@@ -152,4 +152,10 @@
                                      referencedColumnNames="id" deferrable="false" initiallyDeferred="false"
                                      onDelete="RESTRICT" onUpdate="CASCADE"/>
         </changeSet>
+
+        <changeSet id="adding-type-counterparty-contract_table" author="piatlin2002@gmail.com">
+            <addColumn tableName="counterparty_contract">
+                <column name="type" type="varchar(8)"/>
+            </addColumn>
+        </changeSet>
 </databaseChangeLog>
