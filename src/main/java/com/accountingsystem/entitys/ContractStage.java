@@ -52,7 +52,6 @@ public class ContractStage{
     @Column(name="planned_salary_expenses")
     private BigDecimal plannedSalaryExpenses;
 
-    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="contract_id")
     private Contract contract;

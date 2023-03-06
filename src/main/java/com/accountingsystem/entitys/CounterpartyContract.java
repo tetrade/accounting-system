@@ -57,9 +57,4 @@ public class CounterpartyContract{
 
     @Column(name= "planned_end_date")
     private LocalDate plannedEndDate;
-
-    @PreRemove
-    public void onPreRemove(){
-        this.contract.removeCounterpartyContract(this);
-    }
 }
