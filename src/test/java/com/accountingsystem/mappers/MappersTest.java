@@ -5,7 +5,6 @@ import com.accountingsystem.dtos.mappers.*;
 import com.accountingsystem.entitys.*;
 import com.accountingsystem.enums.ERole;
 import com.accountingsystem.enums.EType;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,10 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringJUnitConfig(classes = {
         CounterpartyOrganizationMapperImpl.class,
@@ -87,7 +87,7 @@ public class MappersTest {
 
         CounterpartyOrganizationDto counterpartyOrganizationDto = counterpartyOrganizationMapper.map(counterpartyOrganization);
 
-        Assertions.assertEquals(counterpartyOrganizationDto, should);
+       assertThat(counterpartyOrganizationDto).usingRecursiveComparison().isEqualTo(should);
     }
 
     @Test
@@ -105,7 +105,7 @@ public class MappersTest {
 
        CounterpartyContractDto counterpartyContractDto = counterpartyContractMapper.map(counterpartyContract);
 
-       Assertions.assertEquals(counterpartyContractDto, should);
+        assertThat(counterpartyContractDto).usingRecursiveComparison().isEqualTo(should);
     }
 
     @Test
@@ -125,7 +125,7 @@ public class MappersTest {
 
         ContractStageDto contractStageDto = contractStageMapper.map(contractStage);
 
-        Assertions.assertEquals(contractStageDto, should);
+        assertThat(contractStageDto).usingRecursiveComparison().isEqualTo(should);
     }
 
     @Test
@@ -144,7 +144,7 @@ public class MappersTest {
 
         ContractDto contractDto = contractMapper.map(contract);
 
-        Assertions.assertEquals(contractDto, should);
+        assertThat(contractDto).usingRecursiveComparison().isEqualTo(should);
     }
 
     @Test
@@ -156,10 +156,11 @@ public class MappersTest {
         should.setRoles(user.getRoles());
         should.setLogin(user.getLogin());
         should.setDateOfTermination(user.getDateOfTermination());
+
         should.setContracts(contractMapper.map(user.getContracts()));
 
         UserDto userDto = userMapper.map(user);
 
-        Assertions.assertEquals(userDto, should);
+        assertThat(userDto).usingRecursiveComparison().isEqualTo(should);
     }
 }

@@ -2,6 +2,7 @@ package com.accountingsystem.entitys;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {
         "counterpartyContracts"
 })
+@ToString
 public class CounterpartyOrganization{
 
     @Id
@@ -35,6 +37,7 @@ public class CounterpartyOrganization{
                     CascadeType.PERSIST, CascadeType.REFRESH
             }, mappedBy = "counterpartyOrganization", fetch = FetchType.LAZY
     )
+    @ToString.Exclude
     private Set<CounterpartyContract> counterpartyContracts;
 
     public void addCounterpartyContract(CounterpartyContract counterpartyContract) {

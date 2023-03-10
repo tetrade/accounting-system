@@ -4,6 +4,7 @@ import com.accountingsystem.enums.EType;
 import com.accountingsystem.enums.TypeConverter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(exclude = {
         "contract"
 })
+@ToString
 //@DynamicUpdate for big tables
 public class CounterpartyContract{
 
@@ -41,6 +43,7 @@ public class CounterpartyContract{
             CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH
     }, fetch = FetchType.LAZY)
     @JoinColumn(name="contract_id")
+    @ToString.Exclude
     private Contract contract;
 
     @Column(name="amount")

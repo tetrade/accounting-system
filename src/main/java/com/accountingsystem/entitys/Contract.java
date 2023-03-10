@@ -5,15 +5,18 @@ import com.accountingsystem.enums.EType;
 import com.accountingsystem.enums.TypeConverter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 @Table(name= "contract")
 @Entity
 @Data
+@ToString
 @EqualsAndHashCode(exclude = {
         "user"
 })
@@ -44,6 +47,7 @@ public class Contract{
 
     @JoinColumn(name="user_id")
     @ManyToOne(cascade = CascadeType.ALL, fetch  = FetchType.LAZY)
+    @ToString.Exclude
     private User user;
 
     @Column(name="amount")
@@ -57,7 +61,7 @@ public class Contract{
 
     public void addCounterpartyContract(CounterpartyContract counterpartyContract) {
         if (this.counterpartyContracts == null) {
-            this.counterpartyContracts = Collections.emptySet();
+            this.counterpartyContracts = new HashSet<>();
         }
         this.counterpartyContracts.add(counterpartyContract);
         counterpartyContract.setContract(this);
@@ -65,7 +69,7 @@ public class Contract{
 
     public void addContractStage(ContractStage contractStage) {
         if (this.contractStages == null) {
-            this.contractStages = Collections.emptySet();
+            this.contractStages = new HashSet<>();
         }
         this.contractStages.add(contractStage);
         contractStage.setContract(this);
