@@ -1,4 +1,7 @@
 package com.accountingsystem.repository;
 
-public interface ContractStageRepo {
+import com.accountingsystem.entitys.ContractStage;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ContractStageRepo extends JpaRepository<ContractStage, Integer> {
 }

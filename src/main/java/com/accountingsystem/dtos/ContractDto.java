@@ -3,7 +3,9 @@ package com.accountingsystem.dtos;
 
 import com.accountingsystem.enums.EType;
 import lombok.*;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
