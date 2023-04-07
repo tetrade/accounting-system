@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -15,10 +16,11 @@ import java.util.Set;
 public interface CounterpartyOrganizationMapper {
     CounterpartyOrganizationDto map(CounterpartyOrganization counterpartyOrganization);
     CounterpartyOrganization map(CounterpartyOrganizationDto counterpartyOrganizationDto);
-    CounterpartyOrganization map(
+
+    void mapToTargetCounterpartyOrganization(
             @MappingTarget CounterpartyOrganization counterpartyOrganization,
             CounterpartyOrganizationDto counterpartyOrganizationDto
             );
-    Set<CounterpartyOrganizationDto> map(List<CounterpartyOrganization> counterpartyOrganizations);
-    Set<CounterpartyOrganizationDto> map(Set<CounterpartyOrganization> counterpartyOrganizations);
+
+    Set<CounterpartyOrganizationDto> map(Collection<CounterpartyOrganization> counterpartyOrganizations);
 }

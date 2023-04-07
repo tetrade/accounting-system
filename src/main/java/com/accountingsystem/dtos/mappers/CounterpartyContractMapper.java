@@ -2,29 +2,32 @@ package com.accountingsystem.dtos.mappers;
 
 
 import com.accountingsystem.dtos.CounterpartyContractDto;
+import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
 import com.accountingsystem.entitys.CounterpartyContract;
-import com.accountingsystem.enums.EType;
 import org.mapstruct.*;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 
 
 @Mapper(componentModel = "spring",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-        uses = {CounterpartyOrganizationMapper.class}
+        uses = {CounterpartyOrganizationMapper.class, ContractMapper.class}
 )
 public interface CounterpartyContractMapper {
 
-    CounterpartyContractDto map(CounterpartyContract counterpartyContract);
+    @Named(value = "mapToCounterpartyContractDto")
+    CounterpartyContractDto mapToCounterpartyContractDto(CounterpartyContract counterpartyContract);
+    CounterpartyContract mapToCounterpartyContract(CounterpartyContractDto counterpartyContractDto);
 
-    CounterpartyContract map(CounterpartyContractDto counterpartyContractDto);
+    @IterableMapping(qualifiedByName = "mapToCounterpartyContractDto")
+    Set<CounterpartyContractDto> mapToCounterpartyContractDtoSet(Collection<CounterpartyContract> counterpartyContracts);
 
-    CounterpartyContract map(
-            @MappingTarget CounterpartyContract counterpartyContract,
-            CounterpartyContractDto counterpartyContractDto
-    );
+    void mapToTargetCounterpartyContract(@MappingTarget CounterpartyContract counterpartyContract, CounterpartyContractDto counterpartyContractDto);
 
-    Set<CounterpartyContractDto> map(List<CounterpartyContract> counterpartyContracts);
-    Set<CounterpartyContractDto> map(Set<CounterpartyContract> counterpartyContracts);
+    @Mapping(target = "type", expression = "java(counterpartyContract.getType().getType())")
+    @Mapping(source = "contract", target = "contractDtoExcel")
+    CounterpartyContractDtoExcel mapToContractDtoExcel(CounterpartyContract counterpartyContract);
+
+    Set<CounterpartyContractDtoExcel> mapToCounterpartyContractsDtoExcelSet(Collection<CounterpartyContract> counterpartyContracts);
 }

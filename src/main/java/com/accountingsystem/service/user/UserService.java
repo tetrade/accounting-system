@@ -1,16 +1,15 @@
 package com.accountingsystem.service.user;
 
-import com.accountingsystem.dtos.ContractDto;
-import com.accountingsystem.dtos.CounterpartyContractDto;
 import com.accountingsystem.dtos.mappers.ContractMapper;
+import com.accountingsystem.dtos.mappers.ContractStageMapper;
 import com.accountingsystem.dtos.mappers.CounterpartyContractMapper;
-import com.accountingsystem.dtos.pojo.ExcelData;
+import com.accountingsystem.excel.dto.ContractDtoExcel;
+import com.accountingsystem.excel.dto.ContractStageDtoExcel;
+import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
 import com.accountingsystem.entitys.Contract;
+import com.accountingsystem.entitys.ContractStage;
 import com.accountingsystem.entitys.CounterpartyContract;
-import com.accountingsystem.repository.ContractRepo;
-import com.accountingsystem.repository.CounterpartyContractRepo;
-import com.accountingsystem.repository.CounterpartyOrganizationRepo;
-import com.accountingsystem.repository.UserRepo;
+import com.accountingsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +23,13 @@ public class UserService {
 
     private final CounterpartyContractRepo counterpartyContractRepo;
 
+    private final ContractStageMapper contractStageMapper;
+
     private final CounterpartyOrganizationRepo counterpartyOrganizationRepo;
 
     private final UserRepo userRepo;
+
+    private final ContractStageRepo contractStageRepo;
 
     private final ContractMapper contractMapper;
 
@@ -34,33 +37,41 @@ public class UserService {
 
     @Autowired
     public UserService(ContractRepo contractRepo, CounterpartyContractRepo counterpartyContractRepo,
-                       CounterpartyOrganizationRepo counterpartyOrganizationRepo, UserRepo userRepo,
-                       CounterpartyContractMapper counterpartyContractMapper, ContractMapper contractMapper
+                       ContractStageMapper contractStageMapper, CounterpartyOrganizationRepo counterpartyOrganizationRepo, UserRepo userRepo,
+                       ContractStageRepo contractStageRepo, CounterpartyContractMapper counterpartyContractMapper, ContractMapper contractMapper
     ) {
         this.contractRepo = contractRepo;
+        this.contractStageMapper = contractStageMapper;
         this.counterpartyOrganizationRepo = counterpartyOrganizationRepo;
         this.counterpartyContractRepo = counterpartyContractRepo;
         this.userRepo = userRepo;
+        this.contractStageRepo = contractStageRepo;
         this.contractMapper = contractMapper;
         this.counterpartyContractMapper = counterpartyContractMapper;
     }
 
-    public ExcelData getAllContractsAndCounterpartyContractsBetweenDates(
+    public Set<ContractDtoExcel> getAllContractsContractsBetweenDates(
             String login, LocalDate startDate, LocalDate endDate
     ) {
         Set<Contract> contractsBetweenDates = contractRepo.getContractsBetweenDatesByLogin(login, startDate, endDate);
-        Set<ContractDto> contractsDtoBetweenDates = contractMapper
-                .map(contractsBetweenDates);
-
-        Set<CounterpartyContract> counterpartyContractsBetweenDates =
-                counterpartyContractRepo.getCounterpartyContractsBetweenDatesByLogin(login, startDate, endDate);
-        Set<CounterpartyContractDto> counterpartyContractsDtoBetweenDates = counterpartyContractMapper
-                .map(counterpartyContractsBetweenDates);
-
-        return ExcelData.builder()
-                .counterpartyContracts(counterpartyContractsDtoBetweenDates)
-                .contracts(contractsDtoBetweenDates)
-                .build();
+        return contractMapper.mapToContractDtoExcelSet(contractsBetweenDates);
     }
 
+
+    public Set<CounterpartyContractDtoExcel> getCounterpartyContractsBetweenDates(
+            String login, LocalDate startDate, LocalDate endDate
+    ) {
+        Set<CounterpartyContract> counterpartyContractsBetweenDates =
+                counterpartyContractRepo.getCounterpartyContractsBetweenDatesByLogin(login, startDate, endDate);
+        return counterpartyContractMapper
+                .mapToCounterpartyContractsDtoExcelSet(counterpartyContractsBetweenDates);
+    }
+
+    public Set<ContractStageDtoExcel> getContractStagesContractForContractId(
+            String login, Integer contractId
+    ) {
+        Set<ContractStage> contractStages =
+                contractStageRepo.getContractStagesByContractIdAndUserLogin(login, contractId);
+        return contractStageMapper.mapToContractStageDtoExcelSet(contractStages);
+    }
 }

@@ -20,7 +20,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {
         "user"
 })
-public class Contract{
+public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
@@ -75,7 +75,4 @@ public class Contract{
         contractStage.setContract(this);
     }
 
-    public void removeCounterpartyContract(CounterpartyContract counterpartyContract) {
-        this.counterpartyContracts.remove(counterpartyContract);
-    }
 }

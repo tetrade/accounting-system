@@ -42,14 +42,9 @@ public class CounterpartyOrganization{
 
     public void addCounterpartyContract(CounterpartyContract counterpartyContract) {
         if (this.counterpartyContracts == null) {
-            counterpartyContracts = new HashSet<>();
+            this.counterpartyContracts = new HashSet<>();
         }
-        this.counterpartyContracts.add(counterpartyContract);
+        counterpartyContracts.add(counterpartyContract);
         counterpartyContract.setCounterpartyOrganization(this);
-    }
-
-    public void removeCounterpartyContract(CounterpartyContract counterpartyContract) {
-        this.counterpartyContracts.remove(counterpartyContract);
-        counterpartyContract.setCounterpartyOrganization(null);
     }
 }

@@ -1,10 +1,9 @@
 package com.accountingsystem.service;
 
-import com.accountingsystem.dtos.ContractDto;
-import com.accountingsystem.dtos.CounterpartyContractDto;
 import com.accountingsystem.dtos.mappers.ContractMapper;
 import com.accountingsystem.dtos.mappers.CounterpartyContractMapper;
-import com.accountingsystem.dtos.pojo.ExcelData;
+import com.accountingsystem.excel.dto.ContractDtoExcel;
+import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
 import com.accountingsystem.repository.ContractRepo;
 import com.accountingsystem.repository.CounterpartyContractRepo;
 import com.accountingsystem.service.user.UserService;
@@ -16,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,33 +44,44 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    public void shouldReturnExcelInfo_whenCalled() {
-        CounterpartyContractDto counterpartyContractDto = new CounterpartyContractDto();
-        counterpartyContractDto.setName("cc1");
+    public void shouldReturnSetOfCounterpartyContractDtoInfo_whenCalled() {
+        CounterpartyContractDtoExcel should = new CounterpartyContractDtoExcel();
+        should.setName("cc1");
 
-        ContractDto contractDto = new ContractDto();
-        contractDto.setName("c1");
-
-        when(counterpartyContractMapper.map(anySet())).thenReturn(
-                Stream.of(counterpartyContractDto).collect(Collectors.toSet())
+        when(counterpartyContractMapper.mapToCounterpartyContractsDtoExcelSet(anySet())).thenReturn(
+                Stream.of(should).collect(Collectors.toSet())
         );
 
-        when(contractMapper.map(anySet())).thenReturn(
-                Stream.of(contractDto).collect(Collectors.toSet())
-        );
+        Set<CounterpartyContractDtoExcel> counterpartyContractDtoExcelSet =
+                userService.getCounterpartyContractsBetweenDates("tetrade", LocalDate.MIN, LocalDate.MAX);
 
-        ExcelData excelData =
-                userService.getAllContractsAndCounterpartyContractsBetweenDates("tetrade", LocalDate.MIN, LocalDate.MAX);
 
-        verify(contractRepo).getContractsBetweenDatesByLogin("tetrade", LocalDate.MIN, LocalDate.MAX);
         verify(counterpartyContractRepo).getCounterpartyContractsBetweenDatesByLogin
                 ("tetrade", LocalDate.MIN, LocalDate.MAX);
 
-        assertThat(excelData.getContracts())
+
+        assertThat(counterpartyContractDtoExcelSet)
                 .usingRecursiveFieldByFieldElementComparatorOnFields("name")
-                .containsOnly(contractDto);
-        assertThat(excelData.getCounterpartyContracts())
+                .containsOnly(should);
+    }
+
+    @Test
+    public void shouldReturnSetOfContractDtoInfo_whenCalled() {
+        ContractDtoExcel should = new ContractDtoExcel();
+        should.setName("c1");
+
+        when(contractMapper.mapToContractDtoExcelSet(anySet())).thenReturn(
+                Stream.of(should).collect(Collectors.toSet())
+        );
+
+        Set<ContractDtoExcel> contractDtoExcelSet = userService.getAllContractsContractsBetweenDates(
+                "tetrade", LocalDate.MIN, LocalDate.MAX
+        );
+
+        verify(contractRepo).getContractsBetweenDatesByLogin("tetrade", LocalDate.MIN, LocalDate.MAX);
+
+        assertThat(contractDtoExcelSet)
                 .usingRecursiveFieldByFieldElementComparatorOnFields("name")
-                .containsOnly(counterpartyContractDto);
+                .containsOnly(should);
     }
 }

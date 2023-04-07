@@ -2,11 +2,10 @@ package com.accountingsystem.dtos.mappers;
 
 import com.accountingsystem.dtos.UserDto;
 import com.accountingsystem.entitys.User;
-import com.accountingsystem.enums.ERole;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 
 @Mapper(
@@ -15,8 +14,7 @@ import java.util.Set;
         uses = {ContractMapper.class}
 )
 public interface UserMapper {
-    UserDto map(User user);
-    User map(UserDto user);
-    Set<UserDto> map(List<User> userList);
-    Set<UserDto> map(Set<User> userSet);
+    UserDto mapToUserDto(User user);
+    User mapToUser(UserDto user);
+    Set<UserDto> mapToUserDtoSet(Collection<User> users);
 }

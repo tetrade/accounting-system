@@ -53,7 +53,10 @@ public class ContractStage{
     @Column(name="planned_salary_expenses")
     private BigDecimal plannedSalaryExpenses;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {
+            CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.REFRESH
+    }, fetch = FetchType.LAZY)
     @JoinColumn(name="contract_id")
     @ToString.Exclude
     private Contract contract;

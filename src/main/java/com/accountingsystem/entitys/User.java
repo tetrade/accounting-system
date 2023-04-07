@@ -28,7 +28,11 @@ public class User {
     @Column(name="terminate_date")
     private LocalDate dateOfTermination;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(cascade = {
+            CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH
+    },
+            mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Contract> contracts;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -43,5 +47,12 @@ public class User {
         if (this.contracts == null) this.contracts = new HashSet<>();
         this.contracts.add(contract);
         contract.setUser(this);
+    }
+
+    @PreRemove
+    public void preRemove() {
+        for (Contract c: contracts) {
+            c.setUser(null);
+        }
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -59,9 +60,11 @@ public class MappersTest {
         counterpartyContract.setActualEndDate(LocalDate.now().plusDays(30));
         counterpartyContract.setCounterpartyOrganization(counterpartyOrganization);
 
+
         contractStage = new ContractStage();
         contractStage.setName("Test contract stage");
         contractStage.setId(1);
+
         contract = new Contract();
         contract.setName("Test contract");
         contract.setContractStages(Stream.of(contractStage).collect(Collectors.toSet()));
@@ -93,7 +96,6 @@ public class MappersTest {
     @Test
     public void shouldReturnSameCounterpartyContractDto_whenMapFromCounterpartyContract() {
        CounterpartyContractDto should = new CounterpartyContractDto();
-       should.setCounterpartyOrganization(counterpartyOrganizationMapper.map(counterpartyOrganization));
        should.setName(counterpartyContract.getName());
        should.setId(counterpartyContract.getId());
        should.setType(counterpartyContract.getType());
@@ -103,7 +105,8 @@ public class MappersTest {
        should.setPlannedEndDate(counterpartyContract.getPlannedEndDate());
        should.setPlannedStartDate(counterpartyContract.getPlannedStartDate());
 
-       CounterpartyContractDto counterpartyContractDto = counterpartyContractMapper.map(counterpartyContract);
+       CounterpartyContractDto counterpartyContractDto =
+               counterpartyContractMapper.mapToCounterpartyContractDto(counterpartyContract);
 
         assertThat(counterpartyContractDto).usingRecursiveComparison().isEqualTo(should);
     }
@@ -123,7 +126,7 @@ public class MappersTest {
         should.setActualEndDate(contractStage.getActualEndDate());
         should.setPlannedEndDate(contractStage.getPlannedEndDate());
 
-        ContractStageDto contractStageDto = contractStageMapper.map(contractStage);
+        ContractStageDto contractStageDto = contractStageMapper.mapToContractStageDto(contractStage);
 
         assertThat(contractStageDto).usingRecursiveComparison().isEqualTo(should);
     }
@@ -135,16 +138,19 @@ public class MappersTest {
         should.setName(contract.getName());
         should.setAmount(contract.getAmount());
         should.setType(contract.getType());
-        should.setContractStages(contractStageMapper.map(contract.getContractStages()));
-        should.setCounterpartyContracts(counterpartyContractMapper.map(contract.getCounterpartyContracts()));
         should.setActualStartDate(contract.getActualStartDate());
         should.setPlannedStartDate(contract.getPlannedStartDate());
         should.setActualEndDate(contract.getActualEndDate());
         should.setPlannedEndDate(contract.getPlannedEndDate());
 
-        ContractDto contractDto = contractMapper.map(contract);
+        ContractDto contractDto = contractMapper.mapToContractDto(contract);
+        Set<ContractDto> contractDtoSet1 = contractMapper.mapToContractDtoSet(Stream.of(contract).collect(Collectors.toSet()));
+        Set<ContractDto> contractDtoSet2 = contractMapper.mapToContractDtoSet(Stream.of(contract).collect(Collectors.toList()));
+
 
         assertThat(contractDto).usingRecursiveComparison().isEqualTo(should);
+        assertThat(contractDtoSet1).usingRecursiveFieldByFieldElementComparatorIgnoringFields().containsOnly(should);
+        assertThat(contractDtoSet1).isEqualTo(contractDtoSet2);
     }
 
     @Test
@@ -157,9 +163,9 @@ public class MappersTest {
         should.setLogin(user.getLogin());
         should.setDateOfTermination(user.getDateOfTermination());
 
-        should.setContracts(contractMapper.map(user.getContracts()));
+        should.setContracts(contractMapper.mapToContractDtoSet(user.getContracts()));
 
-        UserDto userDto = userMapper.map(user);
+        UserDto userDto = userMapper.mapToUserDto(user);
 
         assertThat(userDto).usingRecursiveComparison().isEqualTo(should);
     }

@@ -9,6 +9,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Table(name = "counterparty_contract")
 @Entity
@@ -60,4 +61,25 @@ public class CounterpartyContract{
 
     @Column(name= "planned_end_date")
     private LocalDate plannedEndDate;
+
+    public void setCounterpartyOrganization(CounterpartyOrganization counterpartyOrganization) {
+       if (this.counterpartyOrganization == counterpartyOrganization) return;
+
+       if (this.counterpartyOrganization != null) {
+           this.counterpartyOrganization.getCounterpartyContracts().remove(this);
+       }
+
+       this.counterpartyOrganization = counterpartyOrganization;
+
+       if (this.counterpartyOrganization != null) {
+           this.counterpartyOrganization.addCounterpartyContract(this);
+       }
+    }
+
+
+    @PreRemove
+    public void preRemove() {
+        if (this.counterpartyOrganization != null) this.counterpartyOrganization.getCounterpartyContracts().remove(this);
+        if (this.contract != null) this.contract.getCounterpartyContracts().remove(this);
+    }
 }
