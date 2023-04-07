@@ -10,7 +10,7 @@ import java.util.Set;
 public interface ContractStageRepo extends JpaRepository<ContractStage, Integer> {
 
     @Query(value="FROM ContractStage cs LEFT JOIN FETCH cs.contract c LEFT JOIN FETCH c.user u" +
-            " LEFT JOIN FETCH u.roles r WHERE u.login =: user_login AND c.id =: contract_id")
+            " LEFT JOIN FETCH u.roles r WHERE u.login = :user_login AND c.id = :contract_id")
     Set<ContractStage> getContractStagesByContractIdAndUserLogin(
             @Param("user_login") String login, @Param("contract_id") Integer id
     );

@@ -74,7 +74,7 @@ public class UserServiceTest {
                 Stream.of(should).collect(Collectors.toSet())
         );
 
-        Set<ContractDtoExcel> contractDtoExcelSet = userService.getAllContractsContractsBetweenDates(
+        Set<ContractDtoExcel> contractDtoExcelSet = userService.getContractsBetweenDates(
                 "tetrade", LocalDate.MIN, LocalDate.MAX
         );
 

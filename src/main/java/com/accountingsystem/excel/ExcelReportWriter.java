@@ -79,11 +79,11 @@ public class ExcelReportWriter {
             ) throws IOException {
 
         workbook = new XSSFWorkbook();
-        mainSheet = workbook.createSheet("Основной");
+        mainSheet = workbook.createSheet("Основной лист");
 
         Integer rowsBetweenTables = 3;
 
-        this.createTableTitle("Основная таблица", mainSheet.createRow(0));
+        this.createTableTitle("Все договоры за период", mainSheet.createRow(0));
 
         List<EColumn> columns = Stream.of(
                 EColumn.CURRENT_NUMBER, EColumn.TYPE_MAIN, EColumn.NAME, EColumn.TYPE, EColumn.AMOUNT, EColumn.PLANNED_START_DATE,
@@ -124,25 +124,26 @@ public class ExcelReportWriter {
         createTableMarkup(0, columns.size() - 1,
                 startTableNum, mainSheet.getLastRowNum(), true);
 
-        columns.remove(EColumn.RELATED_CONTRACT);
-        row =  mainSheet.createRow(mainSheet.getLastRowNum() + rowsBetweenTables);
+        if (!referencedContracts.isEmpty()) {
+            columns.remove(EColumn.RELATED_CONTRACT);
+            row = mainSheet.createRow(mainSheet.getLastRowNum() + rowsBetweenTables);
 
-        this.createTableTitle("Связанные контракты", row);
+            this.createTableTitle("Связанные контракты", row);
 
-        startTableNum = mainSheet.getLastRowNum() + 1;
-        row = mainSheet.createRow(startTableNum);
+            startTableNum = mainSheet.getLastRowNum() + 1;
+            row = mainSheet.createRow(startTableNum);
 
-        for (int i = 0; i < columns.size(); i++) createColumnHeader(row, i, columns.get(i));
+            for (int i = 0; i < columns.size(); i++) createColumnHeader(row, i, columns.get(i));
 
-        currentRow = 1;
-        for(ContractDtoExcel c: referencedContracts) {
-            row = mainSheet.createRow(mainSheet.getLastRowNum() + 1);
-            addContractToReport(c, row, currentRow++);
+            currentRow = 1;
+            for (ContractDtoExcel c : referencedContracts) {
+                row = mainSheet.createRow(mainSheet.getLastRowNum() + 1);
+                addContractToReport(c, row, currentRow++);
+            }
+
+            createTableMarkup(0, columns.size() - 1,
+                    startTableNum, startTableNum + referencedContracts.size(), false);
         }
-
-        createTableMarkup(0, columns.size() - 1,
-                startTableNum, startTableNum + referencedContracts.size(), false);
-
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 

@@ -50,13 +50,12 @@ public class UserService {
         this.counterpartyContractMapper = counterpartyContractMapper;
     }
 
-    public Set<ContractDtoExcel> getAllContractsContractsBetweenDates(
+    public Set<ContractDtoExcel> getContractsBetweenDates(
             String login, LocalDate startDate, LocalDate endDate
     ) {
         Set<Contract> contractsBetweenDates = contractRepo.getContractsBetweenDatesByLogin(login, startDate, endDate);
         return contractMapper.mapToContractDtoExcelSet(contractsBetweenDates);
     }
-
 
     public Set<CounterpartyContractDtoExcel> getCounterpartyContractsBetweenDates(
             String login, LocalDate startDate, LocalDate endDate
@@ -74,4 +73,6 @@ public class UserService {
                 contractStageRepo.getContractStagesByContractIdAndUserLogin(login, contractId);
         return contractStageMapper.mapToContractStageDtoExcelSet(contractStages);
     }
+
+
 }

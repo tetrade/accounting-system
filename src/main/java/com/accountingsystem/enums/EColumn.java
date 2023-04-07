@@ -9,10 +9,10 @@ public enum EColumn {
     ACTUAL_START_DATE("Фактическая дата окончания", 256 * 20),
     ACTUAL_END_DATE("Фактическая дата начала", 256 * 20),
     RELATED_CONTRACT("Основной контракт", 256 * 16),
-    PLANNED_MATERIAL_COSTS("Плановые расходы на материалы", 256 * 27),
-    ACTUAL_MATERIAL_COSTS("Фактические расходы на материалы", 256 * 27),
-    PLANNED_SALARY_EXPENSES("Плановые расходы на зарплату", 256 * 27),
-    ACTUAL_SALARY_EXPENSES("Фактические расходы на зарплату", 256 * 27);
+    PLANNED_MATERIAL_COSTS("Плановые расходы на материалы", 256 * 28),
+    ACTUAL_MATERIAL_COSTS("Фактические расходы на материалы", 256 * 28),
+    PLANNED_SALARY_EXPENSES("Плановые расходы на зарплату", 256 * 28),
+    ACTUAL_SALARY_EXPENSES("Фактические расходы на зарплату", 256 * 28);
 
     private final String name;
     private final Integer columnWidth;
