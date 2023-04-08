@@ -10,5 +10,6 @@
 
     <include file="create-tables.xml" relativeToChangelogFile="true"/>
     <include file="insert-default-data.xml" relativeToChangelogFile="true"/>
+    <include file="adding-constraints.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

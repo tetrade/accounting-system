@@ -1,9 +1,9 @@
 package com.accountingsystem.entitys;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(exclude = {
         "contract"
 })
+@ToString
 public class ContractStage{
 
     @Id
@@ -52,8 +53,11 @@ public class ContractStage{
     @Column(name="planned_salary_expenses")
     private BigDecimal plannedSalaryExpenses;
 
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {
+            CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.REFRESH
+    }, fetch = FetchType.LAZY)
     @JoinColumn(name="contract_id")
+    @ToString.Exclude
     private Contract contract;
 }

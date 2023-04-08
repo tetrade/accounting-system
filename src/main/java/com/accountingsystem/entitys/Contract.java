@@ -5,21 +5,22 @@ import com.accountingsystem.enums.EType;
 import com.accountingsystem.enums.TypeConverter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 @Table(name= "contract")
 @Entity
 @Data
+@ToString
 @EqualsAndHashCode(exclude = {
         "user"
 })
-public class Contract{
-
+public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
@@ -46,35 +47,32 @@ public class Contract{
 
     @JoinColumn(name="user_id")
     @ManyToOne(cascade = CascadeType.ALL, fetch  = FetchType.LAZY)
+    @ToString.Exclude
     private User user;
 
     @Column(name="amount")
     private BigDecimal amount;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract", targetEntity = CounterpartyContract.class, fetch = FetchType.LAZY)
-    private Set<CounterpartyContract> counterpartyContract;
+    private Set<CounterpartyContract> counterpartyContracts;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract", targetEntity = ContractStage.class, fetch = FetchType.LAZY)
-    private Set<ContractStage> contractStage;
-
+    private Set<ContractStage> contractStages;
 
     public void addCounterpartyContract(CounterpartyContract counterpartyContract) {
-        if (this.counterpartyContract == null) {
-            this.counterpartyContract = Collections.emptySet();
+        if (this.counterpartyContracts == null) {
+            this.counterpartyContracts = new HashSet<>();
         }
-        this.counterpartyContract.add(counterpartyContract);
+        this.counterpartyContracts.add(counterpartyContract);
         counterpartyContract.setContract(this);
     }
 
     public void addContractStage(ContractStage contractStage) {
-        if (this.contractStage == null) {
-            this.contractStage = Collections.emptySet();
+        if (this.contractStages == null) {
+            this.contractStages = new HashSet<>();
         }
-        this.contractStage.add(contractStage);
+        this.contractStages.add(contractStage);
         contractStage.setContract(this);
     }
 
-    public void removeCounterpartyContract(CounterpartyContract counterpartyContract) {
-        this.counterpartyContract.remove(counterpartyContract);
-    }
 }
