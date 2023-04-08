@@ -19,7 +19,7 @@ import java.util.Set;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
-public class CounterpartyContractRepositoryImportBetweenDatesTest {
+class CounterpartyContractRepositoryImportBetweenDatesTest {
 
     @Autowired
     private CounterpartyContractRepo counterpartyContractRepo;
@@ -91,7 +91,7 @@ public class CounterpartyContractRepositoryImportBetweenDatesTest {
     }
 
     @Test
-    public void shouldReturnAllCounterpartyContracts_whenAllCounterpartyContractsOfUserBetweenDates() {
+    void shouldReturnAllCounterpartyContracts_whenAllCounterpartyContractsOfUserBetweenDates() {
         CounterpartyContract should1 = new CounterpartyContract();
         should1.setName("Counterparty Contract 1");
         CounterpartyContract should2 = new CounterpartyContract();
@@ -109,7 +109,7 @@ public class CounterpartyContractRepositoryImportBetweenDatesTest {
     }
 
     @Test
-    public void shouldReturnOneCounterpartyContracts_whenOneCounterpartyContractsOfUserBetweenDates() {
+    void shouldReturnOneCounterpartyContracts_whenOneCounterpartyContractsOfUserBetweenDates() {
         CounterpartyContract should1 = new CounterpartyContract();
         should1.setName("Counterparty Contract 1");
 
@@ -123,7 +123,7 @@ public class CounterpartyContractRepositoryImportBetweenDatesTest {
     }
 
     @Test
-    public void shouldReturnEmptySet_whenNoCounterpartyContractsOfUserBetweenDates() {
+    void shouldReturnEmptySet_whenNoCounterpartyContractsOfUserBetweenDates() {
         Set<CounterpartyContract> counterpartyContractSet = counterpartyContractRepo.getCounterpartyContractsBetweenDatesByLogin(
                 "user", LocalDate.of(2022, 10, 10),
                 LocalDate.of(2023, 9, 1)
@@ -132,7 +132,7 @@ public class CounterpartyContractRepositoryImportBetweenDatesTest {
     }
 
     @Test
-    public void shouldReturnEmptySet_whenUserWithLogin() {
+    void shouldReturnEmptySet_whenUserWithLogin() {
         Set<CounterpartyContract> counterpartyContractSet = counterpartyContractRepo.getCounterpartyContractsBetweenDatesByLogin(
                 "user none", LocalDate.of(2022, 10, 10),
                 LocalDate.of(2023, 9, 1)

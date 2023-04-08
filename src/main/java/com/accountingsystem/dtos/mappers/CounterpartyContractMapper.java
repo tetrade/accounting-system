@@ -17,7 +17,10 @@ import java.util.Set;
 public interface CounterpartyContractMapper {
 
     @Named(value = "mapToCounterpartyContractDto")
+
+    @Mapping(source = "counterpartyOrganization", target = "counterpartyOrganizationDto")
     CounterpartyContractDto mapToCounterpartyContractDto(CounterpartyContract counterpartyContract);
+
     CounterpartyContract mapToCounterpartyContract(CounterpartyContractDto counterpartyContractDto);
 
     @IterableMapping(qualifiedByName = "mapToCounterpartyContractDto")

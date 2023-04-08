@@ -17,7 +17,7 @@ import java.util.Set;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
-public class ContractRepositoryImportBetweenDatesTest {
+class ContractRepositoryImportBetweenDatesTest {
 
     @Autowired
     private ContractRepo contractRepo;
@@ -54,7 +54,7 @@ public class ContractRepositoryImportBetweenDatesTest {
     // getContractsBetweenDatesByLogin() method test
 
     @Test
-    public void shouldReturnContracts_whenUserWithSuchContractsExistAndDatesBetween() {
+    void shouldReturnContracts_whenUserWithSuchContractsExistAndDatesBetween() {
         Contract should1 = new Contract();
         should1.setName("Contract 1 User");
 
@@ -73,7 +73,7 @@ public class ContractRepositoryImportBetweenDatesTest {
 
 
     @Test
-    public void shouldReturnOneContract_whenUserWithSuchContractExistAndDatesBetween() {
+    void shouldReturnOneContract_whenUserWithSuchContractExistAndDatesBetween() {
         Contract should1 = new Contract();
         should1.setName("Contract 2 User");
 
@@ -87,7 +87,7 @@ public class ContractRepositoryImportBetweenDatesTest {
     }
 
     @Test
-    public void shouldReturnEmptySet_whenUserDontHaveContractBetweenDates() {
+    void shouldReturnEmptySet_whenUserDontHaveContractBetweenDates() {
         Set<Contract> contracts = contractRepo.getContractsBetweenDatesByLogin(
                 "User 1", LocalDate.of(2008, 7, 14),
                 LocalDate.of(2022, 8, 14)
@@ -96,7 +96,7 @@ public class ContractRepositoryImportBetweenDatesTest {
     }
 
     @Test
-    public void shouldReturnEmptySet_whenNoUserWithSuchLogin() {
+    void shouldReturnEmptySet_whenNoUserWithSuchLogin() {
         Set<Contract> contracts = contractRepo.getContractsBetweenDatesByLogin(
                 "User 0", LocalDate.of(1999, 7, 14),
                 LocalDate.of(2030, 8, 14)
