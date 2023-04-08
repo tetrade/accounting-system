@@ -25,7 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
         ContractMapperImpl.class,
         UserMapperImpl.class
 })
-public class MappersTest {
+
+class MappersTest {
 
     @Autowired
     private CounterpartyOrganizationMapper counterpartyOrganizationMapper;
@@ -106,7 +107,7 @@ public class MappersTest {
     }
 
     @Test
-    public void shouldReturnSameCounterpartyOrganizationDto_whenMapFromCounterpartyOrganization() {
+    void shouldReturnSameCounterpartyOrganizationDto_whenMapFromCounterpartyOrganization() {
         CounterpartyOrganizationDto should = new CounterpartyOrganizationDto();
         should.setId(counterpartyOrganization.getId());
         should.setInn(counterpartyOrganization.getInn());
@@ -119,7 +120,7 @@ public class MappersTest {
     }
 
     @Test
-    public void shouldReturnSameCounterpartyContractDto_whenMapFromCounterpartyContract() {
+    void shouldReturnSameCounterpartyContractDto_whenMapFromCounterpartyContract() {
        CounterpartyContractDto should = new CounterpartyContractDto();
        should.setName(counterpartyContract.getName());
        should.setId(counterpartyContract.getId());
@@ -145,7 +146,7 @@ public class MappersTest {
     }
 
     @Test
-    public void shouldReturnSameContractStageDto_whenMapFromContractStage(){
+    void shouldReturnSameContractStageDto_whenMapFromContractStage(){
         ContractStageDto should = new ContractStageDto();
         should.setId(contractStage.getId());
         should.setName(contractStage.getName());
@@ -165,7 +166,7 @@ public class MappersTest {
     }
 
     @Test
-    public void shouldReturnSameContractDto_whenMapFromContract() {
+    void shouldReturnSameContractDto_whenMapFromContract() {
         ContractDto should = new ContractDto();
         should.setId(contract.getId());
         should.setName(contract.getName());
@@ -187,7 +188,7 @@ public class MappersTest {
     }
 
     @Test
-    public void shouldReturnSameUserDto_whenMapFromUser() {
+    void shouldReturnSameUserDto_whenMapFromUser() {
         UserDto should = new UserDto();
         should.setId(user.getId());
         should.setFullName(user.getFullName());
@@ -201,10 +202,5 @@ public class MappersTest {
         UserDto userDto = userMapper.mapToUserDto(user);
 
         assertThat(userDto).usingRecursiveComparison().isEqualTo(should);
-    }
-
-    @Test
-    public void shouldReturnSameContractStageDtoExcel_whenMapFromContractStage() {
-
     }
 }

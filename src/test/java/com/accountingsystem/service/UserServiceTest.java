@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
     @Mock
     private CounterpartyContractMapper counterpartyContractMapper;
@@ -53,7 +53,7 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    public void shouldReturnSetOfCounterpartyContractDtoInfo_whenCalled() {
+    void shouldReturnSetOfCounterpartyContractDtoInfo_whenCalled() {
         CounterpartyContractDtoExcel should = new CounterpartyContractDtoExcel();
         should.setName("cc1");
 
@@ -75,7 +75,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldReturnSetOfContractDtoInfo_whenCalled() {
+    void shouldReturnSetOfContractDtoInfo_whenCalled() {
         ContractDtoExcel should = new ContractDtoExcel();
         should.setName("c1");
 
@@ -95,7 +95,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldReturnSetOfContractStage_whenCalled() {
+    void shouldReturnSetOfContractStage_whenCalled() {
         ContractStageDtoExcel should = new ContractStageDtoExcel();
         should.setName("c1");
 

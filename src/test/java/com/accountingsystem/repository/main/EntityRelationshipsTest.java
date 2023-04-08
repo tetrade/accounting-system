@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
-public class EntityRelationshipsTest {
+class EntityRelationshipsTest {
 
     @Autowired
     private UserRepo userRepo;
@@ -30,7 +30,7 @@ public class EntityRelationshipsTest {
     private CounterpartyOrganizationRepo counterpartyOrganizationRepo;
 
     @Test
-    public void shouldCascadeDeleteCounterpartyContractsAndContractStages_whenDeleteContract() {
+    void shouldCascadeDeleteCounterpartyContractsAndContractStages_whenDeleteContract() {
         Contract shouldBeDeleted = new Contract();
         shouldBeDeleted.setAmount(BigDecimal.ONE);
         shouldBeDeleted.setPlannedEndDate(LocalDate.now());
@@ -120,7 +120,7 @@ public class EntityRelationshipsTest {
     }
 
     @Test
-    public void shouldNotDeleteOrganization_whenOrganizationWithContract() {
+    void shouldNotDeleteOrganization_whenOrganizationWithContract() {
         Contract contractShouldNotBeDeleted = new Contract();
         contractShouldNotBeDeleted.setAmount(BigDecimal.ONE);
         contractShouldNotBeDeleted.setPlannedEndDate(LocalDate.now());
@@ -153,7 +153,7 @@ public class EntityRelationshipsTest {
     }
 
     @Test
-    public void shouldDeleteOrganization_whenOrganizationDontHaveContracts() {
+    void shouldDeleteOrganization_whenOrganizationDontHaveContracts() {
         CounterpartyOrganization organizationShouldBeDeleted = new CounterpartyOrganization();
         organizationShouldBeDeleted.setName("co");
         organizationShouldBeDeleted.setAddress("123fss");
@@ -175,7 +175,7 @@ public class EntityRelationshipsTest {
     }
 
     @Test
-    public void shouldDeleteContract_whenDeleteUser() {
+    void shouldDeleteContract_whenDeleteUser() {
         User userToNotDelete = new User();
         userToNotDelete.setLogin("user_to_not_delete");
         userToNotDelete.setPassword("qwe132");

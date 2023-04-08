@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-abstract public class AbstractContract {
+abstract class AbstractContract {
     private String name;
     private EType type;
     private BigDecimal amount;

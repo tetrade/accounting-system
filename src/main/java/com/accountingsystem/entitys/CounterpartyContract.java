@@ -9,7 +9,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Table(name = "counterparty_contract")
 @Entity

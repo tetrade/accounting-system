@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @DataJpaTest
-public class ContractStageRepositoryTest {
+class ContractStageRepositoryTest {
 
     @Autowired
     private ContractStageRepo contractStageRepo;
@@ -123,7 +123,7 @@ public class ContractStageRepositoryTest {
     }
 
     @Test
-    public void shouldReturnContractStages_whenExistWithContract() {
+    void shouldReturnContractStages_whenExistWithContract() {
 
         Set<ContractStage> contractStages = contractStageRepo.getContractStagesByContractIdAndUserLogin(
                 "user1", user1Contract1.getId()
@@ -150,7 +150,7 @@ public class ContractStageRepositoryTest {
     }
 
     @Test
-    public void shouldReturnEmptySet_whenContractStagesDontExist() {
+    void shouldReturnEmptySet_whenContractStagesDontExist() {
         Set<ContractStage> contractStages = contractStageRepo.getContractStagesByContractIdAndUserLogin(
                 "user2", user2Contract4.getId()
         );
@@ -159,7 +159,7 @@ public class ContractStageRepositoryTest {
     }
 
     @Test
-    public void shouldReturnEmptySet_whenUserLoginDontOrContractIdDontExist() {
+    void shouldReturnEmptySet_whenUserLoginDontOrContractIdDontExist() {
         Set<ContractStage> contractStages = contractStageRepo.getContractStagesByContractIdAndUserLogin(
                 "user3", user2Contract4.getId()
         );
