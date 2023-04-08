@@ -26,16 +26,22 @@ import static org.assertj.core.api.Assertions.assertThat;
         UserMapperImpl.class
 })
 public class MappersTest {
+
     @Autowired
     private CounterpartyOrganizationMapper counterpartyOrganizationMapper;
+
     @Autowired
     private ContractMapper contractMapper;
+
     @Autowired
     private CounterpartyContractMapper counterpartyContractMapper;
+
     @Autowired
     private ContractStageMapper contractStageMapper;
+
     @Autowired
     private UserMapper userMapper;
+
     private static CounterpartyOrganization counterpartyOrganization;
     private static CounterpartyContract counterpartyContract;
     private static ContractStage contractStage;
@@ -45,15 +51,17 @@ public class MappersTest {
     @BeforeAll
     static void setUp() {
         counterpartyOrganization = new CounterpartyOrganization();
-        counterpartyOrganization.setId(1);
+        counterpartyOrganization.setId(5);
         counterpartyOrganization.setName("Test counterpartyOrganization 1");
         counterpartyOrganization.setInn("123456789012");
         counterpartyOrganization.setAddress("Санкт-Петербург");
 
         counterpartyContract = new CounterpartyContract();
+        counterpartyContract.setName("8912da");
         counterpartyContract.setId(55);
         counterpartyContract.setAmount(BigDecimal.valueOf(456));
         counterpartyContract.setType(EType.DELIVERY);
+        counterpartyContract.setPlannedStartDate(LocalDate.of(1999, 7, 20));
         counterpartyContract.setActualStartDate(LocalDate.now());
         counterpartyContract.setActualEndDate(LocalDate.now().plusDays(40));
         counterpartyContract.setActualStartDate(LocalDate.now());
@@ -64,14 +72,31 @@ public class MappersTest {
         contractStage = new ContractStage();
         contractStage.setName("Test contract stage");
         contractStage.setId(1);
+        contractStage.setAmount(BigDecimal.TEN);
+        contractStage.setPlannedEndDate(LocalDate.now());
+        contractStage.setPlannedStartDate(LocalDate.now().plusWeeks(2));
+        contractStage.setActualStartDate(LocalDate.now().minusYears(12));
+        contractStage.setActualEndDate(LocalDate.of(2002, 10, 10));
+        contractStage.setPlannedSalaryExpenses(BigDecimal.TEN.pow(2));
+        contractStage.setActualSalaryExpenses(BigDecimal.valueOf(651));
+        contractStage.setPlannedMaterialCosts(BigDecimal.ZERO);
 
         contract = new Contract();
+        contract.setId(10);
         contract.setName("Test contract");
+        contract.setAmount(BigDecimal.valueOf(999));
+        contract.setActualStartDate(LocalDate.now());
+        contract.setActualStartDate(LocalDate.now().plusWeeks(4));
+        contract.setPlannedStartDate(LocalDate.of(2022, 10, 4));
+        contract.setActualEndDate(LocalDate.of(2022, 12, 5));
         contract.setContractStages(Stream.of(contractStage).collect(Collectors.toSet()));
         contract.setCounterpartyContracts(Stream.of(counterpartyContract).collect(Collectors.toSet()));
 
         user = new User();
+        user.setId(29);
         user.setLogin("tetrade");
+        user.setPassword("qwe");
+        user.setFullName("Test testing");
         Role role = new Role();
         role.setName(ERole.ROLE_ADMIN);
         user.setRoles(Stream.of(role).collect(Collectors.toSet()));
@@ -104,6 +129,14 @@ public class MappersTest {
        should.setActualEndDate(counterpartyContract.getActualEndDate());
        should.setPlannedEndDate(counterpartyContract.getPlannedEndDate());
        should.setPlannedStartDate(counterpartyContract.getPlannedStartDate());
+
+       CounterpartyOrganizationDto innerShould = new CounterpartyOrganizationDto();
+       innerShould.setId(counterpartyOrganization.getId());
+       innerShould.setAddress(counterpartyOrganization.getAddress());
+       innerShould.setName(counterpartyOrganization.getName());
+       innerShould.setInn(counterpartyOrganization.getInn());
+
+       should.setCounterpartyOrganizationDto(innerShould);
 
        CounterpartyContractDto counterpartyContractDto =
                counterpartyContractMapper.mapToCounterpartyContractDto(counterpartyContract);
@@ -168,5 +201,10 @@ public class MappersTest {
         UserDto userDto = userMapper.mapToUserDto(user);
 
         assertThat(userDto).usingRecursiveComparison().isEqualTo(should);
+    }
+
+    @Test
+    public void shouldReturnSameContractStageDtoExcel_whenMapFromContractStage() {
+
     }
 }
