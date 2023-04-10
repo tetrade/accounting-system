@@ -1,7 +1,7 @@
 package com.accountingsystem.repository.main;
 
 import com.accountingsystem.entitys.*;
-import com.accountingsystem.enums.EType;
+import com.accountingsystem.entitys.enums.EType;
 import com.accountingsystem.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

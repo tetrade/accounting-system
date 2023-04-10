@@ -4,7 +4,7 @@ import com.accountingsystem.entitys.Contract;
 import com.accountingsystem.entitys.CounterpartyContract;
 import com.accountingsystem.entitys.CounterpartyOrganization;
 import com.accountingsystem.entitys.User;
-import com.accountingsystem.enums.EType;
+import com.accountingsystem.entitys.enums.EType;
 import com.accountingsystem.repository.CounterpartyContractRepo;
 import com.accountingsystem.repository.UserRepo;
 import org.junit.jupiter.api.BeforeEach;

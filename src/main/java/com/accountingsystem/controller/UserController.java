@@ -1,10 +1,15 @@
 package com.accountingsystem.controller;
 
 
+import com.accountingsystem.dtos.ContractDto;
+import com.accountingsystem.dtos.ContractStageDto;
+import com.accountingsystem.dtos.CounterpartyContractDto;
+import com.accountingsystem.dtos.CounterpartyOrganizationDto;
 import com.accountingsystem.excel.ExcelReportWriter;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
+import com.accountingsystem.filters.*;
 import com.accountingsystem.service.user.UserService;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +33,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    // Методы для получения отчета пользователя
     @GetMapping("{login}/downland-contract-report/dates")
     public ResponseEntity<ByteArrayResource> downlandContractReport(
             @PathVariable String login,
@@ -67,6 +73,50 @@ public class UserController {
                 .body(new ByteArrayResource(stream.toByteArray()));
     }
 
+    // TODO Заменить логин из URL на логин из Аунтефикейт
 
+    // Методы для получения информации пользователя
+    @GetMapping("counterparty-organizations/")
+    public ResponseEntity<Set<CounterpartyOrganizationDto>> getCounterpartyOrganizations(@RequestBody SearchRequest searchRequest) {
+        Set<CounterpartyOrganizationDto> counterpartyOrganizationDtos
+                = userService.getCounterpartyOrganizations(searchRequest);
+        return ResponseEntity.ok().body(counterpartyOrganizationDtos);
+    }
 
+    @GetMapping("{login}/contracts/")
+    public ResponseEntity<Set<ContractDto>> getContracts(
+            @PathVariable String login,
+            @RequestBody SearchRequest searchRequest
+    ) {
+
+        searchRequest.addUserLoginFilter(login);
+
+        Set<ContractDto> contractDtos
+                = userService.getContracts(searchRequest);
+        return ResponseEntity.ok().body(contractDtos);
+    }
+
+    @GetMapping("{login}/contracts/{contractId}/counterparty-contracts/")
+    public ResponseEntity<Set<CounterpartyContractDto>> getCounterpartyContractsByContractId(
+            @PathVariable String login, @PathVariable Integer contractId,
+            @RequestBody SearchRequest searchRequest
+    ) {
+        searchRequest.addUserLoginFilter(login);
+        searchRequest.addEntityIdFilter(ETargetEntity.CONTRACT, contractId);
+
+        Set<CounterpartyContractDto> counterpartyContractDtos = userService.getCounterpartyContracts(searchRequest);
+        return ResponseEntity.ok().body(counterpartyContractDtos);
+    }
+
+    @GetMapping("{login}/contracts/{contractId}/contract-stages/")
+    public ResponseEntity<Set<ContractStageDto>> getContractStagesByContractId(
+            @PathVariable String login, @PathVariable Integer contractId,
+            @RequestBody SearchRequest searchRequest
+    ) {
+        searchRequest.addUserLoginFilter(login);
+        searchRequest.addEntityIdFilter(ETargetEntity.CONTRACT, contractId);
+
+        Set<ContractStageDto> contractStageDtos = userService.getContractStages(searchRequest);
+        return ResponseEntity.ok().body(contractStageDtos);
+    }
 }

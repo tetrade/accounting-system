@@ -1,4 +1,4 @@
-package com.accountingsystem.enums;
+package com.accountingsystem.excel.enums;
 
 public enum EDataFormat {
     DATE("dd-mm-yyyy"), CURRENCY("#,##0.00 ₽"), NONE("#");

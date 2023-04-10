@@ -1,4 +1,6 @@
-package com.accountingsystem.enums;
+package com.accountingsystem.entitys;
+
+import com.accountingsystem.entitys.enums.EType;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

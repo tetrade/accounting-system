@@ -1,7 +1,6 @@
 package com.accountingsystem.entitys;
 
-import com.accountingsystem.enums.EType;
-import com.accountingsystem.enums.TypeConverter;
+import com.accountingsystem.entitys.enums.EType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,6 +16,10 @@ import java.time.LocalDate;
         "contract"
 })
 @ToString
+@NamedEntityGraph(
+        name = "CounterpartyContract.counterpartyOrganization",
+        attributeNodes = @NamedAttributeNode("counterpartyOrganization")
+)
 //@DynamicUpdate for big tables
 public class CounterpartyContract{
 
@@ -37,6 +40,7 @@ public class CounterpartyContract{
             CascadeType.REFRESH, CascadeType.PERSIST
     }, fetch = FetchType.LAZY)
     @JoinColumn(name = "counterparty_organization_id")
+    @ToString.Exclude
     private CounterpartyOrganization counterpartyOrganization;
 
     @ManyToOne(cascade = {

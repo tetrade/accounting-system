@@ -2,7 +2,7 @@ package com.accountingsystem.repository.excel;
 
 import com.accountingsystem.entitys.Contract;
 import com.accountingsystem.entitys.User;
-import com.accountingsystem.enums.EType;
+import com.accountingsystem.entitys.enums.EType;
 import com.accountingsystem.repository.ContractRepo;
 import com.accountingsystem.repository.UserRepo;
 import org.junit.jupiter.api.BeforeEach;

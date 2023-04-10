@@ -1,19 +1,28 @@
 package com.accountingsystem.service.user;
 
+import com.accountingsystem.dtos.ContractDto;
+import com.accountingsystem.dtos.ContractStageDto;
+import com.accountingsystem.dtos.CounterpartyContractDto;
+import com.accountingsystem.dtos.CounterpartyOrganizationDto;
 import com.accountingsystem.dtos.mappers.ContractMapper;
 import com.accountingsystem.dtos.mappers.ContractStageMapper;
 import com.accountingsystem.dtos.mappers.CounterpartyContractMapper;
+import com.accountingsystem.dtos.mappers.CounterpartyOrganizationMapper;
+import com.accountingsystem.entitys.CounterpartyOrganization;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
 import com.accountingsystem.entitys.Contract;
 import com.accountingsystem.entitys.ContractStage;
 import com.accountingsystem.entitys.CounterpartyContract;
+import com.accountingsystem.filters.SearchRequest;
+import com.accountingsystem.filters.SearchSpecification;
 import com.accountingsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -35,11 +44,13 @@ public class UserService {
 
     private final CounterpartyContractMapper counterpartyContractMapper;
 
+    private final CounterpartyOrganizationMapper counterpartyOrganizationMapper;
+
     @Autowired
     public UserService(ContractRepo contractRepo, CounterpartyContractRepo counterpartyContractRepo,
                        ContractStageMapper contractStageMapper, CounterpartyOrganizationRepo counterpartyOrganizationRepo, UserRepo userRepo,
-                       ContractStageRepo contractStageRepo, CounterpartyContractMapper counterpartyContractMapper, ContractMapper contractMapper
-    ) {
+                       ContractStageRepo contractStageRepo, CounterpartyContractMapper counterpartyContractMapper, ContractMapper contractMapper,
+                       CounterpartyOrganizationMapper counterpartyOrganizationMapper) {
         this.contractRepo = contractRepo;
         this.contractStageMapper = contractStageMapper;
         this.counterpartyOrganizationRepo = counterpartyOrganizationRepo;
@@ -48,7 +59,11 @@ public class UserService {
         this.contractStageRepo = contractStageRepo;
         this.contractMapper = contractMapper;
         this.counterpartyContractMapper = counterpartyContractMapper;
+        this.counterpartyOrganizationMapper = counterpartyOrganizationMapper;
     }
+
+
+    // Методы для извлечения данных для составления отчета
 
     public Set<ContractDtoExcel> getContractsBetweenDates(
             String login, LocalDate startDate, LocalDate endDate
@@ -74,5 +89,29 @@ public class UserService {
         return contractStageMapper.mapToContractStageDtoExcelSet(contractStages);
     }
 
+    // Методы для извлечения информации для пользователя с использованием фильтров
 
+    public Set<CounterpartyOrganizationDto> getCounterpartyOrganizations(SearchRequest searchRequest){
+        SearchSpecification<CounterpartyOrganization> specification = new SearchSpecification<>(searchRequest);
+        List<CounterpartyOrganization> counterpartyOrganizations = counterpartyOrganizationRepo.findAll(specification);
+        return counterpartyOrganizationMapper.map(counterpartyOrganizations);
+    }
+
+    public Set<ContractDto> getContracts(SearchRequest searchRequest) {
+        SearchSpecification<Contract> specification = new SearchSpecification<>(searchRequest);
+        List<Contract> contracts = contractRepo.findAll(specification);
+        return contractMapper.mapToContractDtoSet(contracts);
+    }
+
+    public Set<CounterpartyContractDto> getCounterpartyContracts(SearchRequest searchRequest) {
+        SearchSpecification<CounterpartyContract> specification = new SearchSpecification<>(searchRequest);
+        List<CounterpartyContract> counterpartyContracts = counterpartyContractRepo.findAll(specification);
+        return counterpartyContractMapper.mapToCounterpartyContractDtoSet(counterpartyContracts);
+    }
+
+    public Set<ContractStageDto> getContractStages(SearchRequest searchRequest) {
+        SearchSpecification<ContractStage> specification = new SearchSpecification<>(searchRequest);
+        List<ContractStage> contractStages = contractStageRepo.findAll(specification);
+        return contractStageMapper.mapToContractStageDtoSet(contractStages);
+    }
 }

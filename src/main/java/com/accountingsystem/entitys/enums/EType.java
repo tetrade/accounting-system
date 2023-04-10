@@ -1,11 +1,11 @@
-package com.accountingsystem.enums;
+package com.accountingsystem.entitys.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum EType {
     PURCHASE("Закупка"), DELIVERY("Поставка"), WORKS("Работы");
 
-    private String type;
+    private final String type;
 
     EType(String type) {
         this.type = type;
@@ -14,9 +14,5 @@ public enum EType {
     @JsonValue
     public String getType() {
         return this.type;
-    }
-
-    public void setType(String realType) {
-        this.type = realType;
     }
 }

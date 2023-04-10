@@ -1,8 +1,7 @@
 package com.accountingsystem.entitys;
 
 
-import com.accountingsystem.enums.EType;
-import com.accountingsystem.enums.TypeConverter;
+import com.accountingsystem.entitys.enums.EType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -54,9 +53,11 @@ public class Contract {
     private BigDecimal amount;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract", targetEntity = CounterpartyContract.class, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Set<CounterpartyContract> counterpartyContracts;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract", targetEntity = ContractStage.class, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Set<ContractStage> contractStages;
 
     public void addCounterpartyContract(CounterpartyContract counterpartyContract) {

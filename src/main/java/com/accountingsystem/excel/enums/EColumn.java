@@ -1,4 +1,4 @@
-package com.accountingsystem.enums;
+package com.accountingsystem.excel.enums;
 
 public enum EColumn {
 

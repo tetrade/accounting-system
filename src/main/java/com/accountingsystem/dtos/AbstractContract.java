@@ -1,6 +1,6 @@
 package com.accountingsystem.dtos;
 
-import com.accountingsystem.enums.EType;
+import com.accountingsystem.entitys.enums.EType;
 import lombok.Data;
 
 import java.math.BigDecimal;
