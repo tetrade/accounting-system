@@ -19,7 +19,8 @@ import java.time.LocalDate;
 public class ContractStage{
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @Column(name="name")

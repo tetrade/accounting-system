@@ -1,7 +1,5 @@
 package com.accountingsystem.filters;
 
-import com.accountingsystem.entitys.enums.ERole;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
@@ -34,5 +32,10 @@ public class SearchRequest {
         FilterRequest userFilter = new FilterRequest(EPublicKey.ID, targetEntity, EOperator.EQUAL, id.toString());
         if (filters == null) filters = new HashSet<>();
         filters.add(userFilter);
+    }
+
+    public void addFilter(FilterRequest filterRequest) {
+        if (filters == null) filters = new HashSet<>();
+        filters.add(filterRequest);
     }
 }

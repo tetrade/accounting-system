@@ -48,8 +48,7 @@ public enum ETargetEntity {
 
             // TODO: Сделать возврат правильной ошибки
             if (sourceRootClass == Contract.class) p = sourceRoot;
-            else if (sourceRootClass == CounterpartyContract.class) {
-
+            else if (sourceRootClass == CounterpartyContract.class || sourceRootClass == ContractStage.class) {
                 p = join(sourceRoot, getName(), JoinType.INNER);
             } else throw new IllegalArgumentException("");
 

@@ -101,7 +101,7 @@ class EntityRelationshipsTest {
         stay2.setPlannedStartDate(LocalDate.now());
         stay2.setPlannedMaterialCosts(BigDecimal.TEN);
         stay2.setPlannedSalaryExpenses(BigDecimal.ZERO);
-        stay2.setName("shouldn't_be_deleted1");
+        stay2.setName("shouldn't_be_deleted");
         shouldNotBeDeleted.addContractStage(stay2);
 
         contractRepo.save(shouldBeDeleted);
@@ -111,11 +111,11 @@ class EntityRelationshipsTest {
         contractRepo.deleteById(shouldBeDeleted.getId());
 
 
-        assertThat(contractRepo.findAll()).usingRecursiveFieldByFieldElementComparatorOnFields("name")
+        assertThat(contractRepo.findAll()).usingRecursiveFieldByFieldElementComparator()
                 .containsOnly(shouldNotBeDeleted);
-        assertThat(counterpartyContractRepo.findAll()).usingRecursiveFieldByFieldElementComparatorOnFields("name")
+        assertThat(counterpartyContractRepo.findAll()).usingRecursiveFieldByFieldElementComparator()
                 .containsOnly(stay);
-        assertThat(contractStageRepo.findAll()).usingRecursiveFieldByFieldElementComparatorOnFields("name")
+        assertThat(contractStageRepo.findAll()).usingRecursiveFieldByFieldElementComparator()
                 .containsOnly(stay1, stay2);
     }
 
@@ -146,9 +146,9 @@ class EntityRelationshipsTest {
         // when
         counterpartyOrganizationRepo.delete(organizationShouldNotBeDeleted);
 
-        assertThat(counterpartyOrganizationRepo.findAll()).usingRecursiveFieldByFieldElementComparatorOnFields("name")
+        assertThat(counterpartyOrganizationRepo.findAll()).usingRecursiveFieldByFieldElementComparator()
                 .containsOnly(organizationShouldNotBeDeleted);
-        assertThat(contractRepo.findAll()).usingRecursiveFieldByFieldElementComparatorOnFields("name")
+        assertThat(contractRepo.findAll()).usingRecursiveFieldByFieldElementComparator()
                 .containsOnly(contractShouldNotBeDeleted);
     }
 
@@ -170,7 +170,7 @@ class EntityRelationshipsTest {
         // when
         counterpartyOrganizationRepo.delete(organizationShouldBeDeleted);
 
-        assertThat(counterpartyOrganizationRepo.findAll()).usingRecursiveFieldByFieldElementComparatorOnFields("name")
+        assertThat(counterpartyOrganizationRepo.findAll()).usingRecursiveFieldByFieldElementComparator()
                 .contains(organizationShouldBeNotDeleted);
     }
 
@@ -219,12 +219,12 @@ class EntityRelationshipsTest {
         assertThat(userRepo.findAll()).usingRecursiveFieldByFieldElementComparatorOnFields("login")
                 .doesNotContain(userToDelete);
 
-        assertThat(contractRepo.findAll()).usingRecursiveFieldByFieldElementComparatorOnFields("name")
+        assertThat(contractRepo.findAll()).usingRecursiveFieldByFieldElementComparator()
                 .contains(contractShouldNotBeDeleted, contractShouldNotBeDeleted1, contractShouldNotBeDeleted2);
 
         assertThat(contractRepo.findAll())
                 .filteredOnNull("user")
-                .usingRecursiveFieldByFieldElementComparatorOnFields("name")
+                .usingRecursiveFieldByFieldElementComparator()
                 .containsOnly(contractShouldNotBeDeleted1, contractShouldNotBeDeleted2);
     }
 }

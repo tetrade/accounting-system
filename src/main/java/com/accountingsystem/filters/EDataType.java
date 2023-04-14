@@ -1,6 +1,8 @@
 package com.accountingsystem.filters;
 
 
+import com.accountingsystem.entitys.TypeConverter;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +32,9 @@ public enum EDataType {
         public Object getValue(String value) {
             return Integer.valueOf(value);
         }
+    }, TYPE {
+        @Override
+        public Object getValue(String value) { return new TypeConverter().convertToEntityAttribute(value); }
     };
 
 

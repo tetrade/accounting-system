@@ -17,6 +17,8 @@ public class SearchSpecification<T> implements Specification<T> {
             predicate = filter.getOperator().build(root, cb, filter, predicate);
         }
 
+        query.distinct(true);
+
         return predicate;
     }
 }

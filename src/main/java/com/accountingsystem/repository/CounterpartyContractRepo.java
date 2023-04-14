@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -28,4 +28,7 @@ public interface CounterpartyContractRepo extends
 
     @EntityGraph(value = "CounterpartyContract.counterpartyOrganization", type = EntityGraph.EntityGraphType.FETCH)
     Page<CounterpartyContract> findAll(Specification<CounterpartyContract> specification, Pageable pageable);
+
+    @EntityGraph(value = "CounterpartyContract.counterpartyOrganization", type = EntityGraph.EntityGraphType.FETCH)
+    List<CounterpartyContract> findAll(Specification<CounterpartyContract> specification);
 }
