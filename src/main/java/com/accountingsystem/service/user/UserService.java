@@ -19,6 +19,8 @@ import com.accountingsystem.filters.SearchRequest;
 import com.accountingsystem.filters.SearchSpecification;
 import com.accountingsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -89,29 +91,33 @@ public class UserService {
         return contractStageMapper.mapToContractStageDtoExcelSet(contractStages);
     }
 
-    // Методы для извлечения информации для пользователя с использованием фильтров
+    // Методы для извлечения информации для пользователя с использованием фильтров и пагинации
 
-    public Set<CounterpartyOrganizationDto> getCounterpartyOrganizations(SearchRequest searchRequest){
+    public Page<CounterpartyOrganizationDto> getCounterpartyOrganizations(SearchRequest searchRequest){
         SearchSpecification<CounterpartyOrganization> specification = new SearchSpecification<>(searchRequest);
-        List<CounterpartyOrganization> counterpartyOrganizations = counterpartyOrganizationRepo.findAll(specification);
-        return counterpartyOrganizationMapper.map(counterpartyOrganizations);
+        return counterpartyOrganizationRepo
+                .findAll(specification, PageRequest.of(searchRequest.getPage(), searchRequest.getSize()))
+                .map(counterpartyOrganizationMapper::map);
     }
 
-    public Set<ContractDto> getContracts(SearchRequest searchRequest) {
+    public Page<ContractDto> getContracts(SearchRequest searchRequest) {
         SearchSpecification<Contract> specification = new SearchSpecification<>(searchRequest);
-        List<Contract> contracts = contractRepo.findAll(specification);
-        return contractMapper.mapToContractDtoSet(contracts);
+        return contractRepo
+                .findAll(specification, PageRequest.of(searchRequest.getPage(), searchRequest.getSize()))
+                .map(contractMapper::mapToContractDto);
     }
 
-    public Set<CounterpartyContractDto> getCounterpartyContracts(SearchRequest searchRequest) {
+    public Page<CounterpartyContractDto> getCounterpartyContracts(SearchRequest searchRequest) {
         SearchSpecification<CounterpartyContract> specification = new SearchSpecification<>(searchRequest);
-        List<CounterpartyContract> counterpartyContracts = counterpartyContractRepo.findAll(specification);
-        return counterpartyContractMapper.mapToCounterpartyContractDtoSet(counterpartyContracts);
+        return counterpartyContractRepo
+                .findAll(specification, PageRequest.of(searchRequest.getPage(), searchRequest.getSize()))
+                .map(counterpartyContractMapper::mapToCounterpartyContractDto);
     }
 
-    public Set<ContractStageDto> getContractStages(SearchRequest searchRequest) {
+    public Page<ContractStageDto> getContractStages(SearchRequest searchRequest) {
         SearchSpecification<ContractStage> specification = new SearchSpecification<>(searchRequest);
-        List<ContractStage> contractStages = contractStageRepo.findAll(specification);
-        return contractStageMapper.mapToContractStageDtoSet(contractStages);
+        return contractStageRepo
+                .findAll(specification, PageRequest.of(searchRequest.getPage(), searchRequest.getSize()))
+                .map(contractStageMapper::mapToContractStageDto);
     }
 }

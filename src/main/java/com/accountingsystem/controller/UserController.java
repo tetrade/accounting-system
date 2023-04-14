@@ -5,15 +5,19 @@ import com.accountingsystem.dtos.ContractDto;
 import com.accountingsystem.dtos.ContractStageDto;
 import com.accountingsystem.dtos.CounterpartyContractDto;
 import com.accountingsystem.dtos.CounterpartyOrganizationDto;
+import com.accountingsystem.dtos.mappers.CounterpartyOrganizationMapper;
+import com.accountingsystem.entitys.CounterpartyOrganization;
 import com.accountingsystem.excel.ExcelReportWriter;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
 import com.accountingsystem.filters.*;
+import com.accountingsystem.repository.CounterpartyOrganizationRepo;
 import com.accountingsystem.service.user.UserService;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +36,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CounterpartyOrganizationMapper counterpartyOrganizationMapper;
 
     // Методы для получения отчета пользователя
     @GetMapping("{login}/downland-contract-report/dates")
@@ -77,46 +84,44 @@ public class UserController {
 
     // Методы для получения информации пользователя
     @GetMapping("counterparty-organizations/")
-    public ResponseEntity<Set<CounterpartyOrganizationDto>> getCounterpartyOrganizations(@RequestBody SearchRequest searchRequest) {
-        Set<CounterpartyOrganizationDto> counterpartyOrganizationDtos
-                = userService.getCounterpartyOrganizations(searchRequest);
+    public ResponseEntity<Page<CounterpartyOrganizationDto>> getCounterpartyOrganizations(@RequestBody SearchRequest searchRequest) {
+        Page<CounterpartyOrganizationDto> counterpartyOrganizationDtos = userService.getCounterpartyOrganizations(searchRequest);
         return ResponseEntity.ok().body(counterpartyOrganizationDtos);
     }
 
     @GetMapping("{login}/contracts/")
-    public ResponseEntity<Set<ContractDto>> getContracts(
+    public ResponseEntity<Page<ContractDto>> getContracts(
             @PathVariable String login,
             @RequestBody SearchRequest searchRequest
     ) {
 
         searchRequest.addUserLoginFilter(login);
 
-        Set<ContractDto> contractDtos
-                = userService.getContracts(searchRequest);
+        Page<ContractDto> contractDtos = userService.getContracts(searchRequest);
         return ResponseEntity.ok().body(contractDtos);
     }
 
     @GetMapping("{login}/contracts/{contractId}/counterparty-contracts/")
-    public ResponseEntity<Set<CounterpartyContractDto>> getCounterpartyContractsByContractId(
+    public ResponseEntity<Page<CounterpartyContractDto>> getCounterpartyContractsByContractId(
             @PathVariable String login, @PathVariable Integer contractId,
             @RequestBody SearchRequest searchRequest
     ) {
         searchRequest.addUserLoginFilter(login);
         searchRequest.addEntityIdFilter(ETargetEntity.CONTRACT, contractId);
 
-        Set<CounterpartyContractDto> counterpartyContractDtos = userService.getCounterpartyContracts(searchRequest);
+        Page<CounterpartyContractDto> counterpartyContractDtos = userService.getCounterpartyContracts(searchRequest);
         return ResponseEntity.ok().body(counterpartyContractDtos);
     }
 
     @GetMapping("{login}/contracts/{contractId}/contract-stages/")
-    public ResponseEntity<Set<ContractStageDto>> getContractStagesByContractId(
+    public ResponseEntity<Page<ContractStageDto>> getContractStagesByContractId(
             @PathVariable String login, @PathVariable Integer contractId,
             @RequestBody SearchRequest searchRequest
     ) {
         searchRequest.addUserLoginFilter(login);
         searchRequest.addEntityIdFilter(ETargetEntity.CONTRACT, contractId);
 
-        Set<ContractStageDto> contractStageDtos = userService.getContractStages(searchRequest);
+        Page<ContractStageDto> contractStageDtos = userService.getContractStages(searchRequest);
         return ResponseEntity.ok().body(contractStageDtos);
     }
 }
