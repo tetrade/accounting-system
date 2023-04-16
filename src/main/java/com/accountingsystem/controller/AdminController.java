@@ -95,14 +95,13 @@ public class AdminController {
 
 //    --------------------------- Контракты ---------------------------
 
-@PostMapping("users/{userId}/contracts/")
-public ResponseEntity<ContractDto> createContract(
-        @PathVariable int userId,
-        @RequestBody ContractDto contractDto
-) {
-    adminService.createContract(userId, contractDto);
-    return ResponseEntity.status(HttpStatus.CREATED).build();
-}
+    @PostMapping("/contracts/")
+    public ResponseEntity<ContractDto> createContract(
+            @RequestBody ContractDto contractDto
+    ) {
+        adminService.createContract(contractDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 
     @PutMapping("contracts/{id}")
     public ResponseEntity<ContractDto> updateContract(

@@ -14,5 +14,5 @@ public class CounterpartyContractDto extends AbstractContract{
     private CounterpartyOrganizationDto counterpartyOrganizationDto;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Integer newCounterpartyOrganizationId;
+    private Integer counterpartyOrganizationId;
 }

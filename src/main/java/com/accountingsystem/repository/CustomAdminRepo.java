@@ -22,7 +22,7 @@ public class CustomAdminRepo {
         entityManager.createNativeQuery("INSERT INTO counterparty_contract (contract_id,counterparty_organization_id,name,amount,actual_start_date," +
             "actual_end_date,planned_start_date,planned_end_date,type) VALUES (?,?,?,?,?,?,?,?,?)")
                 .setParameter(1, contractId)
-                .setParameter(2, c.getNewCounterpartyOrganizationId())
+                .setParameter(2, c.getCounterpartyOrganizationId())
                 .setParameter(3, c.getName())
                 .setParameter(4, c.getAmount())
                 .setParameter(5, c.getActualStartDate())
@@ -38,7 +38,7 @@ public class CustomAdminRepo {
         entityManager.createNativeQuery("UPDATE counterparty_contract SET counterparty_organization_id = ?, name = ?" +
                         ",amount = ?, actual_start_date = ? , actual_end_date = ?, planned_start_date = ? ," +
                         "planned_end_date = ? ,type = ? WHERE counterparty_contract.id = ?")
-                .setParameter(1, c.getNewCounterpartyOrganizationId())
+                .setParameter(1, c.getCounterpartyOrganizationId())
                 .setParameter(2, c.getName())
                 .setParameter(3, c.getAmount())
                 .setParameter(4, c.getActualStartDate())
@@ -110,10 +110,10 @@ public class CustomAdminRepo {
     }
 
     @Transactional
-    public void insertContract(int userId, ContractDto c) {
+    public void insertContract(ContractDto c) {
         entityManager.createNativeQuery("INSERT INTO contract (user_id ,name,amount,actual_start_date," +
                         "actual_end_date,planned_start_date,planned_end_date,type) VALUES (?,?,?,?,?,?,?,?)")
-                .setParameter(1, userId)
+                .setParameter(1, c.getUserId())
                 .setParameter(2, c.getName())
                 .setParameter(3, c.getAmount())
                 .setParameter(4, c.getActualStartDate())
@@ -128,7 +128,7 @@ public class CustomAdminRepo {
     public void updateContract(int contractId, ContractDto c) {
         entityManager.createNativeQuery("UPDATE contract SET name = ?" +
                         ",amount = ?, actual_start_date = ? , actual_end_date = ?, planned_start_date = ? ," +
-                        "planned_end_date = ? ,type = ? WHERE contract.id = ?")
+                        "planned_end_date = ? , type = ?, user_id = ? WHERE contract.id = ?")
                 .setParameter(1, c.getName())
                 .setParameter(2, c.getAmount())
                 .setParameter(3, c.getActualStartDate())
@@ -136,7 +136,8 @@ public class CustomAdminRepo {
                 .setParameter(5, c.getPlannedStartDate())
                 .setParameter(6, c.getPlannedEndDate())
                 .setParameter(7, c.getType().getType())
-                .setParameter(8, contractId)
+                .setParameter(8, c.getUserId())
+                .setParameter(9, contractId)
                 .executeUpdate();
     }
 }

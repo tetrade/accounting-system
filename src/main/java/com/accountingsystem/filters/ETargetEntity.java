@@ -1,5 +1,5 @@
 package com.accountingsystem.filters;
-import com.accountingsystem.advice.NoSuchKeyException;
+import com.accountingsystem.advice.exceptions.IllegalFieldValueException;
 import com.accountingsystem.entitys.*;
 
 import javax.persistence.criteria.*;
@@ -18,10 +18,10 @@ public enum ETargetEntity {
                 );
             else if (sourceRootClass == CounterpartyContract.class) {
                 p = join(sourceRoot, getName(), JoinType.INNER);
-            } else throw new IllegalArgumentException(""); // TODO: Сделать возврат правильной ошибки
+            } else throw new IllegalFieldValueException("Illegal `targetEntity` field value");
 
             try { p = p.get(key); }
-            catch (IllegalArgumentException e) { throw new NoSuchKeyException(e.getMessage()); }
+            catch (IllegalArgumentException e) { throw new IllegalFieldValueException("Illegal `key` field value"); }
 
             return p;
         }
@@ -32,10 +32,10 @@ public enum ETargetEntity {
             Path<?> p;
             if (sourceRootClass == CounterpartyContract.class) p = sourceRoot;
             else if (sourceRootClass == Contract.class) p =  join(sourceRoot, getName(), JoinType.INNER);
-            else throw new IllegalArgumentException(""); // TODO: Сделать возврат правильной ошибки
+            else throw new IllegalFieldValueException("Illegal `targetEntity` field value");
 
             try { p = p.get(key);}
-            catch (IllegalArgumentException e) { throw new NoSuchKeyException(e.getMessage()); }
+            catch (IllegalArgumentException e) { throw new IllegalFieldValueException("Illegal `key` field value"); }
 
             return p;
         }
@@ -46,14 +46,14 @@ public enum ETargetEntity {
             Class<?> sourceRootClass = sourceRoot.getJavaType();
             Path<?> p;
 
-            // TODO: Сделать возврат правильной ошибки
+
             if (sourceRootClass == Contract.class) p = sourceRoot;
             else if (sourceRootClass == CounterpartyContract.class || sourceRootClass == ContractStage.class) {
                 p = join(sourceRoot, getName(), JoinType.INNER);
-            } else throw new IllegalArgumentException("");
+            } else throw new IllegalFieldValueException("Illegal `targetEntity` field value");
 
             try { p = p.get(key); }
-            catch (IllegalArgumentException e) { throw new NoSuchKeyException(e.getMessage()); }
+            catch (IllegalArgumentException e) { throw new IllegalFieldValueException("Illegal `key` field value"); }
 
             return p;
         }
@@ -66,10 +66,10 @@ public enum ETargetEntity {
 
             if (sourceRootClass == ContractStage.class) p = sourceRoot;
             else if (sourceRootClass == Contract.class) p = join(sourceRoot, getName(), JoinType.INNER);
-            else throw new IllegalArgumentException(""); // TODO: Сделать возврат правильной ошибки
+            else throw new IllegalFieldValueException("Illegal `targetEntity` field value");
 
             try { p = p.get(key); }
-            catch (IllegalArgumentException e) { throw new NoSuchKeyException(e.getMessage()); }
+            catch (IllegalArgumentException e) { throw new IllegalFieldValueException("Illegal `key` field value"); }
 
             return p;
         }
@@ -87,10 +87,10 @@ public enum ETargetEntity {
                         join(sourceRoot, CONTRACT.getName(), JoinType.INNER),
                         getName(), JoinType.INNER
                 );
-            else throw new IllegalArgumentException(""); // TODO: Сделать возврат правильной ошибки
+            else throw new IllegalFieldValueException("Illegal `targetEntity` field value");
 
             try { p = p.get(key); }
-            catch (IllegalArgumentException e) { throw new NoSuchKeyException(e.getMessage()); }
+            catch (IllegalArgumentException e) { throw new IllegalFieldValueException("Illegal `key` field value"); }
 
             return p;
         }
