@@ -25,7 +25,9 @@ public interface CounterpartyContractMapper {
 
     @IterableMapping(qualifiedByName = "mapToCounterpartyContractDto")
     Set<CounterpartyContractDto> mapToCounterpartyContractDtoSet(Collection<CounterpartyContract> counterpartyContracts);
-
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "counterpartyOrganization", ignore = true)
+    @Mapping(target = "id", ignore = true)
     void mapToTargetCounterpartyContract(@MappingTarget CounterpartyContract counterpartyContract, CounterpartyContractDto counterpartyContractDto);
 
     @Mapping(target = "type", expression = "java(counterpartyContract.getType().getType())")

@@ -5,15 +5,12 @@ import com.accountingsystem.dtos.ContractDto;
 import com.accountingsystem.dtos.ContractStageDto;
 import com.accountingsystem.dtos.CounterpartyContractDto;
 import com.accountingsystem.dtos.CounterpartyOrganizationDto;
-import com.accountingsystem.dtos.mappers.CounterpartyOrganizationMapper;
-import com.accountingsystem.entitys.CounterpartyOrganization;
 import com.accountingsystem.excel.ExcelReportWriter;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
 import com.accountingsystem.filters.*;
-import com.accountingsystem.repository.CounterpartyOrganizationRepo;
-import com.accountingsystem.service.user.UserService;
+import com.accountingsystem.service.UserService;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -37,11 +34,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private CounterpartyOrganizationMapper counterpartyOrganizationMapper;
-
     // Методы для получения отчета пользователя
-    @GetMapping("{login}/downland-contract-report/dates")
+    @GetMapping("users/{login}/downland-contract-report/dates")
     public ResponseEntity<ByteArrayResource> downlandContractReport(
             @PathVariable String login,
             @RequestParam(value = "planned-start-date", defaultValue = "#{T(java.time.LocalDate).of(1000, 12, 31)}") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate plannedStartDate,
@@ -63,7 +57,7 @@ public class UserController {
                 .body(new ByteArrayResource(stream.toByteArray()));
     }
 
-    @GetMapping("{login}/downland-contract-stage-report/{contractId}")
+    @GetMapping("users/{login}/downland-contract-stage-report/{contractId}")
     public ResponseEntity<ByteArrayResource> downlandContractStageReport(
             @PathVariable String login,
             @PathVariable int contractId
@@ -89,7 +83,7 @@ public class UserController {
         return ResponseEntity.ok().body(counterpartyOrganizationDtos);
     }
 
-    @GetMapping("{login}/contracts/")
+    @GetMapping("users/{login}/contracts/")
     public ResponseEntity<Page<ContractDto>> getContracts(
             @PathVariable String login,
             @RequestBody SearchRequest searchRequest
@@ -101,7 +95,7 @@ public class UserController {
         return ResponseEntity.ok().body(contractDtos);
     }
 
-    @GetMapping("{login}/contracts/{contractId}/counterparty-contracts/")
+    @GetMapping("users/{login}/contracts/{contractId}/counterparty-contracts/")
     public ResponseEntity<Page<CounterpartyContractDto>> getCounterpartyContractsByContractId(
             @PathVariable String login, @PathVariable Integer contractId,
             @RequestBody SearchRequest searchRequest
@@ -113,7 +107,7 @@ public class UserController {
         return ResponseEntity.ok().body(counterpartyContractDtos);
     }
 
-    @GetMapping("{login}/contracts/{contractId}/contract-stages/")
+    @GetMapping("users/{login}/contracts/{contractId}/contract-stages/")
     public ResponseEntity<Page<ContractStageDto>> getContractStagesByContractId(
             @PathVariable String login, @PathVariable Integer contractId,
             @RequestBody SearchRequest searchRequest

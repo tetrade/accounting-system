@@ -25,6 +25,7 @@ public interface ContractMapper {
     @IterableMapping(qualifiedByName = "mapToContractDto")
     Set<ContractDto> mapToContractDtoSet(Collection<Contract> contractList);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void mapToTargetContract(@MappingTarget Contract contract, ContractDto contractDto);
 
     @Mapping(target = "type", expression = "java(contract.getType().getType())")

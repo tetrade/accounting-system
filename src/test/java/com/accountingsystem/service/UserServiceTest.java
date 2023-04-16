@@ -9,7 +9,6 @@ import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
 import com.accountingsystem.repository.ContractRepo;
 import com.accountingsystem.repository.ContractStageRepo;
 import com.accountingsystem.repository.CounterpartyContractRepo;
-import com.accountingsystem.service.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

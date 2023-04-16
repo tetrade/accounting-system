@@ -3,6 +3,7 @@ package com.accountingsystem.repository;
 import com.accountingsystem.entitys.ContractStage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -16,4 +17,8 @@ public interface ContractStageRepo extends
     Set<ContractStage> getContractStagesByContractIdAndUserLogin(
             @Param("user_login") String login, @Param("contract_id") Integer id
     );
+
+    @Modifying
+    @Query("delete from ContractStage cs where cs.id = :id")
+    void deleteById(@Param("id") int id);
 }

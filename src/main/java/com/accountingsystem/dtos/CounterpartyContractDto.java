@@ -1,5 +1,6 @@
 package com.accountingsystem.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,4 +12,7 @@ import lombok.EqualsAndHashCode;
 public class CounterpartyContractDto extends AbstractContract{
     private int id;
     private CounterpartyOrganizationDto counterpartyOrganizationDto;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Integer newCounterpartyOrganizationId;
 }

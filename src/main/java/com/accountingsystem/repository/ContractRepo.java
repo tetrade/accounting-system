@@ -3,6 +3,7 @@ package com.accountingsystem.repository;
 import com.accountingsystem.entitys.Contract;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -18,4 +19,8 @@ public interface ContractRepo  extends JpaRepository<Contract, Integer>, JpaSpec
             @Param("user_login") String login,
             @Param("start_date") LocalDate startDate, @Param("end_date") LocalDate endDate
     );
+
+    @Modifying
+    @Query("delete from Contract c where c.id = :id")
+    void deleteById(@Param("id") int id);
 }

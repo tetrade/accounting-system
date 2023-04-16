@@ -1,4 +1,4 @@
-package com.accountingsystem.service.user;
+package com.accountingsystem.service;
 
 import com.accountingsystem.dtos.ContractDto;
 import com.accountingsystem.dtos.ContractStageDto;
@@ -24,7 +24,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -38,8 +37,6 @@ public class UserService {
 
     private final CounterpartyOrganizationRepo counterpartyOrganizationRepo;
 
-    private final UserRepo userRepo;
-
     private final ContractStageRepo contractStageRepo;
 
     private final ContractMapper contractMapper;
@@ -50,14 +47,13 @@ public class UserService {
 
     @Autowired
     public UserService(ContractRepo contractRepo, CounterpartyContractRepo counterpartyContractRepo,
-                       ContractStageMapper contractStageMapper, CounterpartyOrganizationRepo counterpartyOrganizationRepo, UserRepo userRepo,
+                       ContractStageMapper contractStageMapper, CounterpartyOrganizationRepo counterpartyOrganizationRepo,
                        ContractStageRepo contractStageRepo, CounterpartyContractMapper counterpartyContractMapper, ContractMapper contractMapper,
                        CounterpartyOrganizationMapper counterpartyOrganizationMapper) {
         this.contractRepo = contractRepo;
         this.contractStageMapper = contractStageMapper;
         this.counterpartyOrganizationRepo = counterpartyOrganizationRepo;
         this.counterpartyContractRepo = counterpartyContractRepo;
-        this.userRepo = userRepo;
         this.contractStageRepo = contractStageRepo;
         this.contractMapper = contractMapper;
         this.counterpartyContractMapper = counterpartyContractMapper;

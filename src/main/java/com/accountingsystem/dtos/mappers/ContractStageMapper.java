@@ -16,11 +16,13 @@ public interface ContractStageMapper {
 
     @Named(value = "mapToContractStageDto")
     ContractStageDto mapToContractStageDto(ContractStage contractStage);
+    @Mapping(target = "id", ignore = true)
     ContractStage mapToContractStage(ContractStageDto contractStageDto);
 
     @IterableMapping(qualifiedByName = "mapToContractStageDto")
     Set<ContractStageDto> mapToContractStageDtoSet(Collection<ContractStage> contractStage);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void mapToTargetContractStage(@MappingTarget ContractStage contractStage, ContractStageDto contractStageDto);
 
     ContractStageDtoExcel mapToContractStageDtoExcel(ContractStage contractStage);

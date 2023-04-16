@@ -3,19 +3,20 @@ package com.accountingsystem.repository;
 import com.accountingsystem.entitys.CounterpartyContract;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
 import org.springframework.data.domain.Pageable;
+
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
 public interface CounterpartyContractRepo extends
         JpaRepository<CounterpartyContract, Integer>, JpaSpecificationExecutor<CounterpartyContract> {
+
+    boolean existsById(int id);
 
     @Query(value=
             "FROM CounterpartyContract cc LEFT JOIN FETCH cc.contract c LEFT JOIN FETCH c.user u " +
@@ -31,4 +32,9 @@ public interface CounterpartyContractRepo extends
 
     @EntityGraph(value = "CounterpartyContract.counterpartyOrganization", type = EntityGraph.EntityGraphType.FETCH)
     List<CounterpartyContract> findAll(Specification<CounterpartyContract> specification);
+
+    @Modifying
+    @Query(value="delete from CounterpartyContract cc where cc.id = :id")
+    void deleteById(@Param("id") int id);
+
 }
