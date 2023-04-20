@@ -1,6 +1,7 @@
 package com.accountingsystem.repository;
 
 import com.accountingsystem.entitys.CounterpartyContract;
+import com.accountingsystem.repository.custom.CustomCounterpartyContractRepo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.*;
@@ -14,7 +15,8 @@ import java.util.List;
 import java.util.Set;
 
 public interface CounterpartyContractRepo extends
-        JpaRepository<CounterpartyContract, Integer>, JpaSpecificationExecutor<CounterpartyContract> {
+        JpaRepository<CounterpartyContract, Integer>, JpaSpecificationExecutor<CounterpartyContract>,
+        CustomCounterpartyContractRepo {
 
     boolean existsById(int id);
 

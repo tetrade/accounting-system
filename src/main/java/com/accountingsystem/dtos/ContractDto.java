@@ -8,6 +8,7 @@ import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
+@ToString
 @JsonPropertyOrder({ "id", "name" })
 public class ContractDto extends AbstractContract{
     private int id;

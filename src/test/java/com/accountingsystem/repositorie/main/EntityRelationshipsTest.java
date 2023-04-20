@@ -1,4 +1,4 @@
-package com.accountingsystem.repository.main;
+package com.accountingsystem.repositorie.main;
 
 import com.accountingsystem.entitys.*;
 import com.accountingsystem.entitys.enums.EType;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
-class EntityRelationshipsTest {
+class   EntityRelationshipsTest {
 
     @Autowired
     private UserRepo userRepo;

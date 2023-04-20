@@ -1,4 +1,4 @@
-package com.accountingsystem.repository.main;
+package com.accountingsystem.repositorie.main;
 
 import com.accountingsystem.entitys.*;
 import com.accountingsystem.entitys.enums.ERole;

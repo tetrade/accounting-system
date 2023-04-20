@@ -9,13 +9,8 @@ import com.accountingsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
-
 @Service
 public class AdminService {
-
-    @Autowired
-    private CustomAdminRepo customAdminRepo;
 
     private final ContractRepo contractRepo;
 
@@ -42,7 +37,7 @@ public class AdminService {
     // Удаление/добавление/изменение организаций контр-агентов
 
     public void createCounterpartyOrganization(CounterpartyOrganizationDto counterpartyOrganizationDto) {
-        customAdminRepo.insertCounterpartyOrganization(counterpartyOrganizationDto);
+        counterpartyOrganizationRepo.insertCounterpartyOrganization(counterpartyOrganizationDto);
     }
 
     public void updateCounterpartyOrganization(
@@ -51,7 +46,7 @@ public class AdminService {
         if(!counterpartyOrganizationRepo.existsById(id))
             throw new NoSuchRowException("id", id, "CounterpartyOrganization");
 
-        customAdminRepo.updateCounterpartyOrganization(id, counterpartyOrganizationDto);
+        counterpartyOrganizationRepo.updateCounterpartyOrganization(id, counterpartyOrganizationDto);
     }
 
     public void deleteCounterpartyOrganization(int id) {
@@ -67,14 +62,14 @@ public class AdminService {
         if (!contractRepo.existsById(contractId))
             throw new NoSuchRowException("id", contractId, "Contract");
 
-        customAdminRepo.insertContractStage(contractId, contractStageDto);
+        contractStageRepo.insertContractStage(contractId, contractStageDto);
     }
 
     public void updateContractStage(int id, ContractStageDto contractStageDto) {
         if (!contractStageRepo.existsById(id))
             throw new NoSuchRowException("id", id, "Contract stage");
 
-        customAdminRepo.updateContractStage(id, contractStageDto);
+        contractStageRepo.updateContractStage(id, contractStageDto);
     }
 
     public void deleteContractStage(int id) {
@@ -93,7 +88,7 @@ public class AdminService {
         if (counterpartyOrganizationId != null && !counterpartyOrganizationRepo.existsById(counterpartyOrganizationId))
             throw new NoSuchRowException("id", counterpartyOrganizationId, "Counterparty organization");
 
-        customAdminRepo.insertCounterpartyContract(contractId, counterpartyContractDto);
+        counterpartyContractRepo.insertCounterpartyContract(contractId, counterpartyContractDto);
     }
 
     public void updateCounterpartyContract(int id, CounterpartyContractDto counterpartyContractDto) {
@@ -103,7 +98,7 @@ public class AdminService {
         if (counterpartyOrganizationId != null && !counterpartyOrganizationRepo.existsById(counterpartyOrganizationId))
             throw new NoSuchRowException("id", counterpartyOrganizationId, "Counterparty organization");
 
-        customAdminRepo.updateCounterpartyContract(id, counterpartyContractDto);
+        counterpartyContractRepo.updateCounterpartyContract(id, counterpartyContractDto);
     }
 
     public void deleteCounterpartyContract(Integer id) {
@@ -120,7 +115,7 @@ public class AdminService {
             throw new NoSuchRowException("id", userId, "User");
         contractDto.setUserId(userId);
 
-        customAdminRepo.insertContract(contractDto);
+        contractRepo.insertContract(contractDto);
     }
 
     public void updateContract(Integer contractId, ContractDto contractDto) {
@@ -131,7 +126,7 @@ public class AdminService {
             throw new NoSuchRowException("id", userId, "User");
         contractDto.setUserId(userId);
 
-        customAdminRepo.updateContract(contractId, contractDto);
+        contractRepo.updateContract(contractId, contractDto);
     }
 
     public void deleteContract(Integer contractId) {
