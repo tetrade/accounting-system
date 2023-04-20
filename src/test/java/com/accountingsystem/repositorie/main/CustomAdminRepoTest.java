@@ -1,9 +1,9 @@
 package com.accountingsystem.repositorie.main;
 
-import com.accountingsystem.dtos.ContractDto;
-import com.accountingsystem.dtos.ContractStageDto;
-import com.accountingsystem.dtos.CounterpartyContractDto;
-import com.accountingsystem.dtos.CounterpartyOrganizationDto;
+import com.accountingsystem.controller.dtos.ContractDto;
+import com.accountingsystem.controller.dtos.ContractStageDto;
+import com.accountingsystem.controller.dtos.CounterpartyContractDto;
+import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
 import com.accountingsystem.entitys.Contract;
 import com.accountingsystem.entitys.ContractStage;
 import com.accountingsystem.entitys.CounterpartyContract;

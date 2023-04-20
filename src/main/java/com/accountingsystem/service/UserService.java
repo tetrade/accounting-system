@@ -1,13 +1,13 @@
 package com.accountingsystem.service;
 
-import com.accountingsystem.dtos.ContractDto;
-import com.accountingsystem.dtos.ContractStageDto;
-import com.accountingsystem.dtos.CounterpartyContractDto;
-import com.accountingsystem.dtos.CounterpartyOrganizationDto;
-import com.accountingsystem.dtos.mappers.ContractMapper;
-import com.accountingsystem.dtos.mappers.ContractStageMapper;
-import com.accountingsystem.dtos.mappers.CounterpartyContractMapper;
-import com.accountingsystem.dtos.mappers.CounterpartyOrganizationMapper;
+import com.accountingsystem.controller.dtos.ContractDto;
+import com.accountingsystem.controller.dtos.ContractStageDto;
+import com.accountingsystem.controller.dtos.CounterpartyContractDto;
+import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
+import com.accountingsystem.controller.dtos.mappers.ContractMapper;
+import com.accountingsystem.controller.dtos.mappers.ContractStageMapper;
+import com.accountingsystem.controller.dtos.mappers.CounterpartyContractMapper;
+import com.accountingsystem.controller.dtos.mappers.CounterpartyOrganizationMapper;
 import com.accountingsystem.entitys.CounterpartyOrganization;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;

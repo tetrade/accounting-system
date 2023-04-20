@@ -1,6 +1,6 @@
-package com.accountingsystem.dtos.mappers;
+package com.accountingsystem.controller.dtos.mappers;
 
-import com.accountingsystem.dtos.CounterpartyOrganizationDto;
+import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
 import com.accountingsystem.entitys.CounterpartyOrganization;
 import org.mapstruct.*;
 

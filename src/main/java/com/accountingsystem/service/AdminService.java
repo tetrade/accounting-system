@@ -1,12 +1,17 @@
 package com.accountingsystem.service;
 
 import com.accountingsystem.advice.exceptions.NoSuchRowException;
-import com.accountingsystem.dtos.ContractDto;
-import com.accountingsystem.dtos.ContractStageDto;
-import com.accountingsystem.dtos.CounterpartyContractDto;
-import com.accountingsystem.dtos.CounterpartyOrganizationDto;
+import com.accountingsystem.controller.dtos.*;
+import com.accountingsystem.controller.dtos.mappers.ContractMapper;
+import com.accountingsystem.controller.dtos.mappers.UserMapper;
+import com.accountingsystem.entitys.Contract;
+import com.accountingsystem.entitys.User;
+import com.accountingsystem.filters.SearchRequest;
+import com.accountingsystem.filters.SearchSpecification;
 import com.accountingsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,16 +27,21 @@ public class AdminService {
 
     private final UserRepo userRepo;
 
+    private final UserMapper userMapper;
+
+    private final ContractMapper contractMapper;
 
     @Autowired
     public AdminService(ContractRepo contractRepo, CounterpartyContractRepo counterpartyContractRepo,
                        CounterpartyOrganizationRepo counterpartyOrganizationRepo, ContractStageRepo contractStageRepo,
-                        UserRepo userRepo) {
+                        UserRepo userRepo, UserMapper userMapper, ContractMapper contractMapper) {
         this.contractRepo = contractRepo;
         this.counterpartyOrganizationRepo = counterpartyOrganizationRepo;
         this.counterpartyContractRepo = counterpartyContractRepo;
         this.contractStageRepo = contractStageRepo;
         this.userRepo = userRepo;
+        this.userMapper = userMapper;
+        this.contractMapper= contractMapper;
     }
 
     // Удаление/добавление/изменение организаций контр-агентов
@@ -80,6 +90,7 @@ public class AdminService {
     }
 
     // Удаление-добавление-изменение контр-контрактов
+
     public void createCounterpartyContract(
             int contractId, CounterpartyContractDto counterpartyContractDto) {
         if (!counterpartyContractRepo.existsById(contractId))
@@ -134,6 +145,21 @@ public class AdminService {
             throw new  NoSuchRowException("id", contractId, "Contract");
 
         contractRepo.deleteById(contractId);
+    }
+
+    public Page<ContractUserDto> getContractWithUsers(SearchRequest searchRequest) {
+        SearchSpecification<Contract> specification = new SearchSpecification<>(searchRequest);
+        return contractRepo
+                .findAll(specification, PageRequest.of(searchRequest.getPage(), searchRequest.getSize()))
+                .map(contractMapper::mapToContractUser);
+
+    }
+
+    public Page<UserDto> getAllUsers(SearchRequest searchRequest) {
+        SearchSpecification<User> specification = new SearchSpecification<>(searchRequest);
+        return userRepo
+                .findAll(specification, PageRequest.of(searchRequest.getPage(), searchRequest.getSize()))
+                .map(userMapper::mapToUserDto);
     }
 }
 

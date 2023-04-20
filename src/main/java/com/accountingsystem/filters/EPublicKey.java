@@ -4,7 +4,7 @@ public enum EPublicKey {
 
     NAME("name", EDataType.STRING), AMOUNT("amount", EDataType.DECIMAL),
     TYPE("type", EDataType.TYPE), ID("id", EDataType.INTEGER), LOGIN("login", EDataType.STRING),
-    INN("inn", EDataType.STRING), ADDRESS("address", EDataType.STRING),
+    INN("inn", EDataType.STRING), ADDRESS("address", EDataType.STRING), USER("user", EDataType.INTEGER),
     ACTUAL_START_DATE("actualStartDate", EDataType.DATA),
     ACTUAL_END_DATE("actualEndDate", EDataType.DATA),
     PLANNED_START_DATE("plannedStartDate", EDataType.DATA),

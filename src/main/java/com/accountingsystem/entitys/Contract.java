@@ -19,6 +19,10 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {
         "user"
 })
+@NamedEntityGraph(
+        name = "Contract.user",
+        attributeNodes = @NamedAttributeNode("user")
+)
 public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

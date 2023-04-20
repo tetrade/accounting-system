@@ -1,11 +1,12 @@
 package com.accountingsystem.repository;
 
 import com.accountingsystem.entitys.Contract;
+import com.accountingsystem.entitys.CounterpartyContract;
 import com.accountingsystem.repository.custom.CustomContractRepo;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
@@ -25,4 +26,7 @@ public interface ContractRepo  extends
     @Modifying
     @Query("delete from Contract c where c.id = :id")
     void deleteById(@Param("id") int id);
+
+    @EntityGraph(value = "Contract.user", type = EntityGraph.EntityGraphType.FETCH)
+    Page<Contract> findAll(Specification<Contract> specification, Pageable pageable);
 }

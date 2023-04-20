@@ -1,6 +1,7 @@
-package com.accountingsystem.dtos.mappers;
+package com.accountingsystem.controller.dtos.mappers;
 
-import com.accountingsystem.dtos.ContractDto;
+import com.accountingsystem.controller.dtos.ContractDto;
+import com.accountingsystem.controller.dtos.ContractUserDto;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.entitys.Contract;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -13,7 +14,7 @@ import java.util.Set;
 @Mapper(
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         componentModel = "spring",
-        uses = {ContractStageMapper.class, CounterpartyContractMapper.class},
+        uses = {ContractStageMapper.class, CounterpartyContractMapper.class, UserMapper.class},
         imports = DateUtil.class
 )
 public interface ContractMapper {
@@ -37,4 +38,17 @@ public interface ContractMapper {
     }
 
     Set<ContractDtoExcel> mapToContractDtoExcelSet(Collection<Contract> contracts);
+
+    @Mapping(source = "id", target = "contract.id")
+    @Mapping(source = "name", target = "contract.name")
+    @Mapping(source = "type", target = "contract.type")
+    @Mapping(source = "amount", target = "contract.amount")
+    @Mapping(source = "plannedStartDate", target = "contract.plannedStartDate")
+    @Mapping(source = "plannedEndDate", target = "contract.plannedEndDate")
+    @Mapping(source = "actualStartDate", target = "contract.actualStartDate")
+    @Mapping(source = "actualEndDate", target = "contract.actualEndDate")
+    @Mapping(source = "user", target = "user")
+    ContractUserDto mapToContractUser(Contract contract);
+
+    Set<ContractUserDto> mapToContractUserDtos(Collection<Contract> contracts);
 }

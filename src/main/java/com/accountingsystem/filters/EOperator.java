@@ -13,6 +13,7 @@ public enum EOperator {
         public <T> Predicate build(Root<T> root, CriteriaBuilder cb, FilterRequest request, Predicate predicate) {
             Object value = request.getKey().getType().getValue(request.getValue());
             Expression<?> key = request.getTargetEntity().createExpression(root, request.getKey().getName());
+            if (request.getValue().equalsIgnoreCase("null")) return cb.and(key.isNull(), predicate);
             return cb.and(cb.equal(key, value), predicate);
         }
     },

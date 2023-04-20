@@ -1,6 +1,6 @@
 package com.accountingsystem.repository.custom.impl;
 
-import com.accountingsystem.dtos.CounterpartyContractDto;
+import com.accountingsystem.controller.dtos.CounterpartyContractDto;
 import com.accountingsystem.repository.custom.CustomCounterpartyContractRepo;
 
 import javax.persistence.EntityManager;

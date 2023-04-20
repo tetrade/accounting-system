@@ -1,8 +1,8 @@
 package com.accountingsystem.service;
 
-import com.accountingsystem.dtos.mappers.ContractMapper;
-import com.accountingsystem.dtos.mappers.ContractStageMapper;
-import com.accountingsystem.dtos.mappers.CounterpartyContractMapper;
+import com.accountingsystem.controller.dtos.mappers.ContractMapper;
+import com.accountingsystem.controller.dtos.mappers.ContractStageMapper;
+import com.accountingsystem.controller.dtos.mappers.CounterpartyContractMapper;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;

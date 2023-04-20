@@ -1,6 +1,6 @@
 package com.accountingsystem.repository.custom;
 
-import com.accountingsystem.dtos.ContractStageDto;
+import com.accountingsystem.controller.dtos.ContractStageDto;
 
 public interface CustomContractStageRepo {
     void insertContractStage(int contractId, ContractStageDto c);

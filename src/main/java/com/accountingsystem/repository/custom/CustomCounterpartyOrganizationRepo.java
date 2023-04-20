@@ -1,7 +1,6 @@
 package com.accountingsystem.repository.custom;
 
-import com.accountingsystem.dtos.CounterpartyContractDto;
-import com.accountingsystem.dtos.CounterpartyOrganizationDto;
+import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
 
 public interface CustomCounterpartyOrganizationRepo {
     void updateCounterpartyOrganization(int counterpartyOrganizationId, CounterpartyOrganizationDto c);

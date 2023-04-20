@@ -1,9 +1,6 @@
-package com.accountingsystem.controller;
+package com.accountingsystem.controller.admin;
 
-import com.accountingsystem.dtos.ContractDto;
-import com.accountingsystem.dtos.ContractStageDto;
-import com.accountingsystem.dtos.CounterpartyContractDto;
-import com.accountingsystem.dtos.CounterpartyOrganizationDto;
+import com.accountingsystem.controller.dtos.*;
 import com.accountingsystem.filters.ETargetEntity;
 import com.accountingsystem.filters.SearchRequest;
 import com.accountingsystem.service.AdminService;
@@ -15,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/")
+@RequestMapping("api/admin/")
 public class AdminController {
 
     @Autowired
@@ -128,11 +125,11 @@ public class AdminController {
     // Контракт может быть изначально никому не назначен.
 
     @GetMapping("contracts/")
-    public ResponseEntity<Page<ContractDto>> getContracts(
+    public ResponseEntity<?> getContractsWithUsers(
             @RequestBody SearchRequest searchRequest
     ) {
-        Page<ContractDto> contractDtos = userService.getContracts(searchRequest);
-        return ResponseEntity.ok().body(contractDtos);
+        Page<ContractUserDto> contracts = adminService.getContractWithUsers(searchRequest);
+        return ResponseEntity.ok().body(contracts);
     }
 
     @PostMapping("contracts/")
@@ -158,5 +155,13 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    //
+    // ------------------------------------ Список пользователей ------------------------------------
+
+    @GetMapping("users/")
+    public ResponseEntity<?> getUsers(
+            @RequestBody SearchRequest searchRequest
+    ){
+        Page<UserDto> users = adminService.getAllUsers(searchRequest);
+        return ResponseEntity.ok().body(users);
+    }
 }

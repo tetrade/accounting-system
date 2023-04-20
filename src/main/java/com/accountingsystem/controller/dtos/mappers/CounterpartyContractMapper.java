@@ -1,7 +1,7 @@
-package com.accountingsystem.dtos.mappers;
+package com.accountingsystem.controller.dtos.mappers;
 
 
-import com.accountingsystem.dtos.CounterpartyContractDto;
+import com.accountingsystem.controller.dtos.CounterpartyContractDto;
 import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
 import com.accountingsystem.entitys.CounterpartyContract;
 import org.mapstruct.*;

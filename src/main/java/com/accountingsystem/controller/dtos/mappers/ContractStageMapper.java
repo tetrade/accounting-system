@@ -1,6 +1,6 @@
-package com.accountingsystem.dtos.mappers;
+package com.accountingsystem.controller.dtos.mappers;
 
-import com.accountingsystem.dtos.ContractStageDto;
+import com.accountingsystem.controller.dtos.ContractStageDto;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import com.accountingsystem.entitys.ContractStage;
 import org.mapstruct.*;

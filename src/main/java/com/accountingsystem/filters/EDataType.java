@@ -6,6 +6,7 @@ import com.accountingsystem.entitys.TypeConverter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public enum EDataType {
 
@@ -30,6 +31,7 @@ public enum EDataType {
     }, INTEGER {
         @Override
         public Object getValue(String value) {
+            if (Objects.equals(value, "null")) return null;
             return Integer.valueOf(value);
         }
     }, TYPE {

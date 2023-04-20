@@ -1,4 +1,4 @@
-package com.accountingsystem.dtos;
+package com.accountingsystem.controller.dtos;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
