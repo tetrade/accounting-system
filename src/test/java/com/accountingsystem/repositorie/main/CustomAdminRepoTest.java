@@ -29,7 +29,6 @@ class CustomAdminRepoTest {
     @Autowired
     private CounterpartyOrganizationRepo counterpartyOrganizationRepo;
 
-
     @Autowired
     private ContractRepo contractRepo;
 
