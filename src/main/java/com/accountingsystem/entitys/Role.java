@@ -1,6 +1,6 @@
 package com.accountingsystem.entitys;
 
-import com.accountingsystem.enums.ERole;
+import com.accountingsystem.entitys.enums.ERole;
 import lombok.Data;
 
 import javax.persistence.*;

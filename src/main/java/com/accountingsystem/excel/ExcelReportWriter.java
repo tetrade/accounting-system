@@ -4,10 +4,10 @@ import com.accountingsystem.excel.dto.AbstractExcelContract;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
-import com.accountingsystem.enums.EColumn;
-import com.accountingsystem.enums.EContractType;
-import com.accountingsystem.enums.EDataFormat;
-import com.accountingsystem.enums.EFont;
+import com.accountingsystem.excel.enums.EColumn;
+import com.accountingsystem.excel.enums.EContractType;
+import com.accountingsystem.excel.enums.EDataFormat;
+import com.accountingsystem.excel.enums.EFont;
 import lombok.NoArgsConstructor;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.common.usermodel.HyperlinkType;
@@ -47,12 +47,12 @@ public class ExcelReportWriter {
                 EColumn.PLANNED_SALARY_EXPENSES, EColumn.ACTUAL_SALARY_EXPENSES
         ).collect(Collectors.toList());
 
-        Integer startTableNum = mainSheet.getLastRowNum() + 1;
+        int startTableNum = mainSheet.getLastRowNum() + 1;
 
         Row row = mainSheet.createRow(startTableNum);
         for (int i = 0; i < columns.size(); i++) createColumnHeader(row, i, columns.get(i));
 
-        Integer currentRow = 1;
+        int currentRow = 1;
         for(ContractStageDtoExcel cs: contractStageDtoExcels) {
             row = mainSheet.createRow(mainSheet.getLastRowNum() + 1);
             addContractStageToReport(cs, row, currentRow++);
@@ -81,7 +81,7 @@ public class ExcelReportWriter {
         workbook = new XSSFWorkbook();
         mainSheet = workbook.createSheet("Основной лист");
 
-        Integer rowsBetweenTables = 3;
+        int rowsBetweenTables = 3;
 
         this.createTableTitle("Все договоры за период", mainSheet.createRow(0));
 
@@ -90,20 +90,20 @@ public class ExcelReportWriter {
                 EColumn.PLANNED_END_DATE, EColumn.ACTUAL_START_DATE, EColumn.ACTUAL_END_DATE, EColumn.RELATED_CONTRACT
         ).collect(Collectors.toList());
 
-        Integer startTableNum = mainSheet.getLastRowNum() + 1;
+        int startTableNum = mainSheet.getLastRowNum() + 1;
 
         Row row = mainSheet.createRow(startTableNum);
         for (int i = 0; i < columns.size(); i++) createColumnHeader(row, i, columns.get(i));
 
 
         List<ContractDtoExcel> referencedContracts = new ArrayList<>();
-        Integer currentRow = 1;
+        int currentRow = 1;
         for(CounterpartyContractDtoExcel cc: counterpartyContractDtos) {
                 row = mainSheet.createRow(mainSheet.getLastRowNum() + 1);
                 addContractToReport(cc, row, currentRow++);
 
                 if (columns.contains(EColumn.RELATED_CONTRACT)) {
-                    Integer index = referencedContracts.indexOf(cc.getContractDtoExcel());
+                    int index = referencedContracts.indexOf(cc.getContractDtoExcel());
                     if (index == -1) {
                         referencedContracts.add(cc.getContractDtoExcel());
                         index = referencedContracts.size() - 1;
@@ -159,7 +159,7 @@ public class ExcelReportWriter {
     }
 
     private void addContractToReport(AbstractExcelContract contract, Row row, Integer rowNUm) {
-        Integer currentCell = 0;
+        int currentCell = 0;
         createCell(row, currentCell++, rowNUm);
         if (contract instanceof CounterpartyContractDtoExcel) {
             createCell(row, currentCell++, EContractType.COUNTERPARTY_CONTRACT.getType());
@@ -179,7 +179,7 @@ public class ExcelReportWriter {
     }
 
     private void addContractStageToReport(ContractStageDtoExcel contractStageDtoExcel, Row row, Integer rowNUm) {
-        Integer currentCell = 0;
+        int currentCell = 0;
         createCell(row, currentCell++, rowNUm);
         createCell(row, currentCell++, contractStageDtoExcel.getName());
         createCell(row, currentCell++, contractStageDtoExcel.getAmount(), EDataFormat.CURRENCY);

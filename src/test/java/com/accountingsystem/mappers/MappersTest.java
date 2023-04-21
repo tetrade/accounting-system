@@ -1,10 +1,10 @@
 package com.accountingsystem.mappers;
 
-import com.accountingsystem.dtos.*;
-import com.accountingsystem.dtos.mappers.*;
+import com.accountingsystem.controller.dtos.*;
+import com.accountingsystem.controller.dtos.mappers.*;
 import com.accountingsystem.entitys.*;
-import com.accountingsystem.enums.ERole;
-import com.accountingsystem.enums.EType;
+import com.accountingsystem.entitys.enums.ERole;
+import com.accountingsystem.entitys.enums.EType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,7 +137,7 @@ class MappersTest {
        innerShould.setName(counterpartyOrganization.getName());
        innerShould.setInn(counterpartyOrganization.getInn());
 
-       should.setCounterpartyOrganizationDto(innerShould);
+       should.setCounterpartyOrganization(innerShould);
 
        CounterpartyContractDto counterpartyContractDto =
                counterpartyContractMapper.mapToCounterpartyContractDto(counterpartyContract);
@@ -193,14 +193,12 @@ class MappersTest {
         should.setId(user.getId());
         should.setFullName(user.getFullName());
         should.setPassword(user.getPassword());
-        should.setRoles(user.getRoles());
         should.setLogin(user.getLogin());
-        should.setDateOfTermination(user.getDateOfTermination());
-
-        should.setContracts(contractMapper.mapToContractDtoSet(user.getContracts()));
 
         UserDto userDto = userMapper.mapToUserDto(user);
 
         assertThat(userDto).usingRecursiveComparison().isEqualTo(should);
     }
+
+
 }
