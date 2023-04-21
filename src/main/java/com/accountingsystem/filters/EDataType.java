@@ -1,12 +1,15 @@
 package com.accountingsystem.filters;
 
 
+import com.accountingsystem.advice.exceptions.IllegalFieldValueException;
 import com.accountingsystem.entitys.TypeConverter;
+import com.accountingsystem.entitys.enums.EType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public enum EDataType {
 
@@ -20,23 +23,33 @@ public enum EDataType {
         @Override
         public Object getValue(String value) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            return LocalDate.parse(value, formatter);
+            try { return LocalDate.parse(value, formatter); }
+            catch (Exception ex) {throw new IllegalFieldValueException("Illegal `value` field. Wrong date format. Should be: dd-MM-yyyy"); }
         }
     },
     DECIMAL {
         @Override
         public Object getValue(String value) {
-            return new BigDecimal(value);
+            try { return new BigDecimal(value); }
+            catch (NumberFormatException ex) { throw new IllegalFieldValueException("Illegal `value` field. Wrong number format"); }
         }
     }, INTEGER {
         @Override
         public Object getValue(String value) {
             if (Objects.equals(value, "null")) return null;
-            return Integer.valueOf(value);
+            try { return Integer.valueOf(value); }
+            catch (NumberFormatException ex) { throw new IllegalFieldValueException("Illegal `value` field. Wrong number Format"); }
         }
     }, TYPE {
         @Override
-        public Object getValue(String value) { return new TypeConverter().convertToEntityAttribute(value); }
+        public Object getValue(String value) {
+            try {
+                return new TypeConverter().convertToEntityAttribute(value);
+            } catch (IllegalArgumentException ex) {
+                throw new IllegalFieldValueException("Illegal `value` field. Should be: " + Stream.of(EType.values()).map(EType::getType)
+                        .reduce((x, y) -> x + ", " + y).orElse(""));
+            }
+        }
     };
 
 
