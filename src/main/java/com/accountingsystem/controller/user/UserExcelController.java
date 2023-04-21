@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Set;
 
-@RequestMapping("api/user/")
+@RequestMapping("user-api/")
 @RestController
 public class UserExcelController {
     @Autowired

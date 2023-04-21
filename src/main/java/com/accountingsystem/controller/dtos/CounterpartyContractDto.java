@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @JsonPropertyOrder({ "id", "name" })
 public class CounterpartyContractDto extends AbstractContract{
     private int id;
-    private CounterpartyOrganizationDto counterpartyOrganizationDto;
+    private CounterpartyOrganizationDto counterpartyOrganization;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Integer counterpartyOrganizationId;

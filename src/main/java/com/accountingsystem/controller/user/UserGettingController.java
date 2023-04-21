@@ -13,7 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("api/user/")
+@RequestMapping("user-api/")
 @RestController
 public class UserGettingController {
 
@@ -32,7 +32,7 @@ public class UserGettingController {
         return ResponseEntity.ok().body(counterpartyOrganizationDtos);
     }
 
-    @GetMapping("users/{login}/contracts/")
+    @GetMapping("{login}/contracts/")
     public ResponseEntity<Page<ContractDto>> getContracts(
             @PathVariable String login,
             @RequestBody SearchRequest searchRequest
@@ -44,7 +44,7 @@ public class UserGettingController {
         return ResponseEntity.ok().body(contractDtos);
     }
 
-    @GetMapping("users/{login}/contracts/{contractId}/counterparty-contracts/")
+    @GetMapping("{login}/contracts/{contractId}/counterparty-contracts/")
     public ResponseEntity<Page<CounterpartyContractDto>> getCounterpartyContractsByContractId(
             @PathVariable String login, @PathVariable Integer contractId,
             @RequestBody SearchRequest searchRequest
@@ -56,7 +56,7 @@ public class UserGettingController {
         return ResponseEntity.ok().body(counterpartyContractDtos);
     }
 
-    @GetMapping("users/{login}/contracts/{contractId}/contract-stages/")
+    @GetMapping("{login}/contracts/{contractId}/contract-stages/")
     public ResponseEntity<Page<ContractStageDto>> getContractStagesByContractId(
             @PathVariable String login, @PathVariable Integer contractId,
             @RequestBody SearchRequest searchRequest

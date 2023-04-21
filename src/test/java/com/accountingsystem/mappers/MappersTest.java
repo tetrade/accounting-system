@@ -137,7 +137,7 @@ class MappersTest {
        innerShould.setName(counterpartyOrganization.getName());
        innerShould.setInn(counterpartyOrganization.getInn());
 
-       should.setCounterpartyOrganizationDto(innerShould);
+       should.setCounterpartyOrganization(innerShould);
 
        CounterpartyContractDto counterpartyContractDto =
                counterpartyContractMapper.mapToCounterpartyContractDto(counterpartyContract);
@@ -199,4 +199,6 @@ class MappersTest {
 
         assertThat(userDto).usingRecursiveComparison().isEqualTo(should);
     }
+
+
 }

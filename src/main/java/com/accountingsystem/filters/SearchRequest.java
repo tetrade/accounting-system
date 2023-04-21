@@ -2,14 +2,14 @@ package com.accountingsystem.filters;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.*;
 
-@Getter
-@Setter
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SearchRequest {
     private Set<FilterRequest> filters;
 

@@ -1,5 +1,7 @@
 package com.accountingsystem.filters;
 
+import com.accountingsystem.advice.exceptions.IllegalFieldValueException;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
@@ -39,7 +41,7 @@ public enum EOperator {
                 return cb.and(cb.greaterThan((Expression<LocalDate>) key, (LocalDate) value), predicate);
             } else if (request.getKey().getType().equals(EDataType.DECIMAL)) {
                 return cb.and(cb.greaterThan((Expression<BigDecimal>) key, (BigDecimal) value), predicate);
-            } else throw new IllegalArgumentException(""); //TODO Нормальное исключение надо сделать
+            } else throw new IllegalFieldValueException("Illegal `key` field + " + request.getKey() + "for" + this.name());
         }
     } ,
     LESS {
@@ -50,7 +52,7 @@ public enum EOperator {
                 return cb.and(cb.lessThan((Expression<LocalDate>) key, (LocalDate) value), predicate);
             } else if (request.getKey().getType().equals(EDataType.DECIMAL)) {
                 return cb.and(cb.lessThan((Expression<BigDecimal>) key, (BigDecimal) value), predicate);
-            } else throw new IllegalArgumentException(""); //TODO Нормальное исключение надо сделать
+            } else throw new IllegalFieldValueException("Illegal `key` field + " + request.getKey() + "for" + this.name());
         }
     };
 

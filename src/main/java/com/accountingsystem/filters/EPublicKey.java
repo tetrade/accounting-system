@@ -3,7 +3,8 @@ package com.accountingsystem.filters;
 public enum EPublicKey {
 
     NAME("name", EDataType.STRING), AMOUNT("amount", EDataType.DECIMAL),
-    TYPE("type", EDataType.TYPE), ID("id", EDataType.INTEGER), LOGIN("login", EDataType.STRING),
+    TYPE("type", EDataType.TYPE), ID("id", EDataType.INTEGER),
+    LOGIN("login", EDataType.STRING), FULL_NAME("fullName", EDataType.STRING),
     INN("inn", EDataType.STRING), ADDRESS("address", EDataType.STRING), USER("user", EDataType.INTEGER),
     ACTUAL_START_DATE("actualStartDate", EDataType.DATA),
     ACTUAL_END_DATE("actualEndDate", EDataType.DATA),
