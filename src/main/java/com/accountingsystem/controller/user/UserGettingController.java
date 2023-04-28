@@ -1,16 +1,16 @@
 package com.accountingsystem.controller.user;
 
 
-import com.accountingsystem.controller.dtos.ContractDto;
-import com.accountingsystem.controller.dtos.ContractStageDto;
-import com.accountingsystem.controller.dtos.CounterpartyContractDto;
-import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
+import com.accountingsystem.controller.dtos.*;
+import com.accountingsystem.controller.dtos.mappers.UserMapper;
 import com.accountingsystem.excel.ExcelReportWriter;
 import com.accountingsystem.filters.*;
+import com.accountingsystem.service.UserDetailsImpl;
 import com.accountingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("user-api/")
@@ -23,7 +23,8 @@ public class UserGettingController {
     @Autowired
     private UserService userService;
 
-    // TODO Заменить логин из URL на логин из Аунтефикейт
+    @Autowired
+    private UserMapper userMapper;
 
     // Методы для получения информации пользователя
     @GetMapping("counterparty-organizations/")
@@ -32,39 +33,46 @@ public class UserGettingController {
         return ResponseEntity.ok().body(counterpartyOrganizationDtos);
     }
 
-    @GetMapping("{login}/contracts/")
+    @GetMapping("contracts/")
     public ResponseEntity<Page<ContractDto>> getContracts(
-            @PathVariable String login,
-            @RequestBody SearchRequest searchRequest
+            @RequestBody SearchRequest searchRequest,
+            Authentication authentication
     ) {
 
-        searchRequest.addUserLoginFilter(login);
-
+        searchRequest.addUserLoginFilter(authentication.getName());
         Page<ContractDto> contractDtos = userService.getContracts(searchRequest);
         return ResponseEntity.ok().body(contractDtos);
     }
 
-    @GetMapping("{login}/contracts/{contractId}/counterparty-contracts/")
+    @GetMapping("contracts/{contractId}/counterparty-contracts/")
     public ResponseEntity<Page<CounterpartyContractDto>> getCounterpartyContractsByContractId(
-            @PathVariable String login, @PathVariable Integer contractId,
-            @RequestBody SearchRequest searchRequest
+            @PathVariable Integer contractId,
+            @RequestBody SearchRequest searchRequest,
+            Authentication authentication
     ) {
-        searchRequest.addUserLoginFilter(login);
+        searchRequest.addUserLoginFilter(authentication.getName());
         searchRequest.addEntityIdFilter(ETargetEntity.CONTRACT, contractId);
 
         Page<CounterpartyContractDto> counterpartyContractDtos = userService.getCounterpartyContracts(searchRequest);
         return ResponseEntity.ok().body(counterpartyContractDtos);
     }
 
-    @GetMapping("{login}/contracts/{contractId}/contract-stages/")
+    @GetMapping("contracts/{contractId}/contract-stages/")
     public ResponseEntity<Page<ContractStageDto>> getContractStagesByContractId(
-            @PathVariable String login, @PathVariable Integer contractId,
-            @RequestBody SearchRequest searchRequest
+            @PathVariable Integer contractId,
+            @RequestBody SearchRequest searchRequest,
+            Authentication authentication
     ) {
-        searchRequest.addUserLoginFilter(login);
+        searchRequest.addUserLoginFilter(authentication.getName());
         searchRequest.addEntityIdFilter(ETargetEntity.CONTRACT, contractId);
 
         Page<ContractStageDto> contractStageDtos = userService.getContractStages(searchRequest);
         return ResponseEntity.ok().body(contractStageDtos);
+    }
+
+    @GetMapping("/user-info")
+    public ResponseEntity<UserDto> getUserInfo(Authentication authentication) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        return ResponseEntity.ok(userMapper.mapToUserDto(userDetails));
     }
 }
