@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ~/apps/mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=citizix
+      - MONGO_INITDB_ROOT_PASSWORD=S3cret
+      - MONGO_INITDB_DATABASE=testdb
+  mysqldb:
+    image: mysql:8.0
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_DATABASE=ab
+      - MYSQL_PASSWORD=qwe123
+      - MYSQL_USER=testdb
+      - MYSQL_ROOT_PASSWORD=qwe123
+    ports:
+      - 3307:3306
+    expose:
+      - 3307
+    volumes:
+      - ~/apps/mysql:/data/db
+  main:
+    image: app
+    ports:
+      - 8080:8080
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/ab?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      - spring.data.mongodb.host=mongodb
+    depends_on:
+      - mysqldb
+      - mongodb
+networks:
+  default:
+    name: network
