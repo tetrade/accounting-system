@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
         ContractMapperImpl.class,
         UserMapperImpl.class
 })
-
 class MappersTest {
 
     @Autowired
@@ -194,6 +193,7 @@ class MappersTest {
         should.setFullName(user.getFullName());
         should.setPassword(user.getPassword());
         should.setLogin(user.getLogin());
+        should.setIsAdmin(true);
 
         UserDto userDto = userMapper.mapToUserDto(user);
 

@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
@@ -25,6 +27,12 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 @DataJpaTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class CustomAdminRepoTest {
+
+    @MockBean
+    private MongoTemplate mongoTemplate;
+
+    @MockBean
+    private UserLogRepository userLogRepository;
 
     @Autowired
     private CounterpartyOrganizationRepo counterpartyOrganizationRepo;

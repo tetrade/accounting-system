@@ -11,6 +11,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -26,13 +27,13 @@ public class UserExcelController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("users/{login}/downland-contract-report/dates")
+    @GetMapping("downland-contract-report/dates")
     public ResponseEntity<ByteArrayResource> downlandContractReport(
-            @PathVariable String login,
             @RequestParam(value = "planned-start-date", defaultValue = "#{T(java.time.LocalDate).of(1000, 12, 31)}") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate plannedStartDate,
-            @RequestParam(value = "planned-end-date", defaultValue = "#{T(java.time.LocalDate).of(9999, 12, 31)}") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate plannedEndDate
+            @RequestParam(value = "planned-end-date", defaultValue = "#{T(java.time.LocalDate).of(9999, 12, 31)}") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate plannedEndDate,
+            Authentication authentication
     ) throws IOException {
-
+        String login = authentication.getName();
         Set<ContractDtoExcel> contractDtoExcelSet =
                 userService.getContractsBetweenDates(login, plannedStartDate, plannedEndDate);
 
@@ -48,11 +49,12 @@ public class UserExcelController {
                 .body(new ByteArrayResource(stream.toByteArray()));
     }
 
-    @GetMapping("users/{login}/downland-contract-stage-report/{contractId}")
+    @GetMapping("downland-contract-stage-report/{contractId}")
     public ResponseEntity<ByteArrayResource> downlandContractStageReport(
-            @PathVariable String login,
+            Authentication authentication,
             @PathVariable int contractId
     ) throws IOException {
+        String login = authentication.getName();
         Set<ContractStageDtoExcel> contractStageDtoExcelSet =
                 userService.getContractStagesContractForContractId(login, contractId);
 

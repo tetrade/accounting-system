@@ -32,7 +32,7 @@ public class User {
     private String password;
 
     @Column(name="terminate_date")
-    private LocalDate dateOfTermination;
+    private LocalDate terminationDate;
 
     @OneToMany(cascade = {
             CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE,

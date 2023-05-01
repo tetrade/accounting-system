@@ -1,29 +1,27 @@
 package com.accountingsystem.service;
 
+import com.accountingsystem.entitys.UserLog;
+import com.accountingsystem.controller.SignUpRequest;
 import com.accountingsystem.controller.dtos.ContractDto;
 import com.accountingsystem.controller.dtos.ContractStageDto;
 import com.accountingsystem.controller.dtos.CounterpartyContractDto;
 import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
-import com.accountingsystem.controller.dtos.mappers.ContractMapper;
-import com.accountingsystem.controller.dtos.mappers.ContractStageMapper;
-import com.accountingsystem.controller.dtos.mappers.CounterpartyContractMapper;
-import com.accountingsystem.controller.dtos.mappers.CounterpartyOrganizationMapper;
-import com.accountingsystem.entitys.CounterpartyOrganization;
+import com.accountingsystem.controller.dtos.mappers.*;
+import com.accountingsystem.entitys.*;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
-import com.accountingsystem.entitys.Contract;
-import com.accountingsystem.entitys.ContractStage;
-import com.accountingsystem.entitys.CounterpartyContract;
 import com.accountingsystem.filters.SearchRequest;
 import com.accountingsystem.filters.SearchSpecification;
 import com.accountingsystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Service
@@ -45,11 +43,21 @@ public class UserService {
 
     private final CounterpartyOrganizationMapper counterpartyOrganizationMapper;
 
+    private final UserRepo userRepo;
+
+    private final UserMapper userMapper;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final RoleRepo roleRepo;
+
+    private final UserLogRepository userLogRepository;
+
     @Autowired
     public UserService(ContractRepo contractRepo, CounterpartyContractRepo counterpartyContractRepo,
                        ContractStageMapper contractStageMapper, CounterpartyOrganizationRepo counterpartyOrganizationRepo,
                        ContractStageRepo contractStageRepo, CounterpartyContractMapper counterpartyContractMapper, ContractMapper contractMapper,
-                       CounterpartyOrganizationMapper counterpartyOrganizationMapper) {
+                       CounterpartyOrganizationMapper counterpartyOrganizationMapper, UserRepo userRepo, UserMapper userMapper, PasswordEncoder passwordEncoder, RoleRepo roleRepo, UserLogRepository userLogRepository) {
         this.contractRepo = contractRepo;
         this.contractStageMapper = contractStageMapper;
         this.counterpartyOrganizationRepo = counterpartyOrganizationRepo;
@@ -58,6 +66,11 @@ public class UserService {
         this.contractMapper = contractMapper;
         this.counterpartyContractMapper = counterpartyContractMapper;
         this.counterpartyOrganizationMapper = counterpartyOrganizationMapper;
+        this.userRepo = userRepo;
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepo = roleRepo;
+        this.userLogRepository = userLogRepository;
     }
 
 
@@ -115,5 +128,18 @@ public class UserService {
         return contractStageRepo
                 .findAll(specification, PageRequest.of(searchRequest.getPage(), searchRequest.getSize()))
                 .map(contractStageMapper::mapToContractStageDto);
+    }
+
+    public void createNewUser(SignUpRequest signupRequest) {
+        User user = userMapper.mapToUser(signupRequest, passwordEncoder, roleRepo);
+        userRepo.save(user);
+    }
+
+    public void logUserLogin(String login, String ip) {
+        UserLog userLog = new UserLog();
+        userLog.setLogin(login);
+        userLog.setIpAddress(ip);
+        userLog.setTime(LocalDateTime.now());
+        userLogRepository.save(userLog);
     }
 }
