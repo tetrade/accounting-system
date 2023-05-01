@@ -12,7 +12,6 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
         ContractMapperImpl.class,
         UserMapperImpl.class
 })
-
 class MappersTest {
 
     @Autowired
@@ -195,7 +193,7 @@ class MappersTest {
         should.setFullName(user.getFullName());
         should.setPassword(user.getPassword());
         should.setLogin(user.getLogin());
-        should.setRoles(Stream.of(ERole.ROLE_ADMIN).collect(Collectors.toSet()));
+        should.setIsAdmin(true);
 
         UserDto userDto = userMapper.mapToUserDto(user);
 

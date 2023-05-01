@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -36,7 +37,8 @@ public class AuthController {
 	UserService userService;
 
 	@PostMapping("/sign-in")
-	public ResponseEntity<UserDto> authUser(@RequestBody LoginRequest loginRequest, HttpServletResponse httpServletResponse) {
+	public ResponseEntity<UserDto> authUser(@RequestBody LoginRequest loginRequest, HttpServletResponse httpServletResponse,
+											HttpServletRequest httpServletRequest) {
 		Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(
 						loginRequest.getLogin(), loginRequest.getPassword()
@@ -53,6 +55,8 @@ public class AuthController {
 		httpServletResponse.addCookie(cookie);
 
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+		userService.logUserLogin(userDetails.getLogin(), httpServletRequest.getRemoteAddr());
 
 		return ResponseEntity.ok(userMapper.mapToUserDto(userDetails));
 	}

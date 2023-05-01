@@ -6,6 +6,8 @@ import com.accountingsystem.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,6 +15,12 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
 class   EntityRelationshipsTest {
+
+    @MockBean
+    private MongoTemplate mongoTemplate;
+
+    @MockBean
+    private UserLogRepository userLogRepository;
 
     @Autowired
     private UserRepo userRepo;

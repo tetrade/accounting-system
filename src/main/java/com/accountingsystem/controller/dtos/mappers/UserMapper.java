@@ -24,16 +24,18 @@ import java.util.stream.Stream;
 public interface UserMapper {
 
 
-    default ERole map(Role role) { return role.getName(); }
+    default boolean map(Set<Role> role) {
+        return role.stream().map(Role::getName).anyMatch(r -> r.equals(ERole.ROLE_ADMIN));
+    }
 
-    Set<ERole> map(Set<Role> roles);
-
+    @Mapping(source = "roles", target = "isAdmin")
     UserDto mapToUserDto(User user);
 
     User mapToUser(UserDto user);
+
     Set<UserDto> mapToUserDtoSet(Collection<User> users);
 
-    @Mapping(source = "user.roles", target = "roles")
+    @Mapping(source = "user.roles", target = "isAdmin")
     UserDto mapToUserDto(UserDetailsImpl userDetails);
 
     User mapToUser(SignUpRequest signupRequest, @Context PasswordEncoder passwordEncoder,

@@ -9,6 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.context.TestPropertySource;
+
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import java.math.BigDecimal;
@@ -18,7 +22,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @DataJpaTest
+@TestPropertySource(properties = "spring.mongodb.embedded.version=3.5.5")
 class FiltersTest {
+
+    @MockBean
+    private MongoTemplate mongoTemplate;
+
+    @MockBean
+    private UserLogRepository userLogRepository;
 
     @Autowired
     private UserRepo userRepo;

@@ -3,7 +3,6 @@ package com.accountingsystem.controller.user;
 
 import com.accountingsystem.controller.dtos.*;
 import com.accountingsystem.controller.dtos.mappers.UserMapper;
-import com.accountingsystem.excel.ExcelReportWriter;
 import com.accountingsystem.filters.*;
 import com.accountingsystem.service.UserDetailsImpl;
 import com.accountingsystem.service.UserService;
@@ -16,9 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("user-api/")
 @RestController
 public class UserGettingController {
-
-    @Autowired
-    private ExcelReportWriter excelReportWriter;
 
     @Autowired
     private UserService userService;

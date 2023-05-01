@@ -2,7 +2,6 @@ package com.accountingsystem.configs.jwt;
 
 import com.accountingsystem.service.UserDetailsImpl;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;

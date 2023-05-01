@@ -4,11 +4,15 @@ package com.accountingsystem.repositorie.excel;
 import com.accountingsystem.entitys.*;
 import com.accountingsystem.entitys.enums.EType;
 import com.accountingsystem.repository.ContractStageRepo;
+import com.accountingsystem.repository.UserLogRepository;
 import com.accountingsystem.repository.UserRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.mongodb.core.MongoTemplate;
+
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,6 +20,12 @@ import java.util.Set;
 
 @DataJpaTest
 class ContractStageRepositoryTest {
+
+    @MockBean
+    private MongoTemplate mongoTemplate;
+
+    @MockBean
+    private UserLogRepository userLogRepository;
 
     @Autowired
     private ContractStageRepo contractStageRepo;

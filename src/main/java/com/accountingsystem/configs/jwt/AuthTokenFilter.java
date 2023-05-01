@@ -9,8 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
@@ -30,6 +29,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	
 	@Autowired
 	private UserDetailsServiceImpl userDetailsService;
+
+
+	// Требуется, поскольку мы не должен обращаться к кукам, если происходит регистрация или авторизация
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) {
+		return new AntPathMatcher().match("/auth-api/*", request.getServletPath());
+	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

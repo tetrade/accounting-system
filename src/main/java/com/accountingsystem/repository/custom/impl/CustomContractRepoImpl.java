@@ -1,11 +1,13 @@
 package com.accountingsystem.repository.custom.impl;
 
 import com.accountingsystem.controller.dtos.ContractDto;
+import com.accountingsystem.entitys.enums.EType;
 import com.accountingsystem.repository.custom.CustomContractRepo;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 public class CustomContractRepoImpl implements CustomContractRepo {
 
@@ -23,7 +25,7 @@ public class CustomContractRepoImpl implements CustomContractRepo {
                 .setParameter(5, c.getActualEndDate())
                 .setParameter(6, c.getPlannedStartDate())
                 .setParameter(7, c.getPlannedEndDate())
-                .setParameter(8, c.getType().getType())
+                .setParameter(8, Optional.ofNullable(c.getType()).map(EType::getType).orElse(null))
                 .executeUpdate();
     }
 

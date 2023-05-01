@@ -1,5 +1,6 @@
 package com.accountingsystem.service;
 
+import com.accountingsystem.entitys.UserLog;
 import com.accountingsystem.controller.SignUpRequest;
 import com.accountingsystem.controller.dtos.ContractDto;
 import com.accountingsystem.controller.dtos.ContractStageDto;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Service
@@ -49,11 +51,13 @@ public class UserService {
 
     private final RoleRepo roleRepo;
 
+    private final UserLogRepository userLogRepository;
+
     @Autowired
     public UserService(ContractRepo contractRepo, CounterpartyContractRepo counterpartyContractRepo,
                        ContractStageMapper contractStageMapper, CounterpartyOrganizationRepo counterpartyOrganizationRepo,
                        ContractStageRepo contractStageRepo, CounterpartyContractMapper counterpartyContractMapper, ContractMapper contractMapper,
-                       CounterpartyOrganizationMapper counterpartyOrganizationMapper, UserRepo userRepo, UserMapper userMapper, PasswordEncoder passwordEncoder, RoleRepo roleRepo) {
+                       CounterpartyOrganizationMapper counterpartyOrganizationMapper, UserRepo userRepo, UserMapper userMapper, PasswordEncoder passwordEncoder, RoleRepo roleRepo, UserLogRepository userLogRepository) {
         this.contractRepo = contractRepo;
         this.contractStageMapper = contractStageMapper;
         this.counterpartyOrganizationRepo = counterpartyOrganizationRepo;
@@ -66,6 +70,7 @@ public class UserService {
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.roleRepo = roleRepo;
+        this.userLogRepository = userLogRepository;
     }
 
 
@@ -130,4 +135,11 @@ public class UserService {
         userRepo.save(user);
     }
 
+    public void logUserLogin(String login, String ip) {
+        UserLog userLog = new UserLog();
+        userLog.setLogin(login);
+        userLog.setIpAddress(ip);
+        userLog.setTime(LocalDateTime.now());
+        userLogRepository.save(userLog);
+    }
 }

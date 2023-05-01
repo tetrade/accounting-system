@@ -65,14 +65,13 @@ public class WebSecurityConfig {
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests()
-				.antMatchers("/auth-api/**").permitAll()
-				.antMatchers("/user-api/**").hasAnyRole("USER", "ADMIN")
-				.antMatchers("/admin-api/**").hasRole("ADMIN")
+				.antMatchers("/auth-api/*").permitAll()
+				.antMatchers("/user-api/*").hasAnyRole("USER", "ADMIN")
+				.antMatchers("/admin-api/*").hasRole("ADMIN")
 				.anyRequest().authenticated();
 
-		http.authenticationProvider(authenticationProvider());
-		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
+			http.authenticationProvider(authenticationProvider());
+			http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 }
