@@ -2,6 +2,8 @@ package com.accountingsystem.controller;
 
 
 import com.accountingsystem.configs.jwt.JwtUtils;
+import com.accountingsystem.controller.dtos.LoginRequest;
+import com.accountingsystem.controller.dtos.SignUpRequest;
 import com.accountingsystem.controller.dtos.UserDto;
 import com.accountingsystem.controller.dtos.mappers.UserMapper;
 import com.accountingsystem.service.UserDetailsImpl;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth-api/")
@@ -37,7 +40,7 @@ public class AuthController {
 	UserService userService;
 
 	@PostMapping("/sign-in")
-	public ResponseEntity<UserDto> authUser(@RequestBody LoginRequest loginRequest, HttpServletResponse httpServletResponse,
+	public ResponseEntity<UserDto> authUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse httpServletResponse,
 											HttpServletRequest httpServletRequest) {
 		Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(
@@ -62,7 +65,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/sign-up")
-	public ResponseEntity<Void> registerUser(@RequestBody SignUpRequest signupRequest) {
+	public ResponseEntity<Void> registerUser(@Valid @RequestBody SignUpRequest signupRequest) {
 		userService.createNewUser(signupRequest);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}

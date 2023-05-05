@@ -1,6 +1,7 @@
 package com.accountingsystem.controller.dtos.mappers;
 
-import com.accountingsystem.controller.SignUpRequest;
+import com.accountingsystem.advice.exceptions.IllegalFieldValueException;
+import com.accountingsystem.controller.dtos.SignUpRequest;
 import com.accountingsystem.controller.dtos.UserDto;
 import com.accountingsystem.entitys.Role;
 import com.accountingsystem.entitys.User;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -45,7 +47,10 @@ public interface UserMapper {
     default void map(@MappingTarget User user, SignUpRequest signUpRequest, @Context PasswordEncoder passwordEncoder,
                      @Context RoleRepo roleRepo) {
         user.setTerminationDate(LocalDate.now().plusMonths(1));
-        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+
+        user.setPassword(passwordEncoder.encode(
+                Optional.ofNullable(signUpRequest.getPassword()).orElseThrow(() -> new IllegalFieldValueException("`password` field can't be null"))
+        ));
 
         HashSet<Role> hashSet = new HashSet<>();
         hashSet.add(roleRepo.findByName(ERole.ROLE_USER).orElse(null));

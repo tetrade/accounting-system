@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("admin-api/")
 public class AdminController {
@@ -25,14 +27,14 @@ public class AdminController {
 
     @PostMapping("counterparty-organizations")
     public ResponseEntity<CounterpartyOrganizationDto> createCounterpartyOrganization(
-            @RequestBody CounterpartyOrganizationDto counterpartyOrganizationDto) {
+            @RequestBody @Valid CounterpartyOrganizationDto counterpartyOrganizationDto) {
         adminService.createCounterpartyOrganization(counterpartyOrganizationDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("counterparty-organizations/{id}")
     public ResponseEntity<CounterpartyOrganizationDto> updateCounterpartyOrganization(
-            @RequestBody CounterpartyOrganizationDto counterpartyOrganizationDto,
+            @RequestBody @Valid CounterpartyOrganizationDto counterpartyOrganizationDto,
             @PathVariable int id
     ) {
         adminService.updateCounterpartyOrganization(id, counterpartyOrganizationDto);
@@ -50,7 +52,7 @@ public class AdminController {
     @GetMapping("contracts/{contractId}/counterparty-contracts/")
     public ResponseEntity<Page<CounterpartyContractDto>> getCounterpartyContractsByContractId(
            @PathVariable Integer contractId,
-           @RequestBody SearchRequest searchRequest
+           @RequestBody @Valid SearchRequest searchRequest
     ) {
         searchRequest.addEntityIdFilter(ETargetEntity.CONTRACT, contractId);
 
@@ -61,7 +63,7 @@ public class AdminController {
     @PostMapping("contracts/{contractId}/counterparty-contracts/")
     public ResponseEntity<CounterpartyContractDto> createCounterpartyContract(
             @PathVariable int contractId,
-            @RequestBody CounterpartyContractDto counterpartyContractDto
+            @RequestBody @Valid CounterpartyContractDto counterpartyContractDto
     ) {
         adminService.createCounterpartyContract(contractId, counterpartyContractDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -70,7 +72,7 @@ public class AdminController {
     @PutMapping("counterparty-contracts/{id}")
     public ResponseEntity<CounterpartyContractDto> updateCounterpartyContractDto(
             @PathVariable int id,
-            @RequestBody CounterpartyContractDto counterpartyContractDto
+            @RequestBody @Valid CounterpartyContractDto counterpartyContractDto
     ) {
         adminService.updateCounterpartyContract(id, counterpartyContractDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -87,7 +89,7 @@ public class AdminController {
     @GetMapping("contracts/{contractId}/contract-stages/")
     public ResponseEntity<Page<ContractStageDto>> getContractStagesByContractId(
             @PathVariable Integer contractId,
-            @RequestBody SearchRequest searchRequest
+            @RequestBody @Valid SearchRequest searchRequest
     ) {
         searchRequest.addEntityIdFilter(ETargetEntity.CONTRACT, contractId);
 
@@ -98,7 +100,7 @@ public class AdminController {
     @PostMapping("contracts/{contractId}/contract-stages")
     public ResponseEntity<ContractStageDto> createContractStage(
             @PathVariable int contractId,
-            @RequestBody ContractStageDto contractStageDto
+            @RequestBody @Valid ContractStageDto contractStageDto
     ) {
         adminService.createContractStage(contractId, contractStageDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -107,7 +109,7 @@ public class AdminController {
     @PutMapping("contract-stages/{id}")
     public ResponseEntity<ContractStageDto> updateContractStage(
             @PathVariable int id,
-            @RequestBody ContractStageDto contractStageDto
+            @RequestBody @Valid ContractStageDto contractStageDto
     ) {
         adminService.updateContractStage(id, contractStageDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -134,7 +136,7 @@ public class AdminController {
 
     @PostMapping("contracts/")
     public ResponseEntity<ContractDto> createContract(
-            @RequestBody ContractDto contractDto
+            @RequestBody @Valid ContractDto contractDto
     ) {
         adminService.createContract(contractDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -143,7 +145,7 @@ public class AdminController {
     @PutMapping("contracts/{id}")
     public ResponseEntity<ContractDto> updateContract(
             @PathVariable int id,
-            @RequestBody ContractDto contractDto
+            @RequestBody @Valid ContractDto contractDto
     ) {
         adminService.updateContract(id, contractDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

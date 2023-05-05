@@ -37,6 +37,8 @@ services:
     depends_on:
       - mysqldb
       - mongodb
+
+
 networks:
   default:
     name: network
