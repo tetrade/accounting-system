@@ -1,5 +1,6 @@
 package com.accountingsystem.controller.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -10,6 +11,8 @@ public class UserDto {
     private int id;
     private String login;
     private String fullName;
+
+    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate terminationDate;
 
     private Boolean isAdmin;

@@ -12,8 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("user-api/")
+import javax.validation.constraints.Positive;
+
+@RequestMapping("api/user/")
 @RestController
+@CrossOrigin(allowCredentials = "true", originPatterns = "*")
 public class UserGettingController {
 
     @Autowired
@@ -23,13 +26,13 @@ public class UserGettingController {
     private UserMapper userMapper;
 
     // Методы для получения информации пользователя
-    @GetMapping("counterparty-organizations/")
+    @PostMapping("counterparty-organizations/search")
     public ResponseEntity<Page<CounterpartyOrganizationDto>> getCounterpartyOrganizations(@RequestBody SearchRequest searchRequest) {
         Page<CounterpartyOrganizationDto> counterpartyOrganizationDtos = userService.getCounterpartyOrganizations(searchRequest);
         return ResponseEntity.ok().body(counterpartyOrganizationDtos);
     }
 
-    @GetMapping("contracts/")
+    @PostMapping("contracts/search")
     public ResponseEntity<Page<ContractDto>> getContracts(
             @RequestBody SearchRequest searchRequest,
             Authentication authentication
@@ -40,9 +43,9 @@ public class UserGettingController {
         return ResponseEntity.ok().body(contractDtos);
     }
 
-    @GetMapping("contracts/{contractId}/counterparty-contracts/")
+    @PostMapping("contracts/{contractId}/counterparty-contracts/search")
     public ResponseEntity<Page<CounterpartyContractDto>> getCounterpartyContractsByContractId(
-            @PathVariable Integer contractId,
+            @PathVariable @Positive Integer contractId,
             @RequestBody SearchRequest searchRequest,
             Authentication authentication
     ) {
@@ -53,9 +56,9 @@ public class UserGettingController {
         return ResponseEntity.ok().body(counterpartyContractDtos);
     }
 
-    @GetMapping("contracts/{contractId}/contract-stages/")
+    @PostMapping("contracts/{contractId}/contract-stages/search")
     public ResponseEntity<Page<ContractStageDto>> getContractStagesByContractId(
-            @PathVariable Integer contractId,
+            @PathVariable @Positive Integer contractId,
             @RequestBody SearchRequest searchRequest,
             Authentication authentication
     ) {
@@ -66,7 +69,7 @@ public class UserGettingController {
         return ResponseEntity.ok().body(contractStageDtos);
     }
 
-    @GetMapping("/user-info")
+    @PostMapping("/user-info")
     public ResponseEntity<UserDto> getUserInfo(Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return ResponseEntity.ok(userMapper.mapToUserDto(userDetails));

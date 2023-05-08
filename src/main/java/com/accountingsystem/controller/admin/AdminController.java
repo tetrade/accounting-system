@@ -12,9 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 
 @RestController
-@RequestMapping("admin-api/")
+@RequestMapping("api/admin/")
+@CrossOrigin(allowCredentials = "true", originPatterns = "*")
 public class AdminController {
 
     @Autowired
@@ -35,7 +37,7 @@ public class AdminController {
     @PutMapping("counterparty-organizations/{id}")
     public ResponseEntity<CounterpartyOrganizationDto> updateCounterpartyOrganization(
             @RequestBody @Valid CounterpartyOrganizationDto counterpartyOrganizationDto,
-            @PathVariable int id
+            @PathVariable @Positive int id
     ) {
         adminService.updateCounterpartyOrganization(id, counterpartyOrganizationDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -49,9 +51,9 @@ public class AdminController {
 
     // --------------------------------------- Контракты с контр-агентами ---------------------------------------
 
-    @GetMapping("contracts/{contractId}/counterparty-contracts/")
+    @PostMapping("contracts/{contractId}/counterparty-contracts/search")
     public ResponseEntity<Page<CounterpartyContractDto>> getCounterpartyContractsByContractId(
-           @PathVariable Integer contractId,
+           @PathVariable @Positive Integer contractId,
            @RequestBody @Valid SearchRequest searchRequest
     ) {
         searchRequest.addEntityIdFilter(ETargetEntity.CONTRACT, contractId);
@@ -60,9 +62,9 @@ public class AdminController {
         return ResponseEntity.ok().body(counterpartyContractDtos);
     }
 
-    @PostMapping("contracts/{contractId}/counterparty-contracts/")
+    @PostMapping("contracts/{contractId}/counterparty-contracts")
     public ResponseEntity<CounterpartyContractDto> createCounterpartyContract(
-            @PathVariable int contractId,
+            @PathVariable @Positive int contractId,
             @RequestBody @Valid CounterpartyContractDto counterpartyContractDto
     ) {
         adminService.createCounterpartyContract(contractId, counterpartyContractDto);
@@ -71,7 +73,7 @@ public class AdminController {
 
     @PutMapping("counterparty-contracts/{id}")
     public ResponseEntity<CounterpartyContractDto> updateCounterpartyContractDto(
-            @PathVariable int id,
+            @PathVariable @Positive int id,
             @RequestBody @Valid CounterpartyContractDto counterpartyContractDto
     ) {
         adminService.updateCounterpartyContract(id, counterpartyContractDto);
@@ -86,9 +88,9 @@ public class AdminController {
 
     // ------------------------------------- Стадии контракта -------------------------------------
 
-    @GetMapping("contracts/{contractId}/contract-stages/")
+    @PostMapping("contracts/{contractId}/contract-stages/search")
     public ResponseEntity<Page<ContractStageDto>> getContractStagesByContractId(
-            @PathVariable Integer contractId,
+            @PathVariable @Positive Integer contractId,
             @RequestBody @Valid SearchRequest searchRequest
     ) {
         searchRequest.addEntityIdFilter(ETargetEntity.CONTRACT, contractId);
@@ -99,7 +101,7 @@ public class AdminController {
 
     @PostMapping("contracts/{contractId}/contract-stages")
     public ResponseEntity<ContractStageDto> createContractStage(
-            @PathVariable int contractId,
+            @PathVariable @Positive int contractId,
             @RequestBody @Valid ContractStageDto contractStageDto
     ) {
         adminService.createContractStage(contractId, contractStageDto);
@@ -108,7 +110,7 @@ public class AdminController {
 
     @PutMapping("contract-stages/{id}")
     public ResponseEntity<ContractStageDto> updateContractStage(
-            @PathVariable int id,
+            @PathVariable @Positive int id,
             @RequestBody @Valid ContractStageDto contractStageDto
     ) {
         adminService.updateContractStage(id, contractStageDto);
@@ -126,15 +128,15 @@ public class AdminController {
     // Так поскольку мы имеем не жесткую связь между контрактом и пользователем.
     // Контракт может быть изначально никому не назначен.
 
-    @GetMapping("contracts/")
+    @PostMapping("contracts/search")
     public ResponseEntity<?> getContractsWithUsers(
-            @RequestBody SearchRequest searchRequest
+            @RequestBody @Valid SearchRequest searchRequest
     ) {
         Page<ContractUserDto> contracts = adminService.getContractWithUsers(searchRequest);
         return ResponseEntity.ok().body(contracts);
     }
 
-    @PostMapping("contracts/")
+    @PostMapping("contracts")
     public ResponseEntity<ContractDto> createContract(
             @RequestBody @Valid ContractDto contractDto
     ) {
@@ -144,7 +146,7 @@ public class AdminController {
 
     @PutMapping("contracts/{id}")
     public ResponseEntity<ContractDto> updateContract(
-            @PathVariable int id,
+            @PathVariable @Positive int id,
             @RequestBody @Valid ContractDto contractDto
     ) {
         adminService.updateContract(id, contractDto);
@@ -152,16 +154,16 @@ public class AdminController {
     }
 
     @DeleteMapping("contracts/{id}")
-    public ResponseEntity<ContractDto> deleteContract(@PathVariable int id) {
+    public ResponseEntity<ContractDto> deleteContract(@PathVariable @Positive    int id) {
         adminService.deleteContract(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     // ------------------------------------ Список пользователей ------------------------------------
 
-    @GetMapping("users/")
+    @PostMapping("users")
     public ResponseEntity<?> getUsers(
-            @RequestBody SearchRequest searchRequest
+            @RequestBody @Valid SearchRequest searchRequest
     ){
         Page<UserDto> users = adminService.getAllUsers(searchRequest);
         return ResponseEntity.ok().body(users);

@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/auth-api/")
-@CrossOrigin(origins = "*", maxAge = 3600)
+@RequestMapping("api/auth/")
+@CrossOrigin(allowCredentials = "true", originPatterns = "*")
 public class AuthController {
 
 	@Autowired

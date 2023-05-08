@@ -1,12 +1,18 @@
 package com.accountingsystem.advice;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.*;
 
 @Getter
-@RequiredArgsConstructor
-public class Violation {
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonPropertyOrder(alphabetic=true)
+public class Violation extends AppError {
+    private String fieldName;
 
-    private final String fieldName;
-    private final String message;
+    public Violation(String fieldName, String message) {
+        super(message);
+        this.fieldName = fieldName;
+    }
 }

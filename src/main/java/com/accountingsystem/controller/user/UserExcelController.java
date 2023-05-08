@@ -14,12 +14,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Set;
 
-@RequestMapping("user-api/")
+@RequestMapping("api/user/")
 @RestController
+@CrossOrigin(allowCredentials = "true", originPatterns = "*")
 public class UserExcelController {
     @Autowired
     private ExcelReportWriter excelReportWriter;
@@ -52,7 +54,7 @@ public class UserExcelController {
     @GetMapping("downland-contract-stage-report/{contractId}")
     public ResponseEntity<ByteArrayResource> downlandContractStageReport(
             Authentication authentication,
-            @PathVariable int contractId
+            @PathVariable @Positive int contractId
     ) throws IOException {
         String login = authentication.getName();
         Set<ContractStageDtoExcel> contractStageDtoExcelSet =

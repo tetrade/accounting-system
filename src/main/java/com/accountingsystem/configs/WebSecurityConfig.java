@@ -61,17 +61,19 @@ public class WebSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable()
+		http.csrf().disable()
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests()
-				.antMatchers("/auth-api/*").permitAll()
-				.antMatchers("/user-api/*").hasAnyRole("USER", "ADMIN")
-				.antMatchers("/admin-api/*").hasRole("ADMIN")
+				.antMatchers("/api/auth/*").permitAll()
+				.antMatchers("/api/user/*").hasAnyRole("USER", "ADMIN")
+				.antMatchers("/api/admin/*").hasRole("ADMIN")
 				.anyRequest().authenticated();
+
 
 			http.authenticationProvider(authenticationProvider());
 			http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+			http.cors();
 		return http.build();
 	}
 }
