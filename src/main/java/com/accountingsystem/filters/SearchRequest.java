@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.*;
 
 @Data
@@ -15,7 +16,7 @@ public class SearchRequest {
     @Valid
     private Set<FilterRequest> filters;
 
-    @Positive
+    @PositiveOrZero
     private Integer page;
 
     @Positive

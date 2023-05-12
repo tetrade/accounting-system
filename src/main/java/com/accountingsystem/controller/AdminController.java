@@ -1,4 +1,4 @@
-package com.accountingsystem.controller.admin;
+package com.accountingsystem.controller;
 
 import com.accountingsystem.controller.dtos.*;
 import com.accountingsystem.filters.ETargetEntity;
@@ -129,7 +129,7 @@ public class AdminController {
     // Контракт может быть изначально никому не назначен.
 
     @PostMapping("contracts/search")
-    public ResponseEntity<?> getContractsWithUsers(
+    public ResponseEntity<Page<ContractUserDto>> getContractsWithUsers(
             @RequestBody @Valid SearchRequest searchRequest
     ) {
         Page<ContractUserDto> contracts = adminService.getContractWithUsers(searchRequest);
@@ -162,7 +162,7 @@ public class AdminController {
     // ------------------------------------ Список пользователей ------------------------------------
 
     @PostMapping("users")
-    public ResponseEntity<?> getUsers(
+    public ResponseEntity<Page<UserDto>> getUsers(
             @RequestBody @Valid SearchRequest searchRequest
     ){
         Page<UserDto> users = adminService.getAllUsers(searchRequest);
