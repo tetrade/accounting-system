@@ -64,11 +64,12 @@ class FiltersTest {
 
     private CounterpartyOrganization counterpartyOrganization1;
     private CounterpartyOrganization counterpartyOrganization2;
+    @Autowired
+    private RoleRepo roleRepo;
 
     @BeforeEach
     public void setUp() {
-        Role role = new Role();
-        role.setName(ERole.ROLE_USER);
+        Role role = roleRepo.findByName(ERole.ROLE_USER).orElse(null);
 
         user1 = new User();
         user1.setLogin("user1");

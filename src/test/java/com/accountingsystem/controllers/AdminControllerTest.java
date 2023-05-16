@@ -9,7 +9,6 @@ import com.accountingsystem.repository.UserLogRepository;
 import com.accountingsystem.service.AdminService;
 import com.accountingsystem.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.minidev.json.JSONArray;
 import net.minidev.json.parser.JSONParser;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

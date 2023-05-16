@@ -10,7 +10,6 @@ import com.accountingsystem.filters.*;
 import com.accountingsystem.repository.UserLogRepository;
 import com.accountingsystem.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.minidev.json.JSONArray;
 import net.minidev.json.parser.JSONParser;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.hamcrest.Matchers;

@@ -41,7 +41,7 @@ public class User {
             mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Contract> contracts;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name="user_id"),

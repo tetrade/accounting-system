@@ -93,7 +93,7 @@ public class AdminService {
 
     public void createCounterpartyContract(
             int contractId, CounterpartyContractDto counterpartyContractDto) {
-        if (!counterpartyContractRepo.existsById(contractId))
+        if (!contractRepo.existsById(contractId))
             throw new NoSuchRowException("id", contractId, "Contract");
         Integer counterpartyOrganizationId = counterpartyContractDto.getCounterpartyOrganizationId();
         if (counterpartyOrganizationId != null && !counterpartyOrganizationRepo.existsById(counterpartyOrganizationId))
