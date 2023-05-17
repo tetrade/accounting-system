@@ -56,7 +56,7 @@ class UserServiceTest {
         CounterpartyContractDtoExcel should = new CounterpartyContractDtoExcel();
         should.setName("cc1");
 
-        when(counterpartyContractMapper.mapToCounterpartyContractsDtoExcelSet(anySet())).thenReturn(
+        when(contractMapper.mapToCounterpartyContractsDtoExcelSet(anySet())).thenReturn(
                 Stream.of(should).collect(Collectors.toSet())
         );
 

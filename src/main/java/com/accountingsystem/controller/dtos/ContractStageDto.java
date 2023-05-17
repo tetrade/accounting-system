@@ -18,6 +18,7 @@ public class ContractStageDto {
     private String name;
 
     @DecimalMin(value = "0.0")
+    @NotNull
     private BigDecimal amount;
 
     @JsonFormat(pattern = "dd.MM.yyyy")
@@ -38,11 +39,13 @@ public class ContractStageDto {
     private BigDecimal actualMaterialCosts;
 
     @DecimalMin(value = "0.0")
+    @NotNull
     private BigDecimal plannedMaterialCosts;
 
     @DecimalMin(value = "0.0")
     private BigDecimal actualSalaryExpenses;
 
     @DecimalMin(value = "0.0")
+    @NotNull
     private BigDecimal plannedSalaryExpenses;
 }

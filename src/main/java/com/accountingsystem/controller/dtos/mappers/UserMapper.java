@@ -1,18 +1,20 @@
 package com.accountingsystem.controller.dtos.mappers;
 
 import com.accountingsystem.advice.exceptions.IllegalFieldValueException;
+import com.accountingsystem.advice.exceptions.NoSuchRowException;
 import com.accountingsystem.controller.dtos.SignUpRequest;
 import com.accountingsystem.controller.dtos.UserDto;
 import com.accountingsystem.entitys.Role;
 import com.accountingsystem.entitys.User;
 import com.accountingsystem.entitys.enums.ERole;
 import com.accountingsystem.repository.RoleRepo;
+import com.accountingsystem.repository.UserRepo;
 import com.accountingsystem.service.UserDetailsImpl;
 import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -20,31 +22,34 @@ import java.util.stream.Stream;
 
 @Mapper(
        componentModel = "spring",
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-        imports = {HashSet.class, Stream.class}
+        injectionStrategy = InjectionStrategy.FIELD,
+        imports = {HashSet.class, Stream.class, NoSuchRowException.class}
 )
-public interface UserMapper {
+public abstract class UserMapper {
 
+    @Autowired
+    UserRepo userRepo;
 
-    default boolean map(Set<Role> role) {
+    boolean map(Set<Role> role) {
         return role.stream().map(Role::getName).anyMatch(r -> r.equals(ERole.ROLE_ADMIN));
     }
 
+    User mapIdToUser(Integer id) {
+        if (id == null) return null;
+        return userRepo.findById(id).orElseThrow(() -> new NoSuchRowException("id", id, "user"));
+    }
+
     @Mapping(source = "roles", target = "isAdmin")
-    UserDto mapToUserDto(User user);
-
-    User mapToUser(UserDto user);
-
-    Set<UserDto> mapToUserDtoSet(Collection<User> users);
+    public abstract UserDto mapToUserDto(User user);
 
     @Mapping(source = "user.roles", target = "isAdmin")
-    UserDto mapToUserDto(UserDetailsImpl userDetails);
+    public abstract UserDto mapToUserDto(UserDetailsImpl userDetails);
 
-    User mapToUser(SignUpRequest signupRequest, @Context PasswordEncoder passwordEncoder,
-                   @Context RoleRepo roleRepo);
+    public abstract User mapToUser(SignUpRequest signupRequest, @Context PasswordEncoder passwordEncoder,
+                                   @Context RoleRepo roleRepo);
 
     @AfterMapping
-    default void map(@MappingTarget User user, SignUpRequest signUpRequest, @Context PasswordEncoder passwordEncoder,
+    void map(@MappingTarget User user, SignUpRequest signUpRequest, @Context PasswordEncoder passwordEncoder,
                      @Context RoleRepo roleRepo) {
         user.setTerminationDate(LocalDate.now().plusMonths(1));
 

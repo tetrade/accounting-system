@@ -88,7 +88,7 @@ public class UserService {
     ) {
         Set<CounterpartyContract> counterpartyContractsBetweenDates =
                 counterpartyContractRepo.getCounterpartyContractsBetweenDatesByLogin(login, startDate, endDate);
-        return counterpartyContractMapper
+        return contractMapper
                 .mapToCounterpartyContractsDtoExcelSet(counterpartyContractsBetweenDates);
     }
 

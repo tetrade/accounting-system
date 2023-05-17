@@ -121,12 +121,8 @@ public class AdminService {
     // ------------------------------------- Контракт ------------------------------------------
 
     public void createContract(ContractDto contractDto) {
-        Integer userId = contractDto.getUserId();
-        if (userId != null && !userRepo.existsById(userId))
-            throw new NoSuchRowException("id", userId, "User");
-        contractDto.setUserId(userId);
-
-        contractRepo.insertContract(contractDto);
+        Contract contract = contractMapper.mapToContract(contractDto);
+        contractRepo.insertContract(contract);
     }
 
     public void updateContract(Integer contractId, ContractDto contractDto) {
