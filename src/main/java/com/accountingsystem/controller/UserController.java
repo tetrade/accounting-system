@@ -92,8 +92,8 @@ public class UserController {
 
     @GetMapping("downland-contract-report/dates")
     public ResponseEntity<ByteArrayResource> downlandContractReport(
-            @RequestParam(value = "planned-start-date", defaultValue = "#{T(java.time.LocalDate).of(1000, 12, 31)}") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate plannedStartDate,
-            @RequestParam(value = "planned-end-date", defaultValue = "#{T(java.time.LocalDate).of(9999, 12, 31)}") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate plannedEndDate,
+            @RequestParam(value = "plannedStartDate", defaultValue = "#{T(java.time.LocalDate).of(1000, 12, 31)}") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate plannedStartDate,
+            @RequestParam(value = "plannedEndDate", defaultValue = "#{T(java.time.LocalDate).of(9999, 12, 31)}") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate plannedEndDate,
             Authentication authentication
     ) throws IOException {
         String login = authentication.getName();

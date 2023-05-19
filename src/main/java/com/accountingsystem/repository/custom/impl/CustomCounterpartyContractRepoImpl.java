@@ -13,10 +13,10 @@ public class CustomCounterpartyContractRepoImpl implements CustomCounterpartyCon
     private EntityManager entityManager;
 
     @Transactional
-    public void insertCounterpartyContract(int counterpartyContractId, CounterpartyContractDto c) {
+    public void insertCounterpartyContract(int contractId, CounterpartyContractDto c) {
         entityManager.createNativeQuery("INSERT INTO counterparty_contract (contract_id,counterparty_organization_id,name,amount,actual_start_date," +
                         "actual_end_date,planned_start_date,planned_end_date,type) VALUES (?,?,?,?,?,?,?,?,?)")
-                .setParameter(1, counterpartyContractId)
+                .setParameter(1, contractId)
                 .setParameter(2, c.getCounterpartyOrganizationId())
                 .setParameter(3, c.getName())
                 .setParameter(4, c.getAmount())

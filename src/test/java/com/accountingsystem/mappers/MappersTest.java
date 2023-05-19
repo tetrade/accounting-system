@@ -6,11 +6,13 @@ import com.accountingsystem.entitys.*;
 import com.accountingsystem.entitys.enums.ERole;
 import com.accountingsystem.entitys.enums.EType;
 import com.accountingsystem.repository.CounterpartyOrganizationRepo;
+import com.accountingsystem.repository.RoleRepo;
 import com.accountingsystem.repository.UserRepo;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.math.BigDecimal;
@@ -35,6 +37,12 @@ class MappersTest {
 
     @MockBean
     UserRepo userRepo;
+
+    @MockBean
+    RoleRepo roleRepo;
+
+    @MockBean
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     private CounterpartyOrganizationMapper counterpartyOrganizationMapper;
@@ -232,14 +240,13 @@ class MappersTest {
         UserDto should = new UserDto();
         should.setId(user.getId());
         should.setFullName(user.getFullName());
-        should.setPassword(user.getPassword());
+        should.setNewPassword(user.getPassword());
         should.setLogin(user.getLogin());
         should.setIsAdmin(true);
 
         UserDto userDto = userMapper.mapToUserDto(user);
 
-        assertThat(userDto).usingRecursiveComparison().isEqualTo(should);
+        assertThat(userDto).usingRecursiveComparison()
+                .ignoringFields("newPassword").isEqualTo(should);
     }
-
-
 }

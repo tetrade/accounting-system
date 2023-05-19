@@ -30,6 +30,26 @@ public abstract class UserMapper {
     @Autowired
     UserRepo userRepo;
 
+    @Autowired
+    RoleRepo roleRepo;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    public abstract void mapToUser(@MappingTarget User user, UserDto userDto);
+
+    @AfterMapping
+    void map(@MappingTarget User user, UserDto userDto) {
+
+        if (userDto.getNewPassword() != null)
+            user.setPassword(passwordEncoder.encode(userDto.getNewPassword()));
+
+        if (userDto.getIsAdmin())
+            user.getRoles().add(roleRepo.findByName(ERole.ROLE_ADMIN).orElse(null));
+        else
+            user.getRoles().remove(roleRepo.findByName(ERole.ROLE_ADMIN).orElse(null));
+    }
+
     boolean map(Set<Role> role) {
         return role.stream().map(Role::getName).anyMatch(r -> r.equals(ERole.ROLE_ADMIN));
     }
@@ -45,12 +65,10 @@ public abstract class UserMapper {
     @Mapping(source = "user.roles", target = "isAdmin")
     public abstract UserDto mapToUserDto(UserDetailsImpl userDetails);
 
-    public abstract User mapToUser(SignUpRequest signupRequest, @Context PasswordEncoder passwordEncoder,
-                                   @Context RoleRepo roleRepo);
+    public abstract User mapToUser(SignUpRequest signupRequest);
 
     @AfterMapping
-    void map(@MappingTarget User user, SignUpRequest signUpRequest, @Context PasswordEncoder passwordEncoder,
-                     @Context RoleRepo roleRepo) {
+    void map(@MappingTarget User user, SignUpRequest signUpRequest) {
         user.setTerminationDate(LocalDate.now().plusMonths(1));
 
         user.setPassword(passwordEncoder.encode(

@@ -371,4 +371,37 @@ class AdminControllerTest {
 
         verify(adminService, times(1)).getAllUsers(new SearchRequest());
     }
+
+    @Test
+    @WithMockUser(roles = {"ADMIN", "USER"}, username = "test-admin")
+    void shouldDeleteUser_whenCalledDeleteUser() throws Exception {
+        mvc.perform(
+                MockMvcRequestBuilders.delete("/api/admin/users/5")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        verify(adminService, times(1)).deleteUser(5);
+    }
+
+    @Test
+    @WithMockUser(roles = {"ADMIN", "USER"}, username = "test-admin")
+    void should_whenCalledDeleteUser() throws Exception {
+
+        UserDto userDto = new UserDto();
+        userDto.setLogin("test-lgin");
+        userDto.setIsAdmin(true);
+        userDto.setFullName("Пятлин Иван Васильевич");
+        userDto.setTerminationDate(LocalDate.of(2022, 9, 25));
+
+        mvc.perform(
+                MockMvcRequestBuilders.put("/api/admin/users/20")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userDto))
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        verify(adminService, times(1)).updateUser(20, userDto);
+
+    }
 }

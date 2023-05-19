@@ -9,6 +9,7 @@ import com.accountingsystem.controller.dtos.mappers.UserMapper;
 import com.accountingsystem.service.UserDetailsImpl;
 import com.accountingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,6 +40,9 @@ public class AuthController {
 	@Autowired
 	UserService userService;
 
+	@Value("${app.jwtExpirationMs}")
+	private int jwtExpirationMs;
+
 	@PostMapping("/sign-in")
 	public ResponseEntity<UserDto> authUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse httpServletResponse,
 											HttpServletRequest httpServletRequest) {
@@ -53,7 +57,7 @@ public class AuthController {
 		// В случае если работа будет происходить с куки
 		Cookie cookie = new Cookie("jwt", jwt);
 		cookie.setPath("/");
-		cookie.setMaxAge(36000);
+		cookie.setMaxAge(jwtExpirationMs);
 		httpServletResponse.addCookie(cookie);
 
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();

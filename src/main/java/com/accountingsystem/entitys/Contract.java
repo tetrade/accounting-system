@@ -49,7 +49,9 @@ public class Contract {
     private LocalDate actualEndDate;
 
     @JoinColumn(name="user_id")
-    @ManyToOne(cascade = CascadeType.ALL, fetch  = FetchType.LAZY)
+    @ManyToOne(cascade = {
+            CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE
+    }, fetch  = FetchType.LAZY)
     @ToString.Exclude
     private User user;
 

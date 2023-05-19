@@ -164,4 +164,7 @@ class MainAuthTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.terminationDate", Matchers.is("13.07.2030")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.isAdmin", Matchers.is(false)));
     }
+
+
+
 }

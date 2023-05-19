@@ -168,8 +168,8 @@ class UserControllerTest {
 
         mvc.perform(
                         MockMvcRequestBuilders.get("/api/user/downland-contract-report/dates")
-                                .param("planned-start-date", "13.07.2002")
-                                .param("planned-end-date", "18.08.2005")
+                                .param("plannedStartDate", "13.07.2002")
+                                .param("plannedEndDate", "18.08.2005")
                                 .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.header().string("Content-Disposition", "attachment; filename=contract-report.xlsx"))

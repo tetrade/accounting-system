@@ -14,6 +14,6 @@ public interface CounterpartyOrganizationRepo extends
 {
 
     @Modifying
-    @Query("delete from CounterpartyOrganization  co where co.id = :id")
-    void deleteById(@Param("id") int id);
+    @Query(value = "delete from counterparty_organization co where co.id = :id", nativeQuery = true, countQuery = "select 1")
+    void deleteById(@Param("id") Integer id);
 }

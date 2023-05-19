@@ -3,6 +3,7 @@ package com.accountingsystem.repository.custom.impl;
 import com.accountingsystem.controller.dtos.ContractDto;
 import com.accountingsystem.entitys.Contract;
 import com.accountingsystem.repository.custom.CustomContractRepo;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;

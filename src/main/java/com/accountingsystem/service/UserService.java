@@ -131,7 +131,7 @@ public class UserService {
     }
 
     public void createNewUser(SignUpRequest signupRequest) {
-        User user = userMapper.mapToUser(signupRequest, passwordEncoder, roleRepo);
+        User user = userMapper.mapToUser(signupRequest);
         userRepo.save(user);
     }
 

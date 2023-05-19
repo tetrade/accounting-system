@@ -157,6 +157,18 @@ public class AdminService {
                 .findAll(specification, PageRequest.of(searchRequest.getPage(), searchRequest.getSize()))
                 .map(userMapper::mapToUserDto);
     }
+
+    public void updateUser(Integer userId, UserDto userDto) {
+        userDto.setId(userId);
+        User user = userRepo.findById(userId).orElseThrow(() -> new NoSuchRowException("id", userId, "user"));
+        userMapper.mapToUser(user, userDto);
+        userRepo.save(user);
+    }
+
+    public void deleteUser(Integer userId) {
+        if (!userRepo.existsById(userId)) throw new NoSuchRowException("id", userId, "user");
+        userRepo.deleteById(userId);
+    }
 }
 
 

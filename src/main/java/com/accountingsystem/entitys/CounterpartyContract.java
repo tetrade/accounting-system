@@ -20,7 +20,6 @@ import java.time.LocalDate;
         name = "CounterpartyContract.counterpartyOrganization",
         attributeNodes = @NamedAttributeNode("counterpartyOrganization")
 )
-//@DynamicUpdate for big tables
 public class CounterpartyContract{
 
     @Id

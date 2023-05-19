@@ -36,7 +36,7 @@ public interface CounterpartyContractRepo extends
     List<CounterpartyContract> findAll(Specification<CounterpartyContract> specification);
 
     @Modifying
-    @Query(value="delete from CounterpartyContract cc where cc.id = :id")
-    void deleteById(@Param("id") int id);
+    @Query(value = "delete from counterparty_contract cc where cc.id = :id", nativeQuery = true, countQuery = "select 1")
+    void deleteById(@Param("id") Integer id);
 
 }

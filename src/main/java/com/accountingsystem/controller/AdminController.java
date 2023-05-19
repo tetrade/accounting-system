@@ -28,14 +28,14 @@ public class AdminController {
     // ------------------------------------------- Организации контр-агенты -------------------------------------------
 
     @PostMapping("counterparty-organizations")
-    public ResponseEntity<CounterpartyOrganizationDto> createCounterpartyOrganization(
+    public ResponseEntity<Void> createCounterpartyOrganization(
             @RequestBody @Valid CounterpartyOrganizationDto counterpartyOrganizationDto) {
         adminService.createCounterpartyOrganization(counterpartyOrganizationDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("counterparty-organizations/{id}")
-    public ResponseEntity<CounterpartyOrganizationDto> updateCounterpartyOrganization(
+    public ResponseEntity<Void> updateCounterpartyOrganization(
             @RequestBody @Valid CounterpartyOrganizationDto counterpartyOrganizationDto,
             @PathVariable @Positive int id
     ) {
@@ -44,7 +44,7 @@ public class AdminController {
     }
 
     @DeleteMapping("counterparty-organizations/{id}")
-    public ResponseEntity<CounterpartyOrganizationDto> deleteCounterpartyOrganization(@PathVariable int id) {
+    public ResponseEntity<Void> deleteCounterpartyOrganization(@PathVariable int id) {
         adminService.deleteCounterpartyOrganization(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -63,7 +63,7 @@ public class AdminController {
     }
 
     @PostMapping("contracts/{contractId}/counterparty-contracts")
-    public ResponseEntity<CounterpartyContractDto> createCounterpartyContract(
+    public ResponseEntity<Void> createCounterpartyContract(
             @PathVariable @Positive int contractId,
             @RequestBody @Valid CounterpartyContractDto counterpartyContractDto
     ) {
@@ -72,7 +72,7 @@ public class AdminController {
     }
 
     @PutMapping("counterparty-contracts/{id}")
-    public ResponseEntity<CounterpartyContractDto> updateCounterpartyContractDto(
+    public ResponseEntity<Void> updateCounterpartyContractDto(
             @PathVariable @Positive int id,
             @RequestBody @Valid CounterpartyContractDto counterpartyContractDto
     ) {
@@ -81,7 +81,7 @@ public class AdminController {
     }
 
     @DeleteMapping("counterparty-contracts/{id}")
-    public ResponseEntity<CounterpartyContractDto> deleteCounterpartyContract(@PathVariable int id) {
+    public ResponseEntity<Void> deleteCounterpartyContract(@PathVariable int id) {
         adminService.deleteCounterpartyContract(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -100,7 +100,7 @@ public class AdminController {
     }
 
     @PostMapping("contracts/{contractId}/contract-stages")
-    public ResponseEntity<ContractStageDto> createContractStage(
+    public ResponseEntity<Void> createContractStage(
             @PathVariable @Positive int contractId,
             @RequestBody @Valid ContractStageDto contractStageDto
     ) {
@@ -109,7 +109,7 @@ public class AdminController {
     }
 
     @PutMapping("contract-stages/{id}")
-    public ResponseEntity<ContractStageDto> updateContractStage(
+    public ResponseEntity<Void> updateContractStage(
             @PathVariable @Positive int id,
             @RequestBody @Valid ContractStageDto contractStageDto
     ) {
@@ -118,7 +118,7 @@ public class AdminController {
     }
 
     @DeleteMapping("contract-stages/{id}")
-    public ResponseEntity<ContractStageDto> deleteContractStage(@PathVariable int id) {
+    public ResponseEntity<Void> deleteContractStage(@PathVariable int id) {
         adminService.deleteContractStage(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -137,7 +137,7 @@ public class AdminController {
     }
 
     @PostMapping("contracts")
-    public ResponseEntity<ContractDto> createContract(
+    public ResponseEntity<Void> createContract(
             @RequestBody @Valid ContractDto contractDto
     ) {
         adminService.createContract(contractDto);
@@ -145,7 +145,7 @@ public class AdminController {
     }
 
     @PutMapping("contracts/{id}")
-    public ResponseEntity<ContractDto> updateContract(
+    public ResponseEntity<Void> updateContract(
             @PathVariable @Positive int id,
             @RequestBody @Valid ContractDto contractDto
     ) {
@@ -154,7 +154,7 @@ public class AdminController {
     }
 
     @DeleteMapping("contracts/{id}")
-    public ResponseEntity<ContractDto> deleteContract(@PathVariable @Positive    int id) {
+    public ResponseEntity<Void> deleteContract(@PathVariable @Positive int id) {
         adminService.deleteContract(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -167,5 +167,17 @@ public class AdminController {
     ){
         Page<UserDto> users = adminService.getAllUsers(searchRequest);
         return ResponseEntity.ok().body(users);
+    }
+
+    @PutMapping("users/{id}")
+    public ResponseEntity<Void> updateUser(@PathVariable @Positive Integer id, @RequestBody @Valid UserDto userDto) {
+        adminService.updateUser(id, userDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @DeleteMapping("users/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable @Positive Integer id) {
+        adminService.deleteUser(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
