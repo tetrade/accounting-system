@@ -164,7 +164,7 @@ class UserControllerTest {
 
         when(userService.getContractsBetweenDates(any(), any(), any())).thenReturn(new HashSet<>());
         when(userService.getCounterpartyContractsBetweenDates(any(), any(), any())).thenReturn(new HashSet<>());
-        when(excelReportWriter.createContractReprot(anySet(), anySet())).thenReturn(new ByteArrayOutputStream(3));
+        when(excelReportWriter.createContractReport(anySet(), anySet())).thenReturn(new ByteArrayOutputStream(3));
 
         mvc.perform(
                         MockMvcRequestBuilders.get("/api/user/downland-contract-report/dates")

@@ -104,7 +104,7 @@ public class UserController {
                 userService.getCounterpartyContractsBetweenDates(login, plannedStartDate, plannedEndDate);
 
         ByteArrayOutputStream stream =
-                excelReportWriter.createContractReprot(counterpartyContractDtoExcelSet, contractDtoExcelSet);
+                excelReportWriter.createContractReport(counterpartyContractDtoExcelSet, contractDtoExcelSet);
 
         return ResponseEntity.ok()
                 .header("Content-Disposition", "attachment; filename=contract-report.xlsx")
