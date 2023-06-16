@@ -20,7 +20,10 @@ public interface UserRepo extends JpaRepository<User, Integer>, JpaSpecification
     @EntityGraph(value = "User.roles", type = EntityGraph.EntityGraphType.FETCH)
     Page<User> findAll(Specification<User> specification, Pageable pageable);
 
+    @EntityGraph(value = "User.roles", type = EntityGraph.EntityGraphType.FETCH)
+    Optional<User> findById(Integer id);
+
     @Modifying
-    @Query("delete from User u where u.id = :id")
-    void deleteById(@Param("id") int id);
+    @Query(value = "delete from \"user\" u where u.id = :id", nativeQuery = true, countQuery = "select 1")
+    void deleteById(@Param("id") Integer id);
 }

@@ -1,12 +1,12 @@
 package com.accountingsystem.configs.jwt;
 
 
-import com.accountingsystem.service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -28,13 +28,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	private JwtUtils jwtUtils;
 	
 	@Autowired
-	private UserDetailsServiceImpl userDetailsService;
-
+	private UserDetailsService userDetailsService;
 
 	// Требуется, поскольку мы не должен обращаться к кукам, если происходит регистрация или авторизация
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) {
-		return new AntPathMatcher().match("/auth-api/*", request.getServletPath());
+		return new AntPathMatcher().match("/api/auth/*", request.getServletPath());
 	}
 
 	@Override

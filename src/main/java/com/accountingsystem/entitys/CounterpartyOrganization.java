@@ -33,8 +33,7 @@ public class CounterpartyOrganization{
 
     @OneToMany(
             cascade = {
-                    CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH
+                    CascadeType.DETACH, CascadeType.REFRESH
             }, mappedBy = "counterpartyOrganization", fetch = FetchType.LAZY
     )
     @ToString.Exclude

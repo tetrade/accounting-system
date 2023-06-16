@@ -5,9 +5,14 @@ import com.accountingsystem.controller.dtos.mappers.*;
 import com.accountingsystem.entitys.*;
 import com.accountingsystem.entitys.enums.ERole;
 import com.accountingsystem.entitys.enums.EType;
+import com.accountingsystem.repository.CounterpartyOrganizationRepo;
+import com.accountingsystem.repository.RoleRepo;
+import com.accountingsystem.repository.UserRepo;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.math.BigDecimal;
@@ -26,6 +31,18 @@ import static org.assertj.core.api.Assertions.assertThat;
         UserMapperImpl.class
 })
 class MappersTest {
+
+    @MockBean
+    CounterpartyOrganizationRepo counterpartyOrganizationRepo;
+
+    @MockBean
+    UserRepo userRepo;
+
+    @MockBean
+    RoleRepo roleRepo;
+
+    @MockBean
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     private CounterpartyOrganizationMapper counterpartyOrganizationMapper;
@@ -176,10 +193,42 @@ class MappersTest {
         should.setActualEndDate(contract.getActualEndDate());
         should.setPlannedEndDate(contract.getPlannedEndDate());
 
+        ContractStageDto should1 = new ContractStageDto();
+        should1.setId(contractStage.getId());
+        should1.setName(contractStage.getName());
+        should1.setAmount(contractStage.getAmount());
+        should1.setActualMaterialCosts(contractStage.getActualMaterialCosts());
+        should1.setPlannedMaterialCosts(contractStage.getPlannedMaterialCosts());
+        should1.setActualSalaryExpenses(contractStage.getActualSalaryExpenses());
+        should1.setPlannedSalaryExpenses(contractStage.getPlannedSalaryExpenses());
+        should1.setActualStartDate(contractStage.getActualStartDate());
+        should1.setPlannedStartDate(contractStage.getPlannedStartDate());
+        should1.setActualEndDate(contractStage.getActualEndDate());
+        should1.setPlannedEndDate(contractStage.getPlannedEndDate());
+
+        CounterpartyOrganizationDto innerShould = new CounterpartyOrganizationDto();
+        innerShould.setId(counterpartyOrganization.getId());
+        innerShould.setAddress(counterpartyOrganization.getAddress());
+        innerShould.setName(counterpartyOrganization.getName());
+        innerShould.setInn(counterpartyOrganization.getInn());
+
+        CounterpartyContractDto should3 = new CounterpartyContractDto();
+        should3.setName(counterpartyContract.getName());
+        should3.setId(counterpartyContract.getId());
+        should3.setType(counterpartyContract.getType());
+        should3.setAmount(counterpartyContract.getAmount());
+        should3.setActualStartDate(counterpartyContract.getActualStartDate());
+        should3.setActualEndDate(counterpartyContract.getActualEndDate());
+        should3.setPlannedEndDate(counterpartyContract.getPlannedEndDate());
+        should3.setPlannedStartDate(counterpartyContract.getPlannedStartDate());
+        should3.setCounterpartyOrganization(innerShould);
+
+        should.setContractStages(Stream.of(should1).collect(Collectors.toSet()));
+        should.setCounterpartyContracts(Stream.of(should3).collect(Collectors.toSet()));
+
         ContractDto contractDto = contractMapper.mapToContractDto(contract);
         Set<ContractDto> contractDtoSet1 = contractMapper.mapToContractDtoSet(Stream.of(contract).collect(Collectors.toSet()));
         Set<ContractDto> contractDtoSet2 = contractMapper.mapToContractDtoSet(Stream.of(contract).collect(Collectors.toList()));
-
 
         assertThat(contractDto).usingRecursiveComparison().isEqualTo(should);
         assertThat(contractDtoSet1).usingRecursiveFieldByFieldElementComparatorIgnoringFields().containsOnly(should);
@@ -191,14 +240,13 @@ class MappersTest {
         UserDto should = new UserDto();
         should.setId(user.getId());
         should.setFullName(user.getFullName());
-        should.setPassword(user.getPassword());
+        should.setNewPassword(user.getPassword());
         should.setLogin(user.getLogin());
         should.setIsAdmin(true);
 
         UserDto userDto = userMapper.mapToUserDto(user);
 
-        assertThat(userDto).usingRecursiveComparison().isEqualTo(should);
+        assertThat(userDto).usingRecursiveComparison()
+                .ignoringFields("newPassword").isEqualTo(should);
     }
-
-
 }

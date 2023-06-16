@@ -1,9 +1,10 @@
 package com.accountingsystem.filters;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.*;
 
 @Data
@@ -11,10 +12,14 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchRequest {
+
+    @Valid
     private Set<FilterRequest> filters;
 
+    @PositiveOrZero
     private Integer page;
 
+    @Positive
     private Integer size;
 
     public Set<FilterRequest> getFilters() { return Optional.ofNullable(filters).orElse(new HashSet<>()); }

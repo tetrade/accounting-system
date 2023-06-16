@@ -4,28 +4,29 @@ import com.accountingsystem.controller.dtos.ContractDto;
 import com.accountingsystem.controller.dtos.ContractStageDto;
 import com.accountingsystem.controller.dtos.CounterpartyContractDto;
 import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
-import com.accountingsystem.entitys.Contract;
-import com.accountingsystem.entitys.ContractStage;
-import com.accountingsystem.entitys.CounterpartyContract;
-import com.accountingsystem.entitys.CounterpartyOrganization;
+import com.accountingsystem.entitys.*;
 import com.accountingsystem.entitys.enums.EType;
 import com.accountingsystem.repository.*;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.Ignore;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class CustomAdminRepoTest {
 
     @MockBean
@@ -45,6 +46,11 @@ class CustomAdminRepoTest {
 
     @Autowired
     private CounterpartyContractRepo counterpartyContractRepo;
+
+    @Autowired
+    private EntityManager entityManager;
+    @Autowired
+    private UserRepo userRepo;
 
     @Test
     @Order(1)
@@ -96,23 +102,6 @@ class CustomAdminRepoTest {
     @Test
     @Order(3)
     void shouldInsertContract_whenMethodCalled() {
-        ContractDto c = new ContractDto();
-        c.setName("fde1");
-        c.setAmount(BigDecimal.valueOf(123.13));
-        c.setType(EType.WORKS);
-        c.setActualStartDate(LocalDate.of(2002, 2, 10));
-        c.setPlannedEndDate(LocalDate.now());
-        c.setPlannedStartDate(LocalDate.now().plusDays(2));
-
-        ContractDto c1 = new ContractDto();
-        c1.setName("fde9");
-        c1.setAmount(BigDecimal.valueOf(123.13));
-        c1.setType(EType.WORKS);
-        c1.setActualStartDate(LocalDate.of(2002, 2, 10));
-        c1.setPlannedEndDate(LocalDate.now());
-        c1.setPlannedStartDate(LocalDate.now().plusDays(2));
-
-
         Contract should = new Contract();
         should.setName("fde1");
         should.setAmount(BigDecimal.valueOf(123.13));
@@ -129,8 +118,8 @@ class CustomAdminRepoTest {
         should2.setPlannedEndDate(LocalDate.now());
         should2.setPlannedStartDate(LocalDate.now().plusDays(2));
 
-        contractRepo.insertContract(c);
-        contractRepo.insertContract(c1);
+        contractRepo.insertContract(should);
+        contractRepo.insertContract(should2);
 
         assertThat(contractRepo.findAll())
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "user", "counterpartyContracts", "contractStages")
@@ -140,29 +129,34 @@ class CustomAdminRepoTest {
     @Test
     @Order(4)
     void shouldUpdateContract_whenCalled(){
-        ContractDto c1 = new ContractDto();
-        c1.setName("fde9");
-        c1.setAmount(BigDecimal.valueOf(123.13));
-        c1.setType(EType.WORKS);
-        c1.setActualStartDate(LocalDate.of(2002, 2, 10));
-        c1.setPlannedEndDate(LocalDate.now());
-        c1.setPlannedStartDate(LocalDate.now().plusDays(2));
+        Contract shouldBeUpdated = new Contract();
+        shouldBeUpdated.setName("fde9");
+        shouldBeUpdated.setAmount(BigDecimal.valueOf(123.13));
+        shouldBeUpdated.setType(EType.WORKS);
+        shouldBeUpdated.setActualStartDate(LocalDate.of(2002, 2, 10));
+        shouldBeUpdated.setPlannedEndDate(LocalDate.now());
+        shouldBeUpdated.setPlannedStartDate(LocalDate.now().plusDays(2));
 
-        contractRepo.insertContract(c1);
-
-        c1.setType(EType.DELIVERY);
-        c1.setActualEndDate(LocalDate.of(2000, 03, 15));
+        contractRepo.insertContract(shouldBeUpdated);
+        ContractDto c = new ContractDto();
+        c.setName(shouldBeUpdated.getName());
+        c.setAmount(shouldBeUpdated.getAmount());
+        c.setType(EType.DELIVERY);
+        c.setActualStartDate(LocalDate.of(2002, 2, 11));
+        c.setPlannedEndDate(shouldBeUpdated.getPlannedEndDate());
+        c.setPlannedStartDate(shouldBeUpdated.getPlannedStartDate());
 
         Contract should = new Contract();
-        should.setName(c1.getName());
-        should.setAmount(c1.getAmount());
-        should.setType(c1.getType());
-        should.setActualStartDate(c1.getActualStartDate());
-        should.setPlannedEndDate(c1.getPlannedEndDate());
-        should.setPlannedStartDate(c1.getPlannedStartDate());
-        should.setActualEndDate(c1.getActualEndDate());
+        should.setName(shouldBeUpdated.getName());
+        should.setAmount(shouldBeUpdated.getAmount());
+        should.setType(EType.DELIVERY);
+        should.setActualStartDate(LocalDate.of(2002, 2, 11));
+        should.setPlannedEndDate(shouldBeUpdated.getPlannedEndDate());
+        should.setPlannedStartDate(shouldBeUpdated.getPlannedStartDate());
 
-        contractRepo.updateContract(1, c1);
+        contractRepo.updateContract(1, c);
+
+        entityManager.refresh(shouldBeUpdated);
 
         assertThat(contractRepo.findAll())
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "user", "counterpartyContracts", "contractStages")
@@ -172,8 +166,8 @@ class CustomAdminRepoTest {
     @Test
     @Order(5)
     void shouldInsertContractStage_whenMethodCalled(){
-        ContractDto c = new ContractDto();
-        c.setName("fde1");
+        Contract c = new Contract();
+        c.setName("fde9");
         c.setAmount(BigDecimal.valueOf(123.13));
         c.setType(EType.WORKS);
         c.setActualStartDate(LocalDate.of(2002, 2, 10));
@@ -187,7 +181,7 @@ class CustomAdminRepoTest {
         cs.setAmount(BigDecimal.valueOf(7652.23));
         cs.setActualStartDate(LocalDate.of(2021, 11, 11));
         cs.setActualEndDate(LocalDate.of(2020, 10, 10));
-        cs.setPlannedStartDate(LocalDate.of(2015, 07, 13));
+        cs.setPlannedStartDate(LocalDate.of(2015, 7, 13));
         cs.setPlannedEndDate(LocalDate.of(2019, 3, 15));
         cs.setActualSalaryExpenses(BigDecimal.valueOf(4134.05));
         cs.setPlannedSalaryExpenses(BigDecimal.valueOf(99.22));
@@ -199,7 +193,7 @@ class CustomAdminRepoTest {
         should.setAmount(BigDecimal.valueOf(7652.23));
         should.setActualStartDate(LocalDate.of(2021, 11, 11));
         should.setActualEndDate(LocalDate.of(2020, 10, 10));
-        should.setPlannedStartDate(LocalDate.of(2015, 07, 13));
+        should.setPlannedStartDate(LocalDate.of(2015, 7, 13));
         should.setPlannedEndDate(LocalDate.of(2019, 3, 15));
         should.setActualSalaryExpenses(BigDecimal.valueOf(4134.05));
         should.setPlannedSalaryExpenses(BigDecimal.valueOf(99.22));
@@ -216,8 +210,8 @@ class CustomAdminRepoTest {
     @Test
     @Order(6)
     void shouldUpdateContractStage_whenMethodCalled() {
-        ContractDto c = new ContractDto();
-        c.setName("fde1");
+        Contract c = new Contract();
+        c.setName("fde9");
         c.setAmount(BigDecimal.valueOf(123.13));
         c.setType(EType.WORKS);
         c.setActualStartDate(LocalDate.of(2002, 2, 10));
@@ -231,7 +225,7 @@ class CustomAdminRepoTest {
         cs.setAmount(BigDecimal.valueOf(7652.23));
         cs.setActualStartDate(LocalDate.of(2021, 11, 11));
         cs.setActualEndDate(LocalDate.of(2020, 10, 10));
-        cs.setPlannedStartDate(LocalDate.of(2015, 07, 13));
+        cs.setPlannedStartDate(LocalDate.of(2015, 7, 13));
         cs.setPlannedEndDate(LocalDate.of(2019, 3, 15));
         cs.setActualSalaryExpenses(BigDecimal.valueOf(4134.05));
         cs.setPlannedSalaryExpenses(BigDecimal.valueOf(99.22));
@@ -241,20 +235,20 @@ class CustomAdminRepoTest {
         contractStageRepo.insertContractStage(1, cs);
 
         cs.setAmount(BigDecimal.valueOf(9999.98));
-        cs.setActualEndDate(LocalDate.of(2002, 02, 02));
+        cs.setActualEndDate(LocalDate.of(2002, 2, 2));
 
         ContractStage should = new ContractStage();
         should.setName("contractS");
         should.setAmount(BigDecimal.valueOf(9999.98));
         should.setActualStartDate(LocalDate.of(2021, 11, 11));
         should.setActualEndDate(LocalDate.of(2020, 10, 10));
-        should.setPlannedStartDate(LocalDate.of(2015, 07, 13));
+        should.setPlannedStartDate(LocalDate.of(2015, 7, 13));
         should.setPlannedEndDate(LocalDate.of(2019, 3, 15));
         should.setActualSalaryExpenses(BigDecimal.valueOf(4134.05));
         should.setPlannedSalaryExpenses(BigDecimal.valueOf(99.22));
         should.setActualMaterialCosts(BigDecimal.valueOf(10.12));
         should.setPlannedMaterialCosts(BigDecimal.valueOf(10.12));
-        should.setActualEndDate(LocalDate.of(2002, 02, 02));
+        should.setActualEndDate(LocalDate.of(2002, 2, 2));
 
         contractStageRepo.updateContractStage(1, cs);
 
@@ -266,8 +260,8 @@ class CustomAdminRepoTest {
     @Test
     @Order(7)
     void shouldInsertCounterpartyContract_whenMethodCalled(){
-        ContractDto c = new ContractDto();
-        c.setName("fde1");
+        Contract c = new Contract();
+        c.setName("fde9");
         c.setAmount(BigDecimal.valueOf(123.13));
         c.setType(EType.WORKS);
         c.setActualStartDate(LocalDate.of(2002, 2, 10));
@@ -288,7 +282,7 @@ class CustomAdminRepoTest {
         cc.setAmount(BigDecimal.valueOf(7652.23));
         cc.setActualStartDate(LocalDate.of(2021, 11, 11));
         cc.setActualEndDate(LocalDate.of(2020, 10, 10));
-        cc.setPlannedStartDate(LocalDate.of(2015, 07, 13));
+        cc.setPlannedStartDate(LocalDate.of(2015, 7, 13));
         cc.setPlannedEndDate(LocalDate.of(2019, 3, 15));
         cc.setCounterpartyOrganizationId(1);
         cc.setType(EType.WORKS);
@@ -298,7 +292,7 @@ class CustomAdminRepoTest {
         should.setAmount(BigDecimal.valueOf(7652.23));
         should.setActualStartDate(LocalDate.of(2021, 11, 11));
         should.setActualEndDate(LocalDate.of(2020, 10, 10));
-        should.setPlannedStartDate(LocalDate.of(2015, 07, 13));
+        should.setPlannedStartDate(LocalDate.of(2015, 7, 13));
         should.setPlannedEndDate(LocalDate.of(2019, 3, 15));
         should.setType(EType.WORKS);
 
@@ -312,8 +306,8 @@ class CustomAdminRepoTest {
     @Test
     @Order(8)
     void shouldUpdateCounterpartyContract_whenMethodCalled() {
-        ContractDto c = new ContractDto();
-        c.setName("fde1");
+        Contract c = new Contract();
+        c.setName("fde9");
         c.setAmount(BigDecimal.valueOf(123.13));
         c.setType(EType.WORKS);
         c.setActualStartDate(LocalDate.of(2002, 2, 10));
@@ -333,7 +327,7 @@ class CustomAdminRepoTest {
         cc.setAmount(BigDecimal.valueOf(7652.23));
         cc.setActualStartDate(LocalDate.of(2021, 11, 11));
         cc.setActualEndDate(LocalDate.of(2020, 10, 10));
-        cc.setPlannedStartDate(LocalDate.of(2015, 07, 13));
+        cc.setPlannedStartDate(LocalDate.of(2015, 7, 13));
         cc.setPlannedEndDate(LocalDate.of(2019, 3, 15));
         cc.setCounterpartyOrganizationId(1);
         cc.setType(EType.PURCHASE);
@@ -348,7 +342,7 @@ class CustomAdminRepoTest {
         should.setAmount(BigDecimal.valueOf(7652.23));
         should.setActualStartDate(LocalDate.of(2021, 11, 11));
         should.setActualEndDate(LocalDate.of(2020, 10, 10));
-        should.setPlannedStartDate(LocalDate.of(2015, 07, 13));
+        should.setPlannedStartDate(LocalDate.of(2015, 7, 13));
         should.setPlannedEndDate(LocalDate.of(2019, 3, 15));
 
         should.setType(EType.DELIVERY);
@@ -363,4 +357,312 @@ class CustomAdminRepoTest {
                 .contains(should);
     }
 
+
+    @Test
+    @Order(9)
+    void shouldCreateContractWithCounterpartyContractsAndContractsStage_whenMethodCalled() {
+        Contract c = new Contract();
+        c.setName("fde9");
+        c.setAmount(BigDecimal.valueOf(123.13));
+        c.setType(EType.WORKS);
+        c.setActualStartDate(LocalDate.of(2002, 2, 10));
+        c.setPlannedEndDate(LocalDate.now());
+        c.setPlannedStartDate(LocalDate.now().plusDays(2));
+
+        ContractStage cs = new ContractStage();
+        cs.setContract(c);
+        cs.setName("test1");
+        cs.setAmount(BigDecimal.valueOf(123));
+        cs.setPlannedMaterialCosts(BigDecimal.valueOf(123.9));
+        cs.setPlannedEndDate(LocalDate.now());
+        cs.setPlannedStartDate(LocalDate.now().minusWeeks(12));
+        cs.setPlannedSalaryExpenses(BigDecimal.valueOf(9));
+
+        ContractStage cs1 = new ContractStage();
+        cs1.setContract(c);
+        cs1.setName("test2");
+        cs1.setAmount(BigDecimal.valueOf(89));
+        cs1.setPlannedMaterialCosts(BigDecimal.valueOf(100000.23));
+        cs1.setPlannedEndDate(LocalDate.now());
+        cs1.setPlannedStartDate(LocalDate.now().plusDays(12));
+        cs1.setPlannedSalaryExpenses(BigDecimal.valueOf(9));
+        cs1.setActualEndDate(LocalDate.of(2002, 9, 9));
+
+        CounterpartyOrganization counterpartyOrganization = new CounterpartyOrganization();
+        counterpartyOrganization.setName("test4");
+        counterpartyOrganization.setInn("012345678901");
+        counterpartyOrganization.setAddress("test5");
+
+        CounterpartyContract cc = new CounterpartyContract();
+        cc.setContract(c);
+        cc.setType(EType.DELIVERY);
+        cc.setName("test3");
+        cc.setAmount(BigDecimal.valueOf(89));
+        cc.setPlannedEndDate(LocalDate.now());
+        cc.setPlannedStartDate(LocalDate.now().plusDays(12));
+        cc.setActualEndDate(LocalDate.of(2002, 9, 9));
+        cc.setCounterpartyOrganization(counterpartyOrganization);
+
+        c.setCounterpartyContracts(Stream.of(cc).collect(Collectors.toSet()));
+        c.setContractStages(Stream.of(cs, cs1).collect(Collectors.toSet()));
+
+        contractRepo.insertContract(c);
+
+        assertThat(contractRepo.findAll()).
+                usingRecursiveFieldByFieldElementComparator().contains(c);
+    }
+
+    @Test
+    @Order(10)
+    void shouldDeleteCounterpartyOrganization_whenMethodCalled() {
+        CounterpartyOrganizationDto counterpartyOrganization = new CounterpartyOrganizationDto();
+        counterpartyOrganization.setName("test4");
+        counterpartyOrganization.setInn("012345678901");
+        counterpartyOrganization.setAddress("test5");
+
+        counterpartyOrganizationRepo.insertCounterpartyOrganization(counterpartyOrganization);
+
+        assertThat(counterpartyOrganizationRepo.findAll()).hasSize(1);
+
+        counterpartyOrganizationRepo.deleteById(1);
+
+        assertThat(counterpartyOrganizationRepo.findAll()).isEmpty();
+    }
+
+    @Test
+    @Order(11)
+    void shouldDeleteCounterpartyContract_whenMethodCalled() {
+        Contract c = new Contract();
+        c.setName("fde9");
+        c.setAmount(BigDecimal.valueOf(123.13));
+        c.setType(EType.WORKS);
+        c.setActualStartDate(LocalDate.of(2002, 2, 10));
+        c.setPlannedEndDate(LocalDate.now());
+        c.setPlannedStartDate(LocalDate.now().plusDays(2));
+
+        ContractStage cs = new ContractStage();
+        cs.setContract(c);
+        cs.setName("test1");
+        cs.setAmount(BigDecimal.valueOf(123));
+        cs.setPlannedMaterialCosts(BigDecimal.valueOf(123.9));
+        cs.setPlannedEndDate(LocalDate.now());
+        cs.setPlannedStartDate(LocalDate.now().minusWeeks(12));
+        cs.setPlannedSalaryExpenses(BigDecimal.valueOf(9));
+
+        ContractStage cs1 = new ContractStage();
+        cs1.setContract(c);
+        cs1.setName("test2");
+        cs1.setAmount(BigDecimal.valueOf(89));
+        cs1.setPlannedMaterialCosts(BigDecimal.valueOf(100000.23));
+        cs1.setPlannedEndDate(LocalDate.now());
+        cs1.setPlannedStartDate(LocalDate.now().plusDays(12));
+        cs1.setPlannedSalaryExpenses(BigDecimal.valueOf(9));
+        cs1.setActualEndDate(LocalDate.of(2002, 9, 9));
+
+        CounterpartyOrganization counterpartyOrganization = new CounterpartyOrganization();
+        counterpartyOrganization.setName("test4");
+        counterpartyOrganization.setInn("012345678901");
+        counterpartyOrganization.setAddress("test5");
+
+        CounterpartyContract cc = new CounterpartyContract();
+        cc.setContract(c);
+        cc.setType(EType.DELIVERY);
+        cc.setName("test3");
+        cc.setAmount(BigDecimal.valueOf(89));
+        cc.setPlannedEndDate(LocalDate.now());
+        cc.setPlannedStartDate(LocalDate.now().plusDays(12));
+        cc.setActualEndDate(LocalDate.of(2002, 9, 9));
+        cc.setCounterpartyOrganization(counterpartyOrganization);
+
+        c.setCounterpartyContracts(Stream.of(cc).collect(Collectors.toSet()));
+        c.setContractStages(Stream.of(cs, cs1).collect(Collectors.toSet()));
+
+        contractRepo.insertContract(c);
+
+        assertThat(counterpartyContractRepo.findAll()).hasSize(1)
+                .usingRecursiveFieldByFieldElementComparator().contains(cc);
+
+        counterpartyContractRepo.deleteById(1);
+
+        assertThat(counterpartyContractRepo.findAll()).isEmpty();
+
+        assertThat(contractRepo.findAll())
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("counterpartyContracts")
+                .contains(c);
+    }
+
+
+    @Test
+    @Order(12)
+    void shouldDeleteContractStage_whenCalled() {
+        Contract c = new Contract();
+        c.setName("fde9");
+        c.setAmount(BigDecimal.valueOf(123.13));
+        c.setType(EType.WORKS);
+        c.setActualStartDate(LocalDate.of(2002, 2, 10));
+        c.setPlannedEndDate(LocalDate.now());
+        c.setPlannedStartDate(LocalDate.now().plusDays(2));
+
+        ContractStage cs = new ContractStage();
+        cs.setContract(c);
+        cs.setName("test1");
+        cs.setAmount(BigDecimal.valueOf(123));
+        cs.setPlannedMaterialCosts(BigDecimal.valueOf(123.9));
+        cs.setPlannedEndDate(LocalDate.now());
+        cs.setPlannedStartDate(LocalDate.now().minusWeeks(12));
+        cs.setPlannedSalaryExpenses(BigDecimal.valueOf(9));
+
+        ContractStage cs1 = new ContractStage();
+        cs1.setContract(c);
+        cs1.setName("test2");
+        cs1.setAmount(BigDecimal.valueOf(89));
+        cs1.setPlannedMaterialCosts(BigDecimal.valueOf(100000.23));
+        cs1.setPlannedEndDate(LocalDate.now());
+        cs1.setPlannedStartDate(LocalDate.now().plusDays(12));
+        cs1.setPlannedSalaryExpenses(BigDecimal.valueOf(9));
+        cs1.setActualEndDate(LocalDate.of(2002, 9, 9));
+
+        CounterpartyOrganization counterpartyOrganization = new CounterpartyOrganization();
+        counterpartyOrganization.setName("test4");
+        counterpartyOrganization.setInn("012345678901");
+        counterpartyOrganization.setAddress("test5");
+
+        CounterpartyContract cc = new CounterpartyContract();
+        cc.setContract(c);
+        cc.setType(EType.DELIVERY);
+        cc.setName("test3");
+        cc.setAmount(BigDecimal.valueOf(89));
+        cc.setPlannedEndDate(LocalDate.now());
+        cc.setPlannedStartDate(LocalDate.now().plusDays(12));
+        cc.setActualEndDate(LocalDate.of(2002, 9, 9));
+        cc.setCounterpartyOrganization(counterpartyOrganization);
+
+        c.setCounterpartyContracts(Stream.of(cc).collect(Collectors.toSet()));
+        c.setContractStages(Stream.of(cs, cs1).collect(Collectors.toSet()));
+
+        contractRepo.insertContract(c);
+
+        assertThat(contractStageRepo.findAll()).hasSize(2)
+                .usingRecursiveFieldByFieldElementComparator().contains(cs, cs1);
+
+       contractStageRepo.deleteById(1);
+
+        assertThat(contractStageRepo.findAll()).hasSize(1)
+                .usingRecursiveFieldByFieldElementComparator().containsAnyOf(cs, cs1);
+
+        assertThat(contractRepo.findAll())
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("contractStages")
+                .contains(c);
+    }
+
+    @Test
+    @Order(13)
+    void shouldDeleteContractAndCascadeDeleteCounterpartyContractAndContractStage_whenMethodCalled() {
+        User user = new User();
+        user.setPassword("qqwe1223");
+        user.setLogin("qwwer123");
+        user.setFullName("tEST user user");
+
+        userRepo.save(user);
+
+        Contract c = new Contract();
+        c.setName("fde9");
+        c.setAmount(BigDecimal.valueOf(123.13));
+        c.setType(EType.WORKS);
+        c.setActualStartDate(LocalDate.of(2002, 2, 10));
+        c.setPlannedEndDate(LocalDate.now());
+        c.setPlannedStartDate(LocalDate.now().plusDays(2));
+        c.setUser(user);
+
+        Contract c1 = new Contract();
+        c1.setName("qewww");
+        c1.setAmount(BigDecimal.valueOf(999.89));
+        c1.setType(EType.WORKS);
+        c1.setActualStartDate(LocalDate.of(2002, 2, 10));
+        c1.setPlannedEndDate(LocalDate.now());
+        c1.setPlannedStartDate(LocalDate.now().plusDays(2));
+        c1.setUser(user);
+
+        Contract c2 = new Contract();
+        c2.setName("eeeeeqwe123");
+        c2.setAmount(BigDecimal.valueOf(99012.12));
+        c2.setType(EType.WORKS);
+        c2.setActualStartDate(LocalDate.of(2002, 5, 19));
+        c2.setPlannedEndDate(LocalDate.now());
+        c2.setPlannedStartDate(LocalDate.now().plusDays(290));
+        c2.setActualEndDate(LocalDate.of(2005, 10, 10));
+        c2.setUser(user);
+
+        ContractStage cs = new ContractStage();
+        cs.setContract(c);
+        cs.setName("test1");
+        cs.setAmount(BigDecimal.valueOf(123));
+        cs.setPlannedMaterialCosts(BigDecimal.valueOf(123.9));
+        cs.setPlannedEndDate(LocalDate.now());
+        cs.setPlannedStartDate(LocalDate.now().minusWeeks(12));
+        cs.setPlannedSalaryExpenses(BigDecimal.valueOf(9));
+
+        ContractStage cs1 = new ContractStage();
+        cs1.setContract(c);
+        cs1.setName("test2");
+        cs1.setAmount(BigDecimal.valueOf(89));
+        cs1.setPlannedMaterialCosts(BigDecimal.valueOf(100000.23));
+        cs1.setPlannedEndDate(LocalDate.now());
+        cs1.setPlannedStartDate(LocalDate.now().plusDays(12));
+        cs1.setPlannedSalaryExpenses(BigDecimal.valueOf(9));
+        cs1.setActualEndDate(LocalDate.of(2002, 9, 9));
+
+        CounterpartyOrganization counterpartyOrganization = new CounterpartyOrganization();
+        counterpartyOrganization.setName("test4");
+        counterpartyOrganization.setInn("012345678901");
+        counterpartyOrganization.setAddress("test5");
+
+        CounterpartyContract cc = new CounterpartyContract();
+        cc.setContract(c);
+        cc.setType(EType.DELIVERY);
+        cc.setName("test3");
+        cc.setAmount(BigDecimal.valueOf(89));
+        cc.setPlannedEndDate(LocalDate.now());
+        cc.setPlannedStartDate(LocalDate.now().plusDays(12));
+        cc.setActualEndDate(LocalDate.of(2002, 9, 9));
+        cc.setCounterpartyOrganization(counterpartyOrganization);
+
+        c.setCounterpartyContracts(Stream.of(cc).collect(Collectors.toSet()));
+        c.setContractStages(Stream.of(cs, cs1).collect(Collectors.toSet()));
+
+        contractRepo.insertContract(c);
+        contractRepo.insertContract(c1);
+        contractRepo.insertContract(c2);
+
+        assertThat(contractRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(c, c1, c2);
+        assertThat(counterpartyContractRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(cc);
+        assertThat(contractStageRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(cs, cs1);
+        assertThat(counterpartyOrganizationRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(counterpartyOrganization);
+
+        contractRepo.deleteById(1);
+
+        assertThat(contractRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(c1, c2);
+        assertThat(counterpartyContractRepo.findAll()).isEmpty();
+        assertThat(contractStageRepo.findAll()).isEmpty();
+        assertThat(counterpartyOrganizationRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(counterpartyOrganization);
+        assertThat(userRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(user);
+    }
+
+
+    @Test
+    @Order(14)
+    void shouldDeleteUser_whenMethodCalled() {
+        User user = new User();
+        user.setPassword("qqwe1223");
+        user.setLogin("qwwer123");
+        user.setFullName("tEST user user");
+
+        userRepo.save(user);
+
+        assertThat(userRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(user);
+
+        userRepo.deleteById(2);
+
+        assertThat(userRepo.findAll()).hasSize(1).doesNotContain(user);
+    }
 }

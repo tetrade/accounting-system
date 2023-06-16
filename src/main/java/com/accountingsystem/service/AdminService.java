@@ -93,7 +93,7 @@ public class AdminService {
 
     public void createCounterpartyContract(
             int contractId, CounterpartyContractDto counterpartyContractDto) {
-        if (!counterpartyContractRepo.existsById(contractId))
+        if (!contractRepo.existsById(contractId))
             throw new NoSuchRowException("id", contractId, "Contract");
         Integer counterpartyOrganizationId = counterpartyContractDto.getCounterpartyOrganizationId();
         if (counterpartyOrganizationId != null && !counterpartyOrganizationRepo.existsById(counterpartyOrganizationId))
@@ -121,12 +121,8 @@ public class AdminService {
     // ------------------------------------- Контракт ------------------------------------------
 
     public void createContract(ContractDto contractDto) {
-        Integer userId = contractDto.getUserId();
-        if (userId != null && !userRepo.existsById(userId))
-            throw new NoSuchRowException("id", userId, "User");
-        contractDto.setUserId(userId);
-
-        contractRepo.insertContract(contractDto);
+        Contract contract = contractMapper.mapToContract(contractDto);
+        contractRepo.insertContract(contract);
     }
 
     public void updateContract(Integer contractId, ContractDto contractDto) {
@@ -160,6 +156,18 @@ public class AdminService {
         return userRepo
                 .findAll(specification, PageRequest.of(searchRequest.getPage(), searchRequest.getSize()))
                 .map(userMapper::mapToUserDto);
+    }
+
+    public void updateUser(Integer userId, UserDto userDto) {
+        userDto.setId(userId);
+        User user = userRepo.findById(userId).orElseThrow(() -> new NoSuchRowException("id", userId, "user"));
+        userMapper.mapToUser(user, userDto);
+        userRepo.save(user);
+    }
+
+    public void deleteUser(Integer userId) {
+        if (!userRepo.existsById(userId)) throw new NoSuchRowException("id", userId, "user");
+        userRepo.deleteById(userId);
     }
 }
 

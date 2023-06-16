@@ -2,17 +2,18 @@ package com.accountingsystem.controller.dtos.mappers;
 
 import com.accountingsystem.controller.dtos.ContractDto;
 import com.accountingsystem.controller.dtos.ContractUserDto;
+import com.accountingsystem.entitys.CounterpartyContract;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.entitys.Contract;
+import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.mapstruct.*;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Set;
 
 @Mapper(
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+        injectionStrategy = InjectionStrategy.FIELD,
         componentModel = "spring",
         uses = {ContractStageMapper.class, CounterpartyContractMapper.class, UserMapper.class},
         imports = DateUtil.class
@@ -21,21 +22,23 @@ public interface ContractMapper {
     @Named(value = "mapToContractDto")
     ContractDto mapToContractDto(Contract contract);
 
+    @Mapping(source = "userId", target = "user")
     Contract mapToContract(ContractDto contractDto);
+
+    @AfterMapping
+    default void mapToContract(@MappingTarget Contract contract, ContractDto contractDto){
+        if (contract.getCounterpartyContracts() != null)
+            contract.getCounterpartyContracts().forEach(cc -> cc.setContract(contract));
+        if (contract.getContractStages() != null) {
+            contract.getContractStages().forEach( cs -> cs.setContract(contract));
+        }
+    }
 
     @IterableMapping(qualifiedByName = "mapToContractDto")
     Set<ContractDto> mapToContractDtoSet(Collection<Contract> contractList);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void mapToTargetContract(@MappingTarget Contract contract, ContractDto contractDto);
-
     @Mapping(target = "type", expression = "java(contract.getType().getType())")
     ContractDtoExcel mapToContractDtoExcel(Contract contract);
-
-    default Double dateToExcelDate(LocalDate localDate) {
-        if (localDate == null) return null;
-        return DateUtil.getExcelDate(localDate);
-    }
 
     Set<ContractDtoExcel> mapToContractDtoExcelSet(Collection<Contract> contracts);
 
@@ -51,4 +54,11 @@ public interface ContractMapper {
     ContractUserDto mapToContractUser(Contract contract);
 
     Set<ContractUserDto> mapToContractUserDtos(Collection<Contract> contracts);
+
+    @Mapping(target = "type", expression = "java(counterpartyContract.getType().getType())")
+    @Mapping(source = "contract", target = "contractDtoExcel")
+    CounterpartyContractDtoExcel mapToContractDtoExcel(CounterpartyContract counterpartyContract);
+
+    Set<CounterpartyContractDtoExcel> mapToCounterpartyContractsDtoExcelSet(Collection<CounterpartyContract> counterpartyContracts);
+
 }

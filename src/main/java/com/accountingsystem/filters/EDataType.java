@@ -24,7 +24,7 @@ public enum EDataType {
         public Object getValue(String value) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             try { return LocalDate.parse(value, formatter); }
-            catch (Exception ex) {throw new IllegalFieldValueException("Illegal `value` field. Wrong date format. Should be: dd-MM-yyyy"); }
+            catch (Exception ex) {throw new IllegalFieldValueException("Illegal `value` field. Wrong date format. Should be: dd.MM.yyyy"); }
         }
     },
     DECIMAL {

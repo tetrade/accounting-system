@@ -13,11 +13,11 @@ public class CustomContractStageRepoImpl implements CustomContractStageRepo {
     private EntityManager entityManager;
 
     @Transactional
-    public void insertContractStage(int contractStageId, ContractStageDto c) {
+    public void insertContractStage(int contractId, ContractStageDto c) {
         entityManager.createNativeQuery("INSERT INTO contract_stage (contract_id, name,amount,actual_start_date, " +
                         "actual_end_date,planned_start_date,planned_end_date, actual_salary_expenses, planned_salary_expenses," +
                         "actual_material_costs, planned_material_costs) VALUES (?,?,?,?,?,?,?,?,?,?,?)")
-                .setParameter(1, contractStageId)
+                .setParameter(1, contractId)
                 .setParameter(2, c.getName())
                 .setParameter(3, c.getAmount())
                 .setParameter(4, c.getActualStartDate())

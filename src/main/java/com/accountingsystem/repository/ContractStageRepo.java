@@ -20,6 +20,6 @@ public interface ContractStageRepo extends
     );
 
     @Modifying
-    @Query("delete from ContractStage cs where cs.id = :id")
-    void deleteById(@Param("id") int id);
+    @Query(value = "delete from contract_stage cs where cs.id = :id", nativeQuery = true, countQuery = "select 1")
+    void deleteById(@Param("id") Integer id);
 }

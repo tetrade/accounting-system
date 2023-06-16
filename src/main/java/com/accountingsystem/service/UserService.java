@@ -1,7 +1,7 @@
 package com.accountingsystem.service;
 
 import com.accountingsystem.entitys.UserLog;
-import com.accountingsystem.controller.SignUpRequest;
+import com.accountingsystem.controller.dtos.SignUpRequest;
 import com.accountingsystem.controller.dtos.ContractDto;
 import com.accountingsystem.controller.dtos.ContractStageDto;
 import com.accountingsystem.controller.dtos.CounterpartyContractDto;
@@ -88,7 +88,7 @@ public class UserService {
     ) {
         Set<CounterpartyContract> counterpartyContractsBetweenDates =
                 counterpartyContractRepo.getCounterpartyContractsBetweenDatesByLogin(login, startDate, endDate);
-        return counterpartyContractMapper
+        return contractMapper
                 .mapToCounterpartyContractsDtoExcelSet(counterpartyContractsBetweenDates);
     }
 
@@ -131,7 +131,7 @@ public class UserService {
     }
 
     public void createNewUser(SignUpRequest signupRequest) {
-        User user = userMapper.mapToUser(signupRequest, passwordEncoder, roleRepo);
+        User user = userMapper.mapToUser(signupRequest);
         userRepo.save(user);
     }
 

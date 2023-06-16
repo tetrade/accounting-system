@@ -1,32 +1,24 @@
 package com.accountingsystem.repository.custom.impl;
 
 import com.accountingsystem.controller.dtos.ContractDto;
-import com.accountingsystem.entitys.enums.EType;
+import com.accountingsystem.entitys.Contract;
 import com.accountingsystem.repository.custom.CustomContractRepo;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.Optional;
 
+@Component
 public class CustomContractRepoImpl implements CustomContractRepo {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Transactional
-    public void insertContract(ContractDto c) {
-        entityManager.createNativeQuery("INSERT INTO contract (user_id ,name,amount,actual_start_date," +
-                        "actual_end_date,planned_start_date,planned_end_date,type) VALUES (?,?,?,?,?,?,?,?)")
-                .setParameter(1, c.getUserId())
-                .setParameter(2, c.getName())
-                .setParameter(3, c.getAmount())
-                .setParameter(4, c.getActualStartDate())
-                .setParameter(5, c.getActualEndDate())
-                .setParameter(6, c.getPlannedStartDate())
-                .setParameter(7, c.getPlannedEndDate())
-                .setParameter(8, Optional.ofNullable(c.getType()).map(EType::getType).orElse(null))
-                .executeUpdate();
+    public void insertContract(Contract c) {
+        entityManager.persist(c);
     }
 
     @Transactional

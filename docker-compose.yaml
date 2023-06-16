@@ -28,7 +28,7 @@ services:
     volumes:
       - ~/apps/mysql:/data/db
   main:
-    image: app
+    image: tetrade/acc-sys:0.0.19
     ports:
       - 8080:8080
     environment:
@@ -37,6 +37,8 @@ services:
     depends_on:
       - mysqldb
       - mongodb
+
+
 networks:
   default:
     name: network

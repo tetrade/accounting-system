@@ -3,16 +3,22 @@ package com.accountingsystem.controller.dtos.mappers;
 import com.accountingsystem.controller.dtos.ContractStageDto;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import com.accountingsystem.entitys.ContractStage;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.mapstruct.*;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Set;
 
 @Mapper(componentModel = "spring",
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-        uses = {ContractMapper.class}
+        injectionStrategy = InjectionStrategy.FIELD
 )
 public interface ContractStageMapper {
+
+    default Double dateToExcelDate(LocalDate localDate) {
+        if (localDate == null) return null;
+        return DateUtil.getExcelDate(localDate);
+    }
 
     @Named(value = "mapToContractStageDto")
     ContractStageDto mapToContractStageDto(ContractStage contractStage);
@@ -21,9 +27,6 @@ public interface ContractStageMapper {
 
     @IterableMapping(qualifiedByName = "mapToContractStageDto")
     Set<ContractStageDto> mapToContractStageDtoSet(Collection<ContractStage> contractStage);
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void mapToTargetContractStage(@MappingTarget ContractStage contractStage, ContractStageDto contractStageDto);
 
     ContractStageDtoExcel mapToContractStageDtoExcel(ContractStage contractStage);
 

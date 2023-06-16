@@ -74,7 +74,7 @@ public class ExcelReportWriter {
         return stream;
     }
 
-    public ByteArrayOutputStream createContractReprot (
+    public ByteArrayOutputStream createContractReport(
             Set<CounterpartyContractDtoExcel> counterpartyContractDtos, Set<ContractDtoExcel> contractDtos
             ) throws IOException {
 

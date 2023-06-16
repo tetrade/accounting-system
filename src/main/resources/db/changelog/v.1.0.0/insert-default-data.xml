@@ -17,7 +17,7 @@
         <insert tableName="user">
             <column name="full_name" value="Administrator"/>
             <column name="login" value="admin"/>
-            <column name="password" value="admin"/>
+            <column name="password" value="$2a$10$1zZYjBpqU/kMdKTtqyhTjuHJPjfG0R85UZcxVgmurwjIqtiDfYe9C"/>
         </insert>
         <insert tableName="user_role">
             <column name="user_id" value = "1"/>

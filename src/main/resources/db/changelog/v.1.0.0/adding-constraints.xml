@@ -39,4 +39,8 @@
         <addNotNullConstraint tableName="user" columnName="login" columnDataType="varchar(255)"/>
         <addNotNullConstraint tableName="user" columnName="password" columnDataType="varchar(255)"/>
     </changeSet>
+
+    <changeSet id="adding-uniq-constraints-user-login" author="piatlin2002@gmail.com">
+        <addUniqueConstraint tableName="user" columnNames="login"/>
+    </changeSet>
 </databaseChangeLog>

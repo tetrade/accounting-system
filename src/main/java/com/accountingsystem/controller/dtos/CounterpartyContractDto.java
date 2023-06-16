@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -14,5 +17,7 @@ public class CounterpartyContractDto extends AbstractContract{
     private CounterpartyOrganizationDto counterpartyOrganization;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Positive
+    @NotNull
     private Integer counterpartyOrganizationId;
 }

@@ -23,9 +23,10 @@ public interface ContractRepo  extends
             @Param("start_date") LocalDate startDate, @Param("end_date") LocalDate endDate
     );
 
+    // countQuery define just because spring-boot-data 2.7.9 have bug with native-query
     @Modifying
-    @Query("delete from Contract c where c.id = :id")
-    void deleteById(@Param("id") int id);
+    @Query(value = "delete from contract c where c.id = :contractId", nativeQuery = true, countQuery = "select 1")
+    void deleteById(@Param("contractId") Integer contractId);
 
     @EntityGraph(value = "Contract.user", type = EntityGraph.EntityGraphType.FETCH)
     Page<Contract> findAll(Specification<Contract> specification, Pageable pageable);

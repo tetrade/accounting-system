@@ -183,7 +183,7 @@ class   EntityRelationshipsTest {
     }
 
     @Test
-    void shouldDeleteContract_whenDeleteUser() {
+    void shouldNotDeleteContract_whenDeleteUser() {
         User userToNotDelete = new User();
         userToNotDelete.setLogin("user_to_not_delete");
         userToNotDelete.setPassword("qwe132");
