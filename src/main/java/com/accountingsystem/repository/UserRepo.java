@@ -24,6 +24,6 @@ public interface UserRepo extends JpaRepository<User, Integer>, JpaSpecification
     Optional<User> findById(Integer id);
 
     @Modifying
-    @Query(value = "delete from \"user\" u where u.id = :id", nativeQuery = true, countQuery = "select 1")
+    @Query(value = "delete from user u where u.id = :id", nativeQuery = true, countQuery = "select 1")
     void deleteById(@Param("id") Integer id);
 }

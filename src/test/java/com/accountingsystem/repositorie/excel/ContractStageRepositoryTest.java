@@ -3,6 +3,7 @@ package com.accountingsystem.repositorie.excel;
 
 import com.accountingsystem.entitys.*;
 import com.accountingsystem.entitys.enums.EType;
+import com.accountingsystem.AbstractTestContainerStartUp;
 import com.accountingsystem.repository.ContractStageRepo;
 import com.accountingsystem.repository.UserLogRepository;
 import com.accountingsystem.repository.UserRepo;
@@ -19,7 +20,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @DataJpaTest
-class ContractStageRepositoryTest {
+class ContractStageRepositoryTest extends AbstractTestContainerStartUp {
 
     @MockBean
     private MongoTemplate mongoTemplate;

@@ -2,6 +2,7 @@ package com.accountingsystem.repositorie.main;
 
 import com.accountingsystem.entitys.*;
 import com.accountingsystem.entitys.enums.EType;
+import com.accountingsystem.AbstractTestContainerStartUp;
 import com.accountingsystem.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
-class   EntityRelationshipsTest {
+class EntityRelationshipsTest extends AbstractTestContainerStartUp {
 
     @MockBean
     private MongoTemplate mongoTemplate;

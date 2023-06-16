@@ -18,9 +18,8 @@ public class TypeConverter implements AttributeConverter<EType, String> {
 
     @Override
     public EType convertToEntityAttribute(String s) {
-        if (s == null) {
-            return null;
-        }
+        if (s == null) return null;
+
         return Stream.of(EType.values())
                 .filter(c -> c.getType().equals(s))
                 .findFirst()

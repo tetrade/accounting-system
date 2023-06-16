@@ -3,6 +3,7 @@ package com.accountingsystem.repositorie.excel;
 import com.accountingsystem.entitys.Contract;
 import com.accountingsystem.entitys.User;
 import com.accountingsystem.entitys.enums.EType;
+import com.accountingsystem.AbstractTestContainerStartUp;
 import com.accountingsystem.repository.ContractRepo;
 import com.accountingsystem.repository.UserLogRepository;
 import com.accountingsystem.repository.UserRepo;
@@ -12,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,7 +25,17 @@ import java.util.Set;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
-class ContractRepositoryImportBetweenDatesTest {
+class ContractRepositoryImportBetweenDatesTest extends AbstractTestContainerStartUp {
+
+    @Container
+    static MySQLContainer mySQLContainer = new MySQLContainer<>("mysql:8.0");
+
+    @DynamicPropertySource
+    static void configureProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", mySQLContainer::getUsername);
+        registry.add("spring.datasource.password", mySQLContainer::getPassword);
+    }
 
     @MockBean
     private MongoTemplate mongoTemplate;

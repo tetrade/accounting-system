@@ -5,6 +5,7 @@ import com.accountingsystem.entitys.CounterpartyContract;
 import com.accountingsystem.entitys.CounterpartyOrganization;
 import com.accountingsystem.entitys.User;
 import com.accountingsystem.entitys.enums.EType;
+import com.accountingsystem.AbstractTestContainerStartUp;
 import com.accountingsystem.repository.CounterpartyContractRepo;
 import com.accountingsystem.repository.UserLogRepository;
 import com.accountingsystem.repository.UserRepo;
@@ -22,7 +23,7 @@ import java.util.Set;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
-class CounterpartyContractRepositoryImportBetweenDatesTest {
+class CounterpartyContractRepositoryImportBetweenDatesTest extends AbstractTestContainerStartUp {
 
     @MockBean
     private MongoTemplate mongoTemplate;

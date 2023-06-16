@@ -6,7 +6,7 @@ import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 @TestPropertySource(properties = "spring.mongodb.embedded.version=3.5.5")
-class AccountingSystemApplicationTests {
+class AccountingSystemApplicationTests extends AbstractTestContainerStartUp {
 
 	@Test
 	void contextLoads() {

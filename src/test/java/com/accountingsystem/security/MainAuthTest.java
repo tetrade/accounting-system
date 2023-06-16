@@ -5,6 +5,7 @@ import com.accountingsystem.controller.dtos.SignUpRequest;
 import com.accountingsystem.entitys.User;
 import com.accountingsystem.entitys.enums.ERole;
 import com.accountingsystem.filters.SearchRequest;
+import com.accountingsystem.AbstractTestContainerStartUp;
 import com.accountingsystem.repository.RoleRepo;
 import com.accountingsystem.repository.UserRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +35,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @TestPropertySource(properties = "spring.mongodb.embedded.version=3.5.5")
 @SpringBootTest
 @AutoConfigureMockMvc
-class MainAuthTest {
+class MainAuthTest extends AbstractTestContainerStartUp {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -55,7 +56,7 @@ class MainAuthTest {
 
     @AfterEach
     void tearDown() {
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "\"user\"", "user_role");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "user", "user_role");
     }
 
     @Test

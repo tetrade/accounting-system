@@ -35,6 +35,7 @@ public class ExcelReportWriter {
     public ByteArrayOutputStream createContractStagesReport(
             Set<ContractStageDtoExcel> contractStageDtoExcels
     ) throws IOException {
+
         workbook = new XSSFWorkbook();
         mainSheet = workbook.createSheet("Основной");
 

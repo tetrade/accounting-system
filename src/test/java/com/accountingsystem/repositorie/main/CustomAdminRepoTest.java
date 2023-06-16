@@ -6,28 +6,26 @@ import com.accountingsystem.controller.dtos.CounterpartyContractDto;
 import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
 import com.accountingsystem.entitys.*;
 import com.accountingsystem.entitys.enums.EType;
+import com.accountingsystem.AbstractTestContainerStartUp;
 import com.accountingsystem.repository.*;
-import org.junit.Ignore;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class CustomAdminRepoTest {
+class CustomAdminRepoTest extends AbstractTestContainerStartUp {
 
     @MockBean
     private MongoTemplate mongoTemplate;
@@ -92,9 +90,11 @@ class CustomAdminRepoTest {
         should.setAddress(newRow.getAddress());
         should.setCounterpartyContracts(new HashSet<>());
 
-        counterpartyOrganizationRepo.updateCounterpartyOrganization(1, newRow);
+        CounterpartyOrganization c = counterpartyOrganizationRepo.findAll().get(0);
+        counterpartyOrganizationRepo.updateCounterpartyOrganization(c.getId(), newRow);
+        entityManager.refresh(c);
 
-        assertThat(counterpartyOrganizationRepo.findAll())
+        assertThat(Stream.of(c))
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
                 .contains(should);
     }
@@ -154,11 +154,11 @@ class CustomAdminRepoTest {
         should.setPlannedEndDate(shouldBeUpdated.getPlannedEndDate());
         should.setPlannedStartDate(shouldBeUpdated.getPlannedStartDate());
 
-        contractRepo.updateContract(1, c);
+        Contract contract = contractRepo.findAll().get(0);
+        contractRepo.updateContract(contract.getId(), c);
+        entityManager.refresh(contract);
 
-        entityManager.refresh(shouldBeUpdated);
-
-        assertThat(contractRepo.findAll())
+        assertThat(Stream.of(contract))
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "user", "counterpartyContracts", "contractStages")
                 .contains(should);
     }
@@ -187,6 +187,7 @@ class CustomAdminRepoTest {
         cs.setPlannedSalaryExpenses(BigDecimal.valueOf(99.22));
         cs.setActualMaterialCosts(BigDecimal.valueOf(10.12));
         cs.setPlannedMaterialCosts(BigDecimal.valueOf(10.12));
+        cs.setId(4);
 
         ContractStage should = new ContractStage();
         should.setName("contractS");
@@ -200,7 +201,8 @@ class CustomAdminRepoTest {
         should.setActualMaterialCosts(BigDecimal.valueOf(10.12));
         should.setPlannedMaterialCosts(BigDecimal.valueOf(10.12));
 
-        contractStageRepo.insertContractStage(1, cs);
+        Contract contract = contractRepo.findAll().get(0);
+        contractStageRepo.insertContractStage(contract.getId(), cs);
 
         assertThat(contractStageRepo.findAll())
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "contract")
@@ -232,7 +234,8 @@ class CustomAdminRepoTest {
         cs.setActualMaterialCosts(BigDecimal.valueOf(10.12));
         cs.setPlannedMaterialCosts(BigDecimal.valueOf(10.12));
 
-        contractStageRepo.insertContractStage(1, cs);
+        Contract contract = contractRepo.findAll().get(0);
+        contractStageRepo.insertContractStage(contract.getId(), cs);
 
         cs.setAmount(BigDecimal.valueOf(9999.98));
         cs.setActualEndDate(LocalDate.of(2002, 2, 2));
@@ -250,7 +253,9 @@ class CustomAdminRepoTest {
         should.setPlannedMaterialCosts(BigDecimal.valueOf(10.12));
         should.setActualEndDate(LocalDate.of(2002, 2, 2));
 
-        contractStageRepo.updateContractStage(1, cs);
+        ContractStage contractStage = contractStageRepo.findAll().get(0);
+        contractStageRepo.updateContractStage(contractStage.getId(), cs);
+        entityManager.refresh(contractStage);
 
         assertThat(contractStageRepo.findAll())
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "contract")
@@ -284,7 +289,7 @@ class CustomAdminRepoTest {
         cc.setActualEndDate(LocalDate.of(2020, 10, 10));
         cc.setPlannedStartDate(LocalDate.of(2015, 7, 13));
         cc.setPlannedEndDate(LocalDate.of(2019, 3, 15));
-        cc.setCounterpartyOrganizationId(1);
+        cc.setCounterpartyOrganizationId(counterpartyOrganizationRepo.findAll().get(0).getId());
         cc.setType(EType.WORKS);
 
         CounterpartyContract should = new CounterpartyContract();
@@ -296,7 +301,8 @@ class CustomAdminRepoTest {
         should.setPlannedEndDate(LocalDate.of(2019, 3, 15));
         should.setType(EType.WORKS);
 
-        counterpartyContractRepo.insertCounterpartyContract(1, cc);
+        Contract contract = contractRepo.findAll().get(0);
+        counterpartyContractRepo.insertCounterpartyContract(contract.getId(), cc);
 
         assertThat(counterpartyContractRepo.findAll())
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "contract", "counterpartyOrganization")
@@ -329,10 +335,11 @@ class CustomAdminRepoTest {
         cc.setActualEndDate(LocalDate.of(2020, 10, 10));
         cc.setPlannedStartDate(LocalDate.of(2015, 7, 13));
         cc.setPlannedEndDate(LocalDate.of(2019, 3, 15));
-        cc.setCounterpartyOrganizationId(1);
+        cc.setCounterpartyOrganizationId(counterpartyOrganizationRepo.findAll().get(0).getId());
         cc.setType(EType.PURCHASE);
 
-        counterpartyContractRepo.insertCounterpartyContract(1, cc);
+        Contract contract = contractRepo.findAll().get(0);
+        counterpartyContractRepo.insertCounterpartyContract(contract.getId(), cc);
 
         cc.setType(EType.DELIVERY);
         cc.setAmount(BigDecimal.valueOf(99.12));
@@ -349,10 +356,11 @@ class CustomAdminRepoTest {
         should.setAmount(BigDecimal.valueOf(99.12));
 
         // when
-        counterpartyContractRepo.updateCounterpartyContract(1, cc);
+        CounterpartyContract counterpartyContract = counterpartyContractRepo.findAll().get(0);
+        counterpartyContractRepo.updateCounterpartyContract(counterpartyContract.getId(), cc);
+        entityManager.refresh(counterpartyContract);
 
-
-        assertThat(counterpartyContractRepo.findAll())
+        assertThat(Stream.of(counterpartyContract))
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "contract", "counterpartyOrganization")
                 .contains(should);
     }
@@ -422,9 +430,11 @@ class CustomAdminRepoTest {
 
         counterpartyOrganizationRepo.insertCounterpartyOrganization(counterpartyOrganization);
 
-        assertThat(counterpartyOrganizationRepo.findAll()).hasSize(1);
+        List<CounterpartyOrganization> counterpartyOrganizationList = counterpartyOrganizationRepo.findAll();
+        assertThat(counterpartyOrganizationList).hasSize(1);
 
-        counterpartyOrganizationRepo.deleteById(1);
+
+        counterpartyOrganizationRepo.deleteById(counterpartyOrganizationList.get(0).getId());
 
         assertThat(counterpartyOrganizationRepo.findAll()).isEmpty();
     }
@@ -479,10 +489,12 @@ class CustomAdminRepoTest {
 
         contractRepo.insertContract(c);
 
-        assertThat(counterpartyContractRepo.findAll()).hasSize(1)
+
+        List<CounterpartyContract> counterpartyContractList = counterpartyContractRepo.findAll();
+        assertThat(counterpartyContractList).hasSize(1)
                 .usingRecursiveFieldByFieldElementComparator().contains(cc);
 
-        counterpartyContractRepo.deleteById(1);
+        counterpartyContractRepo.deleteById(counterpartyContractList.get(0).getId());
 
         assertThat(counterpartyContractRepo.findAll()).isEmpty();
 
@@ -542,10 +554,11 @@ class CustomAdminRepoTest {
 
         contractRepo.insertContract(c);
 
-        assertThat(contractStageRepo.findAll()).hasSize(2)
+        List<ContractStage> contractStageList = contractStageRepo.findAll();
+        assertThat(contractStageList).hasSize(2)
                 .usingRecursiveFieldByFieldElementComparator().contains(cs, cs1);
 
-       contractStageRepo.deleteById(1);
+       contractStageRepo.deleteById(contractStageList.get(0).getId());
 
         assertThat(contractStageRepo.findAll()).hasSize(1)
                 .usingRecursiveFieldByFieldElementComparator().containsAnyOf(cs, cs1);
@@ -634,12 +647,14 @@ class CustomAdminRepoTest {
         contractRepo.insertContract(c1);
         contractRepo.insertContract(c2);
 
-        assertThat(contractRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(c, c1, c2);
+        List<Contract> contractList = contractRepo.findAll();
+
+        assertThat(contractList).usingRecursiveFieldByFieldElementComparator().contains(c, c1, c2);
         assertThat(counterpartyContractRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(cc);
         assertThat(contractStageRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(cs, cs1);
         assertThat(counterpartyOrganizationRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(counterpartyOrganization);
 
-        contractRepo.deleteById(1);
+        contractRepo.deleteById(contractList.get(0).getId());
 
         assertThat(contractRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(c1, c2);
         assertThat(counterpartyContractRepo.findAll()).isEmpty();
@@ -657,11 +672,11 @@ class CustomAdminRepoTest {
         user.setLogin("qwwer123");
         user.setFullName("tEST user user");
 
-        userRepo.save(user);
+        User u = userRepo.save(user);
 
         assertThat(userRepo.findAll()).usingRecursiveFieldByFieldElementComparator().contains(user);
 
-        userRepo.deleteById(2);
+        userRepo.deleteById(u.getId());
 
         assertThat(userRepo.findAll()).hasSize(1).doesNotContain(user);
     }
