@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 
 
-// для избежания нарушения приницпа LSP создадим новый класс
+// для избежания нарушения принципа LSP создадим новый класс
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class CounterpartyContractDtoExcel extends AbstractExcelContract {

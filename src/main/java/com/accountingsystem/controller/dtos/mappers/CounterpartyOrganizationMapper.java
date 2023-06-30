@@ -19,7 +19,7 @@ public abstract class CounterpartyOrganizationMapper {
 
     public abstract CounterpartyOrganizationDto map(CounterpartyOrganization counterpartyOrganization);
 
-    CounterpartyOrganization mapIdToCounterpartyOrganization(Integer counterpartyOrganizationId) {
+    public CounterpartyOrganization mapIdToCounterpartyOrganization(Integer counterpartyOrganizationId) {
         return counterpartyOrganizationRepo.findById(counterpartyOrganizationId)
                 .orElseThrow(() -> new NoSuchRowException("id", counterpartyOrganizationId, "counterparty organization"));
     }

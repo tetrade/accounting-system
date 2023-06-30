@@ -27,8 +27,8 @@ services:
       - 3307
     volumes:
       - ~/apps/mysql:/data/db
-  main:
-    image: tetrade/acc-sys:0.0.19
+  server:
+    image: tetrade/acc-sys:0.1.2
     ports:
       - 8080:8080
     environment:
@@ -37,6 +37,15 @@ services:
     depends_on:
       - mysqldb
       - mongodb
+  client:
+    image: alina2002alina/my-vue-app:0.0.7
+    environment:
+      - PORT=8081
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - 8081:8081
+    depends_on:
+      - server
 
 
 networks:

@@ -11,8 +11,8 @@ import org.springframework.data.domain.Pageable;
 
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 public interface CounterpartyContractRepo extends
         JpaRepository<CounterpartyContract, Integer>, JpaSpecificationExecutor<CounterpartyContract>,
@@ -24,7 +24,7 @@ public interface CounterpartyContractRepo extends
             "FROM CounterpartyContract cc LEFT JOIN FETCH cc.contract c LEFT JOIN FETCH c.user u " +
              "WHERE u.login = :user_login AND cc.plannedStartDate >= :start_date AND cc.plannedEndDate <= :end_date"
     )
-    Set<CounterpartyContract> getCounterpartyContractsBetweenDatesByLogin(
+    LinkedHashSet<CounterpartyContract> getCounterpartyContractsBetweenDatesByLogin(
             @Param("user_login") String login,
             @Param("start_date") LocalDate startDate, @Param("end_date") LocalDate endDate
     );

@@ -54,7 +54,7 @@ public abstract class UserMapper {
         return role.stream().map(Role::getName).anyMatch(r -> r.equals(ERole.ROLE_ADMIN));
     }
 
-    User mapIdToUser(Integer id) {
+    public User mapIdToUser(Integer id) {
         if (id == null) return null;
         return userRepo.findById(id).orElseThrow(() -> new NoSuchRowException("id", id, "user"));
     }

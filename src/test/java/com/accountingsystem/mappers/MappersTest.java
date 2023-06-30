@@ -1,13 +1,17 @@
 package com.accountingsystem.mappers;
 
+import com.accountingsystem.advice.exceptions.NoSuchRowException;
 import com.accountingsystem.controller.dtos.*;
 import com.accountingsystem.controller.dtos.mappers.*;
 import com.accountingsystem.entitys.*;
 import com.accountingsystem.entitys.enums.ERole;
 import com.accountingsystem.entitys.enums.EType;
+import com.accountingsystem.excel.dto.ContractDtoExcel;
+import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import com.accountingsystem.repository.CounterpartyOrganizationRepo;
 import com.accountingsystem.repository.RoleRepo;
 import com.accountingsystem.repository.UserRepo;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +21,15 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @SpringJUnitConfig(classes = {
         CounterpartyOrganizationMapperImpl.class,
@@ -233,6 +241,115 @@ class MappersTest {
         assertThat(contractDto).usingRecursiveComparison().isEqualTo(should);
         assertThat(contractDtoSet1).usingRecursiveFieldByFieldElementComparatorIgnoringFields().containsOnly(should);
         assertThat(contractDtoSet1).isEqualTo(contractDtoSet2);
+    }
+
+
+    @Test
+    void shouldReturnContract_whenMapContactDtoToContacts() {
+        ContractDto contactDto = new ContractDto();
+        contactDto.setId(contract.getId());
+        contactDto.setName(contract.getName());
+        contactDto.setAmount(contract.getAmount());
+        contactDto.setType(contract.getType());
+        contactDto.setActualStartDate(contract.getActualStartDate());
+        contactDto.setPlannedStartDate(contract.getPlannedStartDate());
+        contactDto.setActualEndDate(contract.getActualEndDate());
+        contactDto.setPlannedEndDate(contract.getPlannedEndDate());
+
+        ContractStageDto contactsStageDto = new ContractStageDto();
+        contactsStageDto.setId(contractStage.getId());
+        contactsStageDto.setName(contractStage.getName());
+        contactsStageDto.setAmount(contractStage.getAmount());
+        contactsStageDto.setActualMaterialCosts(contractStage.getActualMaterialCosts());
+        contactsStageDto.setPlannedMaterialCosts(contractStage.getPlannedMaterialCosts());
+        contactsStageDto.setActualSalaryExpenses(contractStage.getActualSalaryExpenses());
+        contactsStageDto.setPlannedSalaryExpenses(contractStage.getPlannedSalaryExpenses());
+        contactsStageDto.setActualStartDate(contractStage.getActualStartDate());
+        contactsStageDto.setPlannedStartDate(contractStage.getPlannedStartDate());
+        contactsStageDto.setActualEndDate(contractStage.getActualEndDate());
+        contactsStageDto.setPlannedEndDate(contractStage.getPlannedEndDate());
+
+        contactDto.setContractStages(Stream.of(contactsStageDto).collect(Collectors.toSet()));
+
+        Contract mappedContract = contractMapper.mapToContract(contactDto);
+        assertThat(mappedContract).usingRecursiveComparison().ignoringFields("contractStages", "counterpartyContracts", "user")
+                .isEqualTo(contract);
+
+        assertThat(mappedContract.getContractStages()).extracting("contract").containsOnly(mappedContract);
+    }
+
+    @Test
+    void shouldReturnContractStageDtoExcel_whenMappedContractStageToContractsStageDtoExcel() {
+        ContractStageDto contractStageDto = new ContractStageDto();
+        contractStageDto.setId(contractStage.getId());
+        contractStageDto.setName(contractStage.getName());
+        contractStageDto.setAmount(contractStage.getAmount());
+        contractStageDto.setActualStartDate(contractStage.getActualStartDate());
+        contractStageDto.setPlannedStartDate(contractStage.getPlannedStartDate());
+        contractStageDto.setActualEndDate(contractStage.getActualEndDate());
+        contractStageDto.setPlannedEndDate(contractStage.getPlannedEndDate());
+        contractStageDto.setActualMaterialCosts(contractStage.getActualMaterialCosts());
+        contractStageDto.setPlannedMaterialCosts(contractStage.getPlannedMaterialCosts());
+        contractStageDto.setActualSalaryExpenses(contractStage.getActualSalaryExpenses());
+        contractStageDto.setPlannedSalaryExpenses(contractStage.getPlannedSalaryExpenses());
+
+
+        ContractStageDtoExcel should = new ContractStageDtoExcel();
+        should.setName(contractStage.getName());
+        should.setAmount(contractStage.getAmount().doubleValue());
+        should.setActualStartDate(DateUtil.getExcelDate(contractStage.getActualStartDate()));
+        should.setPlannedStartDate(DateUtil.getExcelDate(contractStage.getPlannedStartDate()));
+        should.setActualEndDate(DateUtil.getExcelDate(contractStage.getActualEndDate()));
+        should.setPlannedEndDate(DateUtil.getExcelDate(contractStage.getPlannedEndDate()));
+        should.setActualMaterialCosts(null);
+        should.setPlannedMaterialCosts(contractStage.getPlannedMaterialCosts().doubleValue());
+        should.setActualSalaryExpenses(contractStage.getActualSalaryExpenses().doubleValue());
+        should.setPlannedSalaryExpenses(contractStage.getPlannedSalaryExpenses().doubleValue());
+
+        assertThat(contractStageMapper.mapToContractStageDtoExcel(contractStage))
+                .usingRecursiveComparison().isEqualTo(should);
+
+    }
+
+    @Test
+    void shouldCallFindByIdAndReturnCounterpartyOrganization_whenMappedIdToCounterpartyOrganization() {
+
+        when(counterpartyOrganizationRepo.findById(any()))
+                .thenReturn(Optional.of(counterpartyOrganization));
+
+        assertThat(counterpartyOrganizationMapper.mapIdToCounterpartyOrganization(5))
+                .isEqualTo(counterpartyOrganization);
+
+    }
+
+    @Test
+    void shouldThrowExp_whenMappedIdToCounterpartyOrganizationWithWrongId() {
+
+        when(counterpartyOrganizationRepo.findById(1))
+                .thenThrow(new NoSuchRowException("id", 1, "counterparty organization"));
+
+        assertThatThrownBy(() -> counterpartyOrganizationMapper.mapIdToCounterpartyOrganization(5))
+                .isInstanceOf(NoSuchRowException.class);
+
+    }
+
+
+    @Test
+    void shouldReturnUser_whenMappedIdToUserWithExistedUser() {
+        when(userRepo.findById(1)).thenReturn(Optional.of(user));
+
+        assertThat(userMapper.mapIdToUser(1))
+                .isEqualTo(user);
+    }
+
+    @Test
+    void shouldThrowExp_whenMappedIdToUserWithWrongId() {
+
+        when(userRepo.findById(1)).thenThrow(new NoSuchRowException("id", 1, "user"));
+
+        assertThatThrownBy(() -> userMapper.mapIdToUser(1))
+                .isInstanceOf(NoSuchRowException.class);
+
     }
 
     @Test
