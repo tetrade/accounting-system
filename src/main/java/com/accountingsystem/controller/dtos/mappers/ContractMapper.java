@@ -2,9 +2,9 @@ package com.accountingsystem.controller.dtos.mappers;
 
 import com.accountingsystem.controller.dtos.ContractDto;
 import com.accountingsystem.controller.dtos.ContractUserDto;
+import com.accountingsystem.entitys.Contract;
 import com.accountingsystem.entitys.CounterpartyContract;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
-import com.accountingsystem.entitys.Contract;
 import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.mapstruct.*;

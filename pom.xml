@@ -18,6 +18,8 @@
 		<java.version>1.8</java.version>
 		<assertj.version>3.24.2</assertj.version>
 		<apache-poi.version>5.2.3</apache-poi.version>
+		<springdoc.version>1.6.9</springdoc.version>
+		<testcontainers.version>1.18.3</testcontainers.version>
 	</properties>
 	<dependencies>
 
@@ -36,7 +38,7 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.6.9</version>
+			<version>${springdoc.version}</version>
 		</dependency>
 
 		<dependency>
@@ -57,21 +59,21 @@
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>testcontainers</artifactId>
-			<version>1.18.3</version>
+			<version>${testcontainers.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>1.18.3</version>
+			<version>${testcontainers.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>mysql</artifactId>
-			<version>1.18.3</version>
+			<version>${testcontainers.version}</version>
 			<scope>test</scope>
 		</dependency>
 

@@ -2,8 +2,9 @@ package com.accountingsystem.excel.dto;
 
 import lombok.Data;
 
+// Реализуем шаблон проектирование Template
 @Data
-public abstract class AbstractExcelContract {
+public abstract class ExcelContractTemplate {
     private String name;
     private String type;
     private Double amount;
@@ -11,4 +12,7 @@ public abstract class AbstractExcelContract {
     private Double plannedEndDate;
     private Double actualStartDate;
     private Double actualEndDate;
+
+    public abstract String getInnerContractName();
+    public abstract String getContactType();
 }

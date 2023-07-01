@@ -1,14 +1,15 @@
 package com.accountingsystem.repositorie.main;
 
+import com.accountingsystem.AbstractTestContainerStartUp;
 import com.accountingsystem.controller.dtos.ContractDto;
 import com.accountingsystem.controller.dtos.ContractStageDto;
 import com.accountingsystem.controller.dtos.CounterpartyContractDto;
 import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
 import com.accountingsystem.entitys.*;
 import com.accountingsystem.entitys.enums.EType;
-import com.accountingsystem.AbstractTestContainerStartUp;
 import com.accountingsystem.repository.*;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

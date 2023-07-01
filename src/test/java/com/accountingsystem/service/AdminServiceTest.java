@@ -9,7 +9,6 @@ import com.accountingsystem.entitys.enums.EType;
 import com.accountingsystem.repository.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,11 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 public class AdminServiceTest {
@@ -262,7 +257,7 @@ public class AdminServiceTest {
         int orgId = 5;
         int contractId = 8;
         CounterpartyContractDto counterpartyContractDto = new CounterpartyContractDto();
-        counterpartyContractDto.setName("test-contract");;
+        counterpartyContractDto.setName("test-contract");
         counterpartyContractDto.setType(EType.WORKS);
         counterpartyContractDto.setAmount(BigDecimal.valueOf(567));
         counterpartyContractDto.setActualStartDate(LocalDate.now());
@@ -286,7 +281,7 @@ public class AdminServiceTest {
         int orgId = 5;
         int contractId = 8;
         CounterpartyContractDto counterpartyContractDto = new CounterpartyContractDto();
-        counterpartyContractDto.setName("test-contract");;
+        counterpartyContractDto.setName("test-contract");
         counterpartyContractDto.setType(EType.WORKS);
         counterpartyContractDto.setAmount(BigDecimal.valueOf(567));
         counterpartyContractDto.setActualStartDate(LocalDate.now());
@@ -310,7 +305,7 @@ public class AdminServiceTest {
         int orgId = 5;
         int contractId = 8;
         CounterpartyContractDto counterpartyContractDto = new CounterpartyContractDto();
-        counterpartyContractDto.setName("test-contract");;
+        counterpartyContractDto.setName("test-contract");
         counterpartyContractDto.setType(EType.WORKS);
         counterpartyContractDto.setAmount(BigDecimal.valueOf(567));
         counterpartyContractDto.setActualStartDate(LocalDate.now());
@@ -335,7 +330,7 @@ public class AdminServiceTest {
         int orgId = 5;
         int contractId = 8;
         CounterpartyContractDto counterpartyContractDto = new CounterpartyContractDto();
-        counterpartyContractDto.setName("test-contract");;
+        counterpartyContractDto.setName("test-contract");
         counterpartyContractDto.setType(EType.WORKS);
         counterpartyContractDto.setAmount(BigDecimal.valueOf(567));
         counterpartyContractDto.setActualStartDate(LocalDate.now());
@@ -359,7 +354,7 @@ public class AdminServiceTest {
         int orgId = 5;
         int contractId = 8;
         CounterpartyContractDto counterpartyContractDto = new CounterpartyContractDto();
-        counterpartyContractDto.setName("test-contract");;
+        counterpartyContractDto.setName("test-contract");
         counterpartyContractDto.setType(EType.WORKS);
         counterpartyContractDto.setAmount(BigDecimal.valueOf(567));
         counterpartyContractDto.setActualStartDate(LocalDate.now());
@@ -383,7 +378,7 @@ public class AdminServiceTest {
         int orgId = 5;
         int contractId = 8;
         CounterpartyContractDto counterpartyContractDto = new CounterpartyContractDto();
-        counterpartyContractDto.setName("test-contract");;
+        counterpartyContractDto.setName("test-contract");
         counterpartyContractDto.setType(EType.WORKS);
         counterpartyContractDto.setAmount(BigDecimal.valueOf(567));
         counterpartyContractDto.setActualStartDate(LocalDate.now());

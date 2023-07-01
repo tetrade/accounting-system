@@ -3,12 +3,10 @@ package com.accountingsystem.repository;
 import com.accountingsystem.entitys.CounterpartyContract;
 import com.accountingsystem.repository.custom.CustomCounterpartyContractRepo;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
-
-import org.springframework.data.domain.Pageable;
-
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;

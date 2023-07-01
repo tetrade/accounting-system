@@ -1,8 +1,8 @@
 package com.accountingsystem.controller.dtos.mappers;
 
 import com.accountingsystem.controller.dtos.ContractStageDto;
-import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import com.accountingsystem.entitys.ContractStage;
+import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.mapstruct.*;
 

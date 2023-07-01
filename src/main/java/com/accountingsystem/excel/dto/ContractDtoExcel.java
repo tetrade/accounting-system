@@ -1,4 +1,15 @@
 package com.accountingsystem.excel.dto;
 
-public class ContractDtoExcel extends AbstractExcelContract {
+import com.accountingsystem.excel.enums.EContractType;
+
+public class ContractDtoExcel extends ExcelContractTemplate {
+    @Override
+    public String getInnerContractName() {
+        return "";
+    }
+
+    @Override
+    public String getContactType() {
+        return EContractType.MAIN.getType();
+    }
 }

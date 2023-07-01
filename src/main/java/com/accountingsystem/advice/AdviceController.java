@@ -49,7 +49,7 @@ public class AdviceController {
         if (ex.getValue().toString().equals("")) v.setMessage("не может быть пустым");
         else if (ex.getTargetType().isEnum()) v.setMessage("возможные значения: " + ex.getOriginalMessage().split("(\\[)|(\\])")[1]);
         else if (ex.getTargetType().equals(BigDecimal.class)) v.setMessage("неправильный числовой формат");
-        else if (ex.getTargetType().equals(LocalDate.class)) v.setMessage("неправильный формат даты, должен быть dd-MM-yyyy");
+        else if (ex.getTargetType().equals(LocalDate.class)) v.setMessage("неправильный формат даты, должен быть dd.MM.yyyy");
         else v.setMessage(ex.getLocalizedMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -38,9 +38,9 @@ public enum EOperator {
             Object value = request.getKey().getType().getValue(request.getValue());
             Expression<?> key = request.getTargetEntity().createExpression(root, request.getKey().getName());
             if (request.getKey().getType().equals(EDataType.DATA)) {
-                return cb.and(cb.greaterThan((Expression<LocalDate>) key, (LocalDate) value), predicate);
+                return cb.and(cb.greaterThanOrEqualTo((Expression<LocalDate>) key, (LocalDate) value), predicate);
             } else if (request.getKey().getType().equals(EDataType.DECIMAL)) {
-                return cb.and(cb.greaterThan((Expression<BigDecimal>) key, (BigDecimal) value), predicate);
+                return cb.and(cb.greaterThanOrEqualTo((Expression<BigDecimal>) key, (BigDecimal) value), predicate);
             } else throw new IllegalFieldValueException("Illegal `key` field " + request.getKey() + " for " + this.name() + " `operator`");
         }
     } ,
@@ -49,9 +49,9 @@ public enum EOperator {
             Object value = request.getKey().getType().getValue(request.getValue());
             Expression<?> key = request.getTargetEntity().createExpression(root, request.getKey().getName());
             if (request.getKey().getType().equals(EDataType.DATA)) {
-                return cb.and(cb.lessThan((Expression<LocalDate>) key, (LocalDate) value), predicate);
+                return cb.and(cb.lessThanOrEqualTo((Expression<LocalDate>) key, (LocalDate) value), predicate);
             } else if (request.getKey().getType().equals(EDataType.DECIMAL)) {
-                return cb.and(cb.lessThan((Expression<BigDecimal>) key, (BigDecimal) value), predicate);
+                return cb.and(cb.lessThanOrEqualTo((Expression<BigDecimal>) key, (BigDecimal) value), predicate);
             } else throw new IllegalFieldValueException("Illegal `key` field " + request.getKey() + " for " + this.name() + " `operator`");
         }
     };

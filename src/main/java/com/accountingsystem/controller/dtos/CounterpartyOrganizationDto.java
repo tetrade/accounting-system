@@ -1,21 +1,21 @@
 package com.accountingsystem.controller.dtos;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
 public class CounterpartyOrganizationDto {
-    public int id;
+    private int id;
 
     @NotBlank
-    public String name;
+    private String name;
 
     @NotBlank
-    public String address;
+    private String address;
 
     @Pattern(regexp = "(^\\d{12}$)|(^\\d{10}$)", message = "инн должен содержать либо 12, либо 10 символов")
     @NotBlank
-    public String inn;
+    private String inn;
 }

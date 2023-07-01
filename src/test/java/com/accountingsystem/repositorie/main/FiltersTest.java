@@ -1,10 +1,10 @@
 package com.accountingsystem.repositorie.main;
 
+import com.accountingsystem.AbstractTestContainerStartUp;
 import com.accountingsystem.entitys.*;
 import com.accountingsystem.entitys.enums.ERole;
 import com.accountingsystem.entitys.enums.EType;
 import com.accountingsystem.filters.*;
-import com.accountingsystem.AbstractTestContainerStartUp;
 import com.accountingsystem.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,13 +13,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
 class FiltersTest extends AbstractTestContainerStartUp {
@@ -63,6 +63,7 @@ class FiltersTest extends AbstractTestContainerStartUp {
 
     private CounterpartyOrganization counterpartyOrganization1;
     private CounterpartyOrganization counterpartyOrganization2;
+
     @Autowired
     private RoleRepo roleRepo;
 
@@ -225,7 +226,7 @@ class FiltersTest extends AbstractTestContainerStartUp {
     }
 
     @Test
-    void shouldReturnContractOfUser1WithAmountGreater_whenFilterContainsUserAndAmountFilter() {
+    void shouldReturnContractOfUser1WithAmountGreaterOrEqual_whenFilterContainsUserAndAmountFilter() {
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.addUserLoginFilter(user1.getLogin());
 
@@ -237,7 +238,7 @@ class FiltersTest extends AbstractTestContainerStartUp {
         List<Contract> contracts = contractRepo.findAll(specification);
 
         assertThat(contracts).usingRecursiveFieldByFieldElementComparator()
-                .containsOnly(contract2);
+                .containsOnly(contract2, contract1);
     }
 
     @Test
@@ -263,7 +264,7 @@ class FiltersTest extends AbstractTestContainerStartUp {
 
         searchRequest.addFilter(
                 new FilterRequest(EPublicKey.PLANNED_START_DATE, ETargetEntity.COUNTERPARTY_CONTRACT,
-                        EOperator.LESS, "09-02-2020")
+                        EOperator.LESS, "09.02.2020")
         );
 
         searchRequest.addFilter(
@@ -317,7 +318,7 @@ class FiltersTest extends AbstractTestContainerStartUp {
 
         searchRequest.addFilter(
                 new FilterRequest(EPublicKey.ACTUAL_END_DATE, ETargetEntity.COUNTERPARTY_CONTRACT,
-                        EOperator.LESS, "01-01-2020")
+                        EOperator.LESS, "01.01.2020")
         );
 
         SearchSpecification<CounterpartyContract> specification = new SearchSpecification<>(searchRequest);

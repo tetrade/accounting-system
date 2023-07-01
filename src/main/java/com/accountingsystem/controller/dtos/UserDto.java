@@ -3,7 +3,6 @@ package com.accountingsystem.controller.dtos;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -15,12 +14,11 @@ import java.time.LocalDate;
 public class UserDto {
     private int id;
 
-    @Size(min = 5, message = "не должно быть меньше 5 символов")
+    @Size(min = 6, message = "не должно быть меньше 6 символов")
     @NotBlank
     private String login;
 
     @NotBlank
-    @Pattern(regexp = "^([а-яА-Я]+ )([а-яА-Я]+ )([а-яА-Я]+)", message = "должен быть следующий формат:Ф И О")
     private String fullName;
 
     @JsonFormat(pattern = "dd.MM.yyyy")

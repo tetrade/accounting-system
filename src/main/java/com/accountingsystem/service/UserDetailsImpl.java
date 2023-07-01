@@ -4,17 +4,16 @@ package com.accountingsystem.service;
 import com.accountingsystem.entitys.Role;
 import com.accountingsystem.entitys.User;
 import com.accountingsystem.entitys.enums.ERole;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 @Setter
 @Getter
 public class UserDetailsImpl implements UserDetails {

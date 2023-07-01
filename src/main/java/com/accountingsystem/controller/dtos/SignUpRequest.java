@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 @Data
 public class SignUpRequest {
 
-    @Size(min = 5, message = "не должно быть меньше 5 символов")
+    @Size(min = 6, message = "не должно быть меньше 6 символов")
     @NotBlank
     private String login;
 
@@ -20,6 +20,5 @@ public class SignUpRequest {
     private String password;
 
     @NotBlank
-    @Pattern(regexp = "^([а-яА-Я]+ )([а-яА-Я]+ )([а-яА-Я]+)", message = "должен быть следующий формат:Ф И О")
     private String fullName;
 }

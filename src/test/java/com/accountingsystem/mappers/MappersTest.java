@@ -6,7 +6,6 @@ import com.accountingsystem.controller.dtos.mappers.*;
 import com.accountingsystem.entitys.*;
 import com.accountingsystem.entitys.enums.ERole;
 import com.accountingsystem.entitys.enums.EType;
-import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import com.accountingsystem.repository.CounterpartyOrganizationRepo;
 import com.accountingsystem.repository.RoleRepo;
@@ -29,7 +28,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @SpringJUnitConfig(classes = {
         CounterpartyOrganizationMapperImpl.class,

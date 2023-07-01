@@ -1,11 +1,6 @@
 package com.accountingsystem.service;
 
-import com.accountingsystem.entitys.UserLog;
-import com.accountingsystem.controller.dtos.SignUpRequest;
-import com.accountingsystem.controller.dtos.ContractDto;
-import com.accountingsystem.controller.dtos.ContractStageDto;
-import com.accountingsystem.controller.dtos.CounterpartyContractDto;
-import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
+import com.accountingsystem.controller.dtos.*;
 import com.accountingsystem.controller.dtos.mappers.*;
 import com.accountingsystem.entitys.*;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
@@ -47,17 +42,13 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-    private final PasswordEncoder passwordEncoder;
-
-    private final RoleRepo roleRepo;
-
     private final UserLogRepository userLogRepository;
 
     @Autowired
     public UserService(ContractRepo contractRepo, CounterpartyContractRepo counterpartyContractRepo,
                        ContractStageMapper contractStageMapper, CounterpartyOrganizationRepo counterpartyOrganizationRepo,
                        ContractStageRepo contractStageRepo, CounterpartyContractMapper counterpartyContractMapper, ContractMapper contractMapper,
-                       CounterpartyOrganizationMapper counterpartyOrganizationMapper, UserRepo userRepo, UserMapper userMapper, PasswordEncoder passwordEncoder, RoleRepo roleRepo, UserLogRepository userLogRepository) {
+                       CounterpartyOrganizationMapper counterpartyOrganizationMapper, UserRepo userRepo, UserMapper userMapper, UserLogRepository userLogRepository) {
         this.contractRepo = contractRepo;
         this.contractStageMapper = contractStageMapper;
         this.counterpartyOrganizationRepo = counterpartyOrganizationRepo;
@@ -68,8 +59,6 @@ public class UserService {
         this.counterpartyOrganizationMapper = counterpartyOrganizationMapper;
         this.userRepo = userRepo;
         this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
-        this.roleRepo = roleRepo;
         this.userLogRepository = userLogRepository;
     }
 

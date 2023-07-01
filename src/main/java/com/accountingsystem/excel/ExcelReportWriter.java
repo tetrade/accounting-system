@@ -1,11 +1,10 @@
 package com.accountingsystem.excel;
 
-import com.accountingsystem.excel.dto.AbstractExcelContract;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
+import com.accountingsystem.excel.dto.ExcelContractTemplate;
 import com.accountingsystem.excel.enums.EColumn;
-import com.accountingsystem.excel.enums.EContractType;
 import com.accountingsystem.excel.enums.EDataFormat;
 import com.accountingsystem.excel.enums.EFont;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -159,14 +160,10 @@ public class ExcelReportWriter {
         return stream;
     }
 
-    private void addContractToReport(AbstractExcelContract contract, Row row, Integer rowNUm) {
+    private void addContractToReport(ExcelContractTemplate contract, Row row, Integer rowNUm) {
         int currentCell = 0;
         createCell(row, currentCell++, rowNUm);
-        if (contract instanceof CounterpartyContractDtoExcel) {
-            createCell(row, currentCell++, EContractType.COUNTERPARTY_CONTRACT.getType());
-        } else {
-            createCell(row, currentCell++, EContractType.MAIN.getType());
-        }
+        createCell(row, currentCell++, contract.getContactType());
         createCell(row, currentCell++, contract.getName());
         createCell(row, currentCell++, contract.getType());
         createCell(row, currentCell++, contract.getAmount(), EDataFormat.CURRENCY);
@@ -174,9 +171,7 @@ public class ExcelReportWriter {
         createCell(row, currentCell++, contract.getPlannedEndDate(), EDataFormat.DATE);
         createCell(row, currentCell++, contract.getActualStartDate(), EDataFormat.DATE);
         createCell(row, currentCell++, contract.getActualEndDate(), EDataFormat.DATE);
-
-        if (contract instanceof CounterpartyContractDtoExcel)
-            createCell(row, currentCell, ((CounterpartyContractDtoExcel) contract).getContractDtoExcel().getName());
+        createCell(row, currentCell, contract.getInnerContractName());
     }
 
     private void addContractStageToReport(ContractStageDtoExcel contractStageDtoExcel, Row row, Integer rowNUm) {

@@ -1,7 +1,6 @@
 package com.accountingsystem.repository;
 
 import com.accountingsystem.entitys.Contract;
-import com.accountingsystem.entitys.CounterpartyContract;
 import com.accountingsystem.repository.custom.CustomContractRepo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

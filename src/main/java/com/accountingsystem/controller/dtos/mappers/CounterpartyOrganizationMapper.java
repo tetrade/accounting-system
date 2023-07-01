@@ -4,7 +4,8 @@ import com.accountingsystem.advice.exceptions.NoSuchRowException;
 import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
 import com.accountingsystem.entitys.CounterpartyOrganization;
 import com.accountingsystem.repository.CounterpartyOrganizationRepo;
-import org.mapstruct.*;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;

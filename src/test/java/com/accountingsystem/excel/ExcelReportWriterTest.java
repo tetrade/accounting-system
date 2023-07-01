@@ -1,7 +1,5 @@
 package com.accountingsystem.excel;
 
-import com.accountingsystem.entitys.Contract;
-import com.accountingsystem.entitys.CounterpartyContract;
 import com.accountingsystem.entitys.enums.EType;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;
@@ -14,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -29,7 +26,7 @@ class ExcelReportWriterTest {
     public ExcelReportWriter excelReportWriter = new ExcelReportWriter();
 
     @Test
-    void shouldCreateRightContractStageReport_whenCallCreateContractStagesReport() throws IOException, SAXException {
+    void shouldCreateRightContractStageReport_whenCallCreateContractStagesReport() throws IOException {
 
         ContractStageDtoExcel contractStageDtoExcel = new ContractStageDtoExcel();
         contractStageDtoExcel.setName("Первый контракт");
@@ -174,11 +171,11 @@ class ExcelReportWriterTest {
                 },
                 {
                     "4.0", "Договор", "Test contract 1", "", "8891.01", "01-авг-2021", "20-сен-2021", "21-мая-2021",
-                        "08-июл-2021"
+                        "08-июл-2021", ""
                 },
                 {
                     "5.0", "Договор", "Test contract 3", "Закупка", "45678.89", "01-авг-2008", "09-сен-2010",
-                        "21-мая-2007", "09-сен-2010"
+                        "21-мая-2007", "09-сен-2010", ""
                 },
                 {""}, {""},
                 {
@@ -191,11 +188,11 @@ class ExcelReportWriterTest {
                 },
                 {
                     "1.0", "Договор", "Test contract 1", "", "8891.01", "01-авг-2021", "20-сен-2021", "21-мая-2021",
-                        "08-июл-2021"
+                        "08-июл-2021", ""
                 },
                 {
                     "2.0", "Договор", "Test contract 2", "", "58719.23", "01-авг-2021", "11-ноя-2021", "21-мая-2025",
-                        "25-мар-2021"
+                        "25-мар-2021", ""
                 }
         };
 

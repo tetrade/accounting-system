@@ -1,9 +1,11 @@
 package com.accountingsystem.repositorie.excel;
 
 
-import com.accountingsystem.entitys.*;
-import com.accountingsystem.entitys.enums.EType;
 import com.accountingsystem.AbstractTestContainerStartUp;
+import com.accountingsystem.entitys.Contract;
+import com.accountingsystem.entitys.ContractStage;
+import com.accountingsystem.entitys.User;
+import com.accountingsystem.entitys.enums.EType;
 import com.accountingsystem.repository.ContractStageRepo;
 import com.accountingsystem.repository.UserLogRepository;
 import com.accountingsystem.repository.UserRepo;
@@ -14,10 +16,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
+
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
 class ContractStageRepositoryTest extends AbstractTestContainerStartUp {
