@@ -1,5 +1,4 @@
 version: '3.9'
-
 services:
   mongodb:
     image: mongo
@@ -38,10 +37,10 @@ services:
       - mysqldb
       - mongodb
   client:
-    image: alina2002alina/my-vue-app:0.1.7
+    image: alina2002alina/my-vue-app:0.2.0
     environment:
-      - NGINX_PORT=82
       - NGINX_HOST=foobar.com
+      - NGINX_PORT=80
       - CHOKIDAR_USEPOLLING=true
     ports:
       - 8081:80
