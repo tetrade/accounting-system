@@ -1,11 +1,11 @@
 version: '3.9'
 services:
   mongodb:
-    image: mongo
+    image: mongo:4.4.6
     ports:
       - 27017:27017
     volumes:
-      - ~/apps/mongo:/data/db
+      - ~/apps/mongo-no-avx:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=citizix
       - MONGO_INITDB_ROOT_PASSWORD=S3cret
@@ -51,3 +51,4 @@ services:
 networks:
   default:
     name: network
+
