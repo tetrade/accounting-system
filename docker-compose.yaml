@@ -36,6 +36,7 @@ services:
     depends_on:
       - mysqldb
       - mongodb
+    restart: on-failure
   client:
     image: alina2002alina/my-vue-app:0.2.0
     environment:
@@ -46,6 +47,7 @@ services:
       - 8081:80
     depends_on:
       - server
+    restart: on-failure
 
 
 networks:
