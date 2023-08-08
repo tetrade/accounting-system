@@ -38,7 +38,7 @@ services:
       - mongodb
     restart: on-failure
   client:
-    image: alina2002alina/my-vue-app:0.2.0
+    image: alina2002alina/my-vue-app:0.2.8
     environment:
       - NGINX_HOST=foobar.com
       - NGINX_PORT=80
@@ -46,6 +46,8 @@ services:
     ports:
       - 8081:80
     depends_on:
+      - server
+    links:
       - server
     restart: on-failure
 
