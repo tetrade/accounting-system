@@ -1,11 +1,13 @@
 package com.accountingsystem.service;
 
+import com.accountingsystem.advice.exceptions.IllegalFieldValueException;
 import com.accountingsystem.advice.exceptions.NoSuchRowException;
 import com.accountingsystem.controller.dtos.*;
 import com.accountingsystem.controller.dtos.mappers.ContractMapper;
 import com.accountingsystem.controller.dtos.mappers.UserMapper;
 import com.accountingsystem.entitys.Contract;
 import com.accountingsystem.entitys.User;
+import com.accountingsystem.entitys.enums.ERole;
 import com.accountingsystem.filters.SearchRequest;
 import com.accountingsystem.filters.SearchSpecification;
 import com.accountingsystem.repository.*;
@@ -166,7 +168,11 @@ public class AdminService {
     }
 
     public void deleteUser(Integer userId) {
-        if (!userRepo.existsById(userId)) throw new NoSuchRowException("id", userId, "user");
+        User userToDelete = userRepo.findById(userId).orElseThrow(()-> new NoSuchRowException("id", userId, "user"));
+
+        if (userToDelete.getRoles().stream().anyMatch(role -> role.getName().equals(ERole.ROLE_ADMIN)))
+            throw new IllegalFieldValueException("Can't delete user with \'ADMIN\' role");
+
         userRepo.deleteById(userId);
     }
 }

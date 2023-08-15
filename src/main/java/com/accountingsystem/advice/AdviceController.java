@@ -30,20 +30,20 @@ public class AdviceController {
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public ResponseEntity<AppError> catchNoSuchRowException(SQLIntegrityConstraintViolationException ex) {
+    public ResponseEntity<AppError> catchSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new AppError(ex.getMessage()));
     }
 
     @ExceptionHandler(IllegalFieldValueException.class)
-    public ResponseEntity<AppError> catchNoSuchRowException(IllegalFieldValueException ex) {
+    public ResponseEntity<AppError> catchIllegalFieldValueException(IllegalFieldValueException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new AppError(ex.getMessage()));
     }
 
     @ExceptionHandler(InvalidFormatException.class)
     @Order(Ordered.HIGHEST_PRECEDENCE)
-    public ResponseEntity<Violation> catchNoSuchRowException(InvalidFormatException ex) {
+    public ResponseEntity<Violation> catchInvalidFormatException(InvalidFormatException ex) {
         Violation v = new Violation();
         v.setFieldName(ex.getPath().get(ex.getPath().size() - 1).getFieldName());
         if (ex.getValue().toString().equals("")) v.setMessage("не может быть пустым");
@@ -57,10 +57,10 @@ public class AdviceController {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<? extends AppError> catchE(HttpMessageNotReadableException ex) {
+    public ResponseEntity<? extends AppError> catchHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         Throwable rootCause = ex.getMostSpecificCause();
         if (rootCause instanceof InvalidFormatException || rootCause instanceof DateTimeParseException)
-            return catchNoSuchRowException((InvalidFormatException) ex.getCause());
+            return catchInvalidFormatException((InvalidFormatException) ex.getCause());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new AppError(ex.getMostSpecificCause().getLocalizedMessage().split("\n")[0]));

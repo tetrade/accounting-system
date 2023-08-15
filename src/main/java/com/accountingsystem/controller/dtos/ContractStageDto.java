@@ -1,6 +1,7 @@
 package com.accountingsystem.controller.dtos;
 
 
+import com.accountingsystem.controller.customValidator.EndDateAfterStart;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -11,6 +12,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
+@EndDateAfterStart(endDateField = "plannedEndDate", startDateField = "plannedStartDate")
+@EndDateAfterStart(endDateField = "actualEndDate", startDateField = "actualStartDate")
 public class ContractStageDto {
     private int id;
 

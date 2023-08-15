@@ -1,7 +1,7 @@
 package com.accountingsystem.excel.enums;
 
 public enum EDataFormat {
-    DATE("dd-mm-yyyy"), CURRENCY("#,##0.00 ₽"), NONE("#");
+    DATE("DD.MM.YYYY"), CURRENCY("#,##0.00 ₽"), NONE("#");
 
     private final String format;
 

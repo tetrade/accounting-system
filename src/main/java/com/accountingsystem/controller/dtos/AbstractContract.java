@@ -1,9 +1,11 @@
 package com.accountingsystem.controller.dtos;
 
+import com.accountingsystem.controller.customValidator.EndDateAfterStart;
 import com.accountingsystem.entitys.enums.EType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.ToString;
+import org.aspectj.lang.annotation.Before;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +15,8 @@ import java.time.LocalDate;
 
 @Data
 @ToString
+@EndDateAfterStart(endDateField = "plannedEndDate", startDateField = "plannedStartDate")
+@EndDateAfterStart(endDateField = "actualEndDate", startDateField = "actualStartDate")
 abstract class AbstractContract {
 
     @NotBlank
