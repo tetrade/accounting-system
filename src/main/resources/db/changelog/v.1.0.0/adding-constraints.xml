@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="adding-not-null-constraint-contract" author="piatlin2002@gmail.com">
+        <addNotNullConstraint tableName="contract" columnName="name" columnDataType="varchar(255)"/>
+        <addNotNullConstraint tableName="contract" columnName="type" columnDataType="varchar(8)"/>
+        <addNotNullConstraint tableName="contract" columnName="amount" columnDataType="decimal(20, 2)"/>
+        <addNotNullConstraint tableName="contract" columnName="planned_start_date" columnDataType="date"/>
+        <addNotNullConstraint tableName="contract" columnName="planned_end_date" columnDataType="date"/>
+    </changeSet>
+    <changeSet id="adding-not-null-constraint-counterparty-contract" author="piatlin2002@gmail.com">
+        <addNotNullConstraint tableName="counterparty_contract" columnName="name" columnDataType="varchar(255)"/>
+        <addNotNullConstraint tableName="counterparty_contract" columnName="type" columnDataType="varchar(8)"/>
+        <addNotNullConstraint tableName="counterparty_contract" columnName="amount" columnDataType="decimal(20, 2)"/>
+        <addNotNullConstraint tableName="counterparty_contract" columnName="planned_start_date" columnDataType="date"/>
+        <addNotNullConstraint tableName="counterparty_contract" columnName="planned_end_date" columnDataType="date"/>
+        <addNotNullConstraint tableName="counterparty_contract" columnName="contract_id" columnDataType="int"/>
+        <addNotNullConstraint tableName="counterparty_contract" columnName="counterparty_organization_id" columnDataType="int"/>
+    </changeSet>
+    <changeSet id="adding-not-null-constraint-contract-stage" author="piatlin2002@gmail.com">
+        <addNotNullConstraint tableName="contract_stage" columnName="name" columnDataType="varchar(255)"/>
+        <addNotNullConstraint tableName="contract_stage" columnName="amount" columnDataType="decimal(20, 2)"/>
+        <addNotNullConstraint tableName="contract_stage" columnName="planned_start_date" columnDataType="date" />
+        <addNotNullConstraint tableName="contract_stage" columnName="planned_end_date" columnDataType="date"/>
+        <addNotNullConstraint tableName="contract_stage" columnName="planned_material_costs" columnDataType="decimal(20, 2)"/>
+        <addNotNullConstraint tableName="contract_stage" columnName="planned_salary_expenses" columnDataType="decimal(20, 2)"/>
+        <addNotNullConstraint tableName="contract_stage" columnName="contract_id" columnDataType="int"/>
+    </changeSet>
+    <changeSet id="adding-not-null-constraint-counterparty_organization" author="piatlin2002@gmail.com">
+        <addNotNullConstraint tableName="counterparty_organization" columnName="name" columnDataType="varchar(255)"/>
+        <addNotNullConstraint tableName="counterparty_organization" columnName="address" columnDataType="varchar(255)"/>
+        <addNotNullConstraint tableName="counterparty_organization" columnName="inn" columnDataType="char(12)"/>
+    </changeSet>
+    <changeSet id="adding-not-null-constraint-user" author="piatlin2002@gmail.com">
+        <addNotNullConstraint tableName="user" columnName="full_name" columnDataType="varchar(255)"/>
+        <addNotNullConstraint tableName="user" columnName="login" columnDataType="varchar(255)"/>
+        <addNotNullConstraint tableName="user" columnName="password" columnDataType="varchar(255)"/>
+    </changeSet>
+
+    <changeSet id="adding-uniq-constraints-user-login" author="piatlin2002@gmail.com">
+        <addUniqueConstraint tableName="user" columnNames="login"/>
+    </changeSet>
+</databaseChangeLog>
