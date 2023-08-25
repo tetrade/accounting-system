@@ -21,7 +21,7 @@ public class EndDateAfterStartValidator implements ConstraintValidator<EndDateAf
     @Override
     public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {
         try {
-            LocalDate startDate= (LocalDate) getFieldValue(o, startDateField);
+            LocalDate startDate = (LocalDate) getFieldValue(o, startDateField);
             LocalDate endDate = (LocalDate) getFieldValue(o, endDateField);
             return startDate == null || endDate == null || endDate.isEqual(startDate) || endDate.isAfter(startDate);
         } catch (Exception e) {

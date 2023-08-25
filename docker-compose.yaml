@@ -27,7 +27,7 @@ services:
     volumes:
       - ~/apps/mysql:/data/db
   server:
-    image: tetrade/acc-sys:0.2.1
+    image: tetrade/acc-sys:0.2.2
     ports:
       - 8080:8080
     environment:

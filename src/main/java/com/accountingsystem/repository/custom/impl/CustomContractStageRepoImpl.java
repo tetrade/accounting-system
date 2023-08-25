@@ -32,7 +32,7 @@ public class CustomContractStageRepoImpl implements CustomContractStageRepo {
     }
 
     @Transactional
-    public void updateContractStage(int contractStageId, ContractStageDto c){
+    public void updateContractStage(int contractStageId, ContractStageDto c) {
         entityManager.createNativeQuery("UPDATE contract_stage SET name = ?, amount = ?, actual_start_date = ?," +
                         "actual_end_date = ?, planned_start_date = ?, planned_end_date = ?, actual_material_costs = ?," +
                         "planned_material_costs = ?, actual_salary_expenses = ?, planned_salary_expenses = ? " +

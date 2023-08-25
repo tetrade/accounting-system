@@ -2,9 +2,9 @@ package com.accountingsystem.excel.enums;
 
 public enum EColumn {
 
-    CURRENT_NUMBER("№", 256 * 6) , TYPE_MAIN("Тип договора", 256 * 16) ,
+    CURRENT_NUMBER("№", 256 * 6), TYPE_MAIN("Тип договора", 256 * 16),
     NAME("Название", 256 * 30), TYPE("Цель договора", 256 * 16),
-    AMOUNT("Сумма",256 * 27) , PLANNED_START_DATE("Плановая дата начала", 256 * 20),
+    AMOUNT("Сумма", 256 * 27), PLANNED_START_DATE("Плановая дата начала", 256 * 20),
     PLANNED_END_DATE("Плановая дата окончания", 256 * 20),
     ACTUAL_START_DATE("Фактическая дата начала", 256 * 20),
     ACTUAL_END_DATE("Фактическая дата окончания", 256 * 20),
@@ -26,5 +26,8 @@ public enum EColumn {
     public String getName() {
         return name;
     }
-    public Integer getColumnWidth() { return columnWidth; }
+
+    public Integer getColumnWidth() {
+        return columnWidth;
+    }
 }

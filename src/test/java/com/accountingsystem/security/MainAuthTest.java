@@ -120,10 +120,10 @@ class MainAuthTest extends AbstractTestContainerStartUp {
         signUpRequest.setPassword("qe123g!fw*");
 
         mvc.perform(
-                MockMvcRequestBuilders.post("/api/auth/sign-up")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(signUpRequest))
-                        .with(csrf()))
+                        MockMvcRequestBuilders.post("/api/auth/sign-up")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(signUpRequest))
+                                .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
 
         User underTest = userRepo.findByLogin(signUpRequest.getLogin()).orElse(null);
@@ -153,7 +153,7 @@ class MainAuthTest extends AbstractTestContainerStartUp {
         loginRequest.setPassword(password);
 
         mvc.perform(
-                MockMvcRequestBuilders.post("/api/auth/sign-in")
+                        MockMvcRequestBuilders.post("/api/auth/sign-in")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(loginRequest))
                                 .with(csrf()))

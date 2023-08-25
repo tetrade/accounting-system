@@ -280,7 +280,7 @@ class FiltersTest extends AbstractTestContainerStartUp {
     }
 
     @Test
-    void shouldReturnContractThatHaveCounterpartyContractWithSpecificCounterpartyOrgInn_whenContractWithCounterpartyContractFilter(){
+    void shouldReturnContractThatHaveCounterpartyContractWithSpecificCounterpartyOrgInn_whenContractWithCounterpartyContractFilter() {
         SearchRequest searchRequest = new SearchRequest();
 
         searchRequest.addFilter(

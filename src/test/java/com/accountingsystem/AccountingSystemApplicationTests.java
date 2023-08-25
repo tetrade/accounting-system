@@ -8,8 +8,8 @@ import org.springframework.test.context.TestPropertySource;
 @TestPropertySource(properties = "spring.mongodb.embedded.version=3.5.5")
 class AccountingSystemApplicationTests extends AbstractTestContainerStartUp {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }

@@ -1,4 +1,5 @@
 package com.accountingsystem.filters;
+
 import com.accountingsystem.advice.exceptions.IllegalFieldValueException;
 import com.accountingsystem.entitys.*;
 
@@ -8,21 +9,26 @@ public enum ETargetEntity {
 
     COUNTERPARTY_ORGANIZATION("counterpartyOrganization") {
         @Override
-        public Expression<?> createExpression(Root<?> sourceRoot, String key){
+        public Expression<?> createExpression(Root<?> sourceRoot, String key) {
             Class<?> sourceRootClass = sourceRoot.getJavaType();
             Path<?> p;
-            if (sourceRootClass == CounterpartyOrganization.class) p = sourceRoot;
-            else if (sourceRootClass == Contract.class)
+            if (sourceRootClass == CounterpartyOrganization.class) {
+                p = sourceRoot;
+            } else if (sourceRootClass == Contract.class) {
                 p = join(
                         join(sourceRoot, COUNTERPARTY_CONTRACT.getName(), JoinType.INNER),
                         getName(), JoinType.INNER
                 );
-            else if (sourceRootClass == CounterpartyContract.class) {
+            } else if (sourceRootClass == CounterpartyContract.class) {
                 p = join(sourceRoot, getName(), JoinType.INNER);
-            } else throw new IllegalFieldValueException(IllegalFieldValueException.TARGET_ENTITY_ERROR + sourceRoot.getJavaType().getName());
+            } else
+                throw new IllegalFieldValueException(IllegalFieldValueException.TARGET_ENTITY_ERROR + sourceRoot.getJavaType().getName());
 
-            try { p = p.get(key); }
-            catch (IllegalArgumentException e) { throw new IllegalFieldValueException(IllegalFieldValueException.KEY_ERROR + this.name()); }
+            try {
+                p = p.get(key);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalFieldValueException(IllegalFieldValueException.KEY_ERROR + this.name());
+            }
 
             return p;
         }
@@ -31,12 +37,19 @@ public enum ETargetEntity {
         public Expression<?> createExpression(Root<?> sourceRoot, String key) {
             Class<?> sourceRootClass = sourceRoot.getJavaType();
             Path<?> p;
-            if (sourceRootClass == CounterpartyContract.class) p = sourceRoot;
-            else if (sourceRootClass == Contract.class) p =  join(sourceRoot, getName(), JoinType.INNER);
-            else throw new IllegalFieldValueException(IllegalFieldValueException.TARGET_ENTITY_ERROR + sourceRoot.getJavaType().getName());
+            if (sourceRootClass == CounterpartyContract.class) {
+                p = sourceRoot;
+            } else if (sourceRootClass == Contract.class) {
+                p = join(sourceRoot, getName(), JoinType.INNER);
+            } else {
+                throw new IllegalFieldValueException(IllegalFieldValueException.TARGET_ENTITY_ERROR + sourceRoot.getJavaType().getName());
+            }
 
-            try { p = p.get(key);}
-            catch (IllegalArgumentException e) { throw new IllegalFieldValueException(IllegalFieldValueException.KEY_ERROR + this.name()); }
+            try {
+                p = p.get(key);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalFieldValueException(IllegalFieldValueException.KEY_ERROR + this.name());
+            }
 
             return p;
         }
@@ -48,13 +61,19 @@ public enum ETargetEntity {
             Path<?> p;
 
 
-            if (sourceRootClass == Contract.class) p = sourceRoot;
-            else if (sourceRootClass == CounterpartyContract.class || sourceRootClass == ContractStage.class) {
+            if (sourceRootClass == Contract.class) {
+                p = sourceRoot;
+            } else if (sourceRootClass == CounterpartyContract.class || sourceRootClass == ContractStage.class) {
                 p = join(sourceRoot, getName(), JoinType.INNER);
-            } else throw new IllegalFieldValueException(IllegalFieldValueException.TARGET_ENTITY_ERROR + sourceRoot.getJavaType().getName());
+            } else {
+                throw new IllegalFieldValueException(IllegalFieldValueException.TARGET_ENTITY_ERROR + sourceRoot.getJavaType().getName());
+            }
 
-            try { p = p.get(key); }
-            catch (IllegalArgumentException e) { throw new IllegalFieldValueException(IllegalFieldValueException.KEY_ERROR + this.name()); }
+            try {
+                p = p.get(key);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalFieldValueException(IllegalFieldValueException.KEY_ERROR + this.name());
+            }
 
             return p;
         }
@@ -65,12 +84,19 @@ public enum ETargetEntity {
             Class<?> sourceRootClass = sourceRoot.getJavaType();
             Path<?> p;
 
-            if (sourceRootClass == ContractStage.class) p = sourceRoot;
-            else if (sourceRootClass == Contract.class) p = join(sourceRoot, getName(), JoinType.INNER);
-            else throw new IllegalFieldValueException(IllegalFieldValueException.TARGET_ENTITY_ERROR + sourceRoot.getJavaType().getName());
+            if (sourceRootClass == ContractStage.class) {
+                p = sourceRoot;
+            } else if (sourceRootClass == Contract.class) {
+                p = join(sourceRoot, getName(), JoinType.INNER);
+            } else {
+                throw new IllegalFieldValueException(IllegalFieldValueException.TARGET_ENTITY_ERROR + sourceRoot.getJavaType().getName());
+            }
 
-            try { p = p.get(key); }
-            catch (IllegalArgumentException e) { throw new IllegalFieldValueException(IllegalFieldValueException.KEY_ERROR + this.name()); }
+            try {
+                p = p.get(key);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalFieldValueException(IllegalFieldValueException.KEY_ERROR + this.name());
+            }
 
             return p;
         }
@@ -81,17 +107,24 @@ public enum ETargetEntity {
             Class<?> sourceRootClass = sourceRoot.getJavaType();
             Path<?> p;
 
-            if (sourceRootClass == User.class) p = sourceRoot;
-            else if (sourceRootClass == Contract.class) p = join(sourceRoot, getName(), JoinType.INNER);
-            else if (sourceRootClass == CounterpartyContract.class || sourceRootClass == ContractStage.class)
+            if (sourceRootClass == User.class) {
+                p = sourceRoot;
+            } else if (sourceRootClass == Contract.class) {
+                p = join(sourceRoot, getName(), JoinType.INNER);
+            } else if (sourceRootClass == CounterpartyContract.class || sourceRootClass == ContractStage.class) {
                 p = join(
                         join(sourceRoot, CONTRACT.getName(), JoinType.INNER),
                         getName(), JoinType.INNER
                 );
-            else throw new IllegalFieldValueException(IllegalFieldValueException.TARGET_ENTITY_ERROR + sourceRoot.getJavaType().getName());
+            } else {
+                throw new IllegalFieldValueException(IllegalFieldValueException.TARGET_ENTITY_ERROR + sourceRoot.getJavaType().getName());
+            }
 
-            try { p = p.get(key); }
-            catch (IllegalArgumentException e) { throw new IllegalFieldValueException(IllegalFieldValueException.KEY_ERROR + this.name()); }
+            try {
+                p = p.get(key);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalFieldValueException(IllegalFieldValueException.KEY_ERROR + this.name());
+            }
 
             return p;
         }
@@ -105,11 +138,13 @@ public enum ETargetEntity {
 
     public abstract Expression<?> createExpression(Root<?> root, String key);
 
-    public String getName() {return name;}
+    public String getName() {
+        return name;
+    }
 
     public Join<?, ?> join(From<?, ?> criteriaRoot,
-                        String s,
-                        JoinType joinType
+                           String s,
+                           JoinType joinType
     ) {
         return criteriaRoot.getJoins().stream()
                 .filter(j -> j.getAttribute().getName().equals(s) && j.getJoinType().equals(joinType))

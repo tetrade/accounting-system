@@ -43,7 +43,7 @@ public class ExcelReportWriter {
         this.createTableTitle("Основная таблица", mainSheet.createRow(0));
 
         List<EColumn> columns = Stream.of(
-                EColumn.CURRENT_NUMBER,  EColumn.NAME, EColumn.AMOUNT, EColumn.PLANNED_START_DATE,
+                EColumn.CURRENT_NUMBER, EColumn.NAME, EColumn.AMOUNT, EColumn.PLANNED_START_DATE,
                 EColumn.PLANNED_END_DATE, EColumn.ACTUAL_START_DATE, EColumn.ACTUAL_END_DATE,
                 EColumn.PLANNED_MATERIAL_COSTS, EColumn.ACTUAL_MATERIAL_COSTS,
                 EColumn.PLANNED_SALARY_EXPENSES, EColumn.ACTUAL_SALARY_EXPENSES
@@ -52,10 +52,12 @@ public class ExcelReportWriter {
         int startTableNum = mainSheet.getLastRowNum() + 1;
 
         Row row = mainSheet.createRow(startTableNum);
-        for (int i = 0; i < columns.size(); i++) createColumnHeader(row, i, columns.get(i));
+        for (int i = 0; i < columns.size(); i++) {
+            createColumnHeader(row, i, columns.get(i));
+        }
 
         int currentRow = 1;
-        for(ContractStageDtoExcel cs: contractStageDtoExcels) {
+        for (ContractStageDtoExcel cs : contractStageDtoExcels) {
             row = mainSheet.createRow(mainSheet.getLastRowNum() + 1);
             addContractStageToReport(cs, row, currentRow++);
         }
@@ -65,20 +67,19 @@ public class ExcelReportWriter {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-        try {
-            FileOutputStream out = new FileOutputStream("contract_stage_demo.xlsx");
+        try (FileOutputStream out = new FileOutputStream("contract_stage_demo.xlsx")) {
             workbook.write(stream);
             workbook.write(out);
-            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (Exception e)  { e.printStackTrace(); }
         workbook.close();
         return stream;
     }
 
     public ByteArrayOutputStream createContractReport(
             Set<CounterpartyContractDtoExcel> counterpartyContractDtos, Set<ContractDtoExcel> contractDtos
-            ) throws IOException {
+    ) throws IOException {
 
         workbook = new XSSFWorkbook();
         mainSheet = workbook.createSheet("Основной лист");
@@ -95,30 +96,32 @@ public class ExcelReportWriter {
         int startTableNum = mainSheet.getLastRowNum() + 1;
 
         Row row = mainSheet.createRow(startTableNum);
-        for (int i = 0; i < columns.size(); i++) createColumnHeader(row, i, columns.get(i));
+        for (int i = 0; i < columns.size(); i++) {
+            createColumnHeader(row, i, columns.get(i));
+        }
 
 
         List<ContractDtoExcel> referencedContracts = new ArrayList<>();
         int currentRow = 1;
-        for(CounterpartyContractDtoExcel cc: counterpartyContractDtos) {
-                row = mainSheet.createRow(mainSheet.getLastRowNum() + 1);
-                addContractToReport(cc, row, currentRow++);
+        for (CounterpartyContractDtoExcel cc : counterpartyContractDtos) {
+            row = mainSheet.createRow(mainSheet.getLastRowNum() + 1);
+            addContractToReport(cc, row, currentRow++);
 
-                if (columns.contains(EColumn.RELATED_CONTRACT)) {
-                    int index = referencedContracts.indexOf(cc.getContractDtoExcel());
-                    if (index == -1) {
-                        referencedContracts.add(cc.getContractDtoExcel());
-                        index = referencedContracts.size() - 1;
-                    }
-                    index = index + contractDtos.size() + counterpartyContractDtos.size() + rowsBetweenTables + 3;
-                    Hyperlink h = workbook.getCreationHelper().createHyperlink(HyperlinkType.DOCUMENT);
-                    String sb = '\'' + mainSheet.getSheetName() + '\'' + "!A" + (index + 1);
-                    h.setAddress(sb);
-                    row.getCell(row.getLastCellNum() - 1).setHyperlink(h);
+            if (columns.contains(EColumn.RELATED_CONTRACT)) {
+                int index = referencedContracts.indexOf(cc.getContractDtoExcel());
+                if (index == -1) {
+                    referencedContracts.add(cc.getContractDtoExcel());
+                    index = referencedContracts.size() - 1;
                 }
+                index = index + contractDtos.size() + counterpartyContractDtos.size() + rowsBetweenTables + 3;
+                Hyperlink h = workbook.getCreationHelper().createHyperlink(HyperlinkType.DOCUMENT);
+                String sb = '\'' + mainSheet.getSheetName() + '\'' + "!A" + (index + 1);
+                h.setAddress(sb);
+                row.getCell(row.getLastCellNum() - 1).setHyperlink(h);
+            }
         }
 
-        for(ContractDtoExcel c: contractDtos) {
+        for (ContractDtoExcel c : contractDtos) {
             row = mainSheet.createRow(mainSheet.getLastRowNum() + 1);
             addContractToReport(c, row, currentRow++);
         }
@@ -135,7 +138,9 @@ public class ExcelReportWriter {
             startTableNum = mainSheet.getLastRowNum() + 1;
             row = mainSheet.createRow(startTableNum);
 
-            for (int i = 0; i < columns.size(); i++) createColumnHeader(row, i, columns.get(i));
+            for (int i = 0; i < columns.size(); i++) {
+                createColumnHeader(row, i, columns.get(i));
+            }
 
             currentRow = 1;
             for (ContractDtoExcel c : referencedContracts) {
@@ -149,13 +154,12 @@ public class ExcelReportWriter {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-        try {
-            FileOutputStream out = new FileOutputStream("contract_demo.xlsx");
+        try (FileOutputStream out = new FileOutputStream("contract_demo.xlsx")) {
             workbook.write(stream);
             workbook.write(out);
-            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (Exception e)  { e.printStackTrace(); }
         workbook.close();
         return stream;
     }
@@ -195,6 +199,7 @@ public class ExcelReportWriter {
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         cellStyle.setFont(EFont.TIMES_NEW_ROMAN.getFont(workbook, 12));
     }
+
     private void createCell(Row row, int i, Object value) {
         this.createCell(row, i, value, EDataFormat.NONE);
     }
@@ -210,7 +215,7 @@ public class ExcelReportWriter {
                 );
             } else if (value instanceof String) {
                 cell.setCellValue((String) value);
-            } else if (value instanceof Integer){
+            } else if (value instanceof Integer) {
                 cell.setCellValue((Integer) value);
             }
         } else {
@@ -222,7 +227,7 @@ public class ExcelReportWriter {
 
 
     private void createTableTitle(String title, Row row) {
-        mainSheet.addMergedRegion(new CellRangeAddress(row.getRowNum(),row.getRowNum(),0,5));
+        mainSheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 0, 5));
         Cell cell = row.createCell(0);
         cell.setCellValue(title);
         CellStyle cellStyle = workbook.createCellStyle();

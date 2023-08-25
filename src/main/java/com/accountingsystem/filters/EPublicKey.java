@@ -23,6 +23,11 @@ public enum EPublicKey {
         this.type = type;
     }
 
-    public String getName(){ return name; }
-    public EDataType getType() { return type; }
+    public String getName() {
+        return name;
+    }
+
+    public EDataType getType() {
+        return type;
+    }
 }

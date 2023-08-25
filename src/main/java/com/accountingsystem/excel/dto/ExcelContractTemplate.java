@@ -14,5 +14,6 @@ public abstract class ExcelContractTemplate {
     private Double actualEndDate;
 
     public abstract String getInnerContractName();
+
     public abstract String getContactType();
 }

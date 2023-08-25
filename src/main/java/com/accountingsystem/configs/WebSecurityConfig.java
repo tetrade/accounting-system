@@ -1,10 +1,8 @@
 package com.accountingsystem.configs;
 
-
-
 import com.accountingsystem.configs.jwt.AuthEntryPointJwt;
 import com.accountingsystem.configs.jwt.AuthTokenFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.accountingsystem.configs.jwt.JwtUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,59 +22,60 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
-	
-	private final UserDetailsService userDetailsService;
-	
-	private final AuthEntryPointJwt unauthorizedHandler;
 
-	@Autowired
-	public WebSecurityConfig(UserDetailsService userDetailsService, AuthEntryPointJwt unauthorizedHandler) {
-		this.userDetailsService = userDetailsService;
-		this.unauthorizedHandler = unauthorizedHandler;
-	}
-
-	@Bean
-	public AuthTokenFilter authenticationJwtTokenFilter() {
-		return new AuthTokenFilter();
-	}
-
-	@Bean
-	public AuthenticationManager authenticationManager(
-			AuthenticationConfiguration authenticationConfiguration) throws Exception {
-		return authenticationConfiguration.getAuthenticationManager();
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	@Bean
-	public DaoAuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider authProvider  = new DaoAuthenticationProvider();
-		authProvider.setPasswordEncoder(passwordEncoder());
-		authProvider.setUserDetailsService(userDetailsService);
-		return authProvider;
-	}
-
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeRequests()
-				.antMatchers("/api/auth/**").permitAll()
-				.antMatchers("/swagger-ui/**").permitAll()
-				.antMatchers("/v3/**").permitAll()
-				.antMatchers("/api/docs/**").permitAll()
-				.antMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
-				.antMatchers("/api/admin/**").hasRole("ADMIN")
-				.anyRequest().authenticated();
+    private final UserDetailsService userDetailsService;
+    private final AuthEntryPointJwt unauthorizedHandler;
+    private final JwtUtils jwtUtils;
 
 
-			http.authenticationProvider(authenticationProvider());
-			http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-			http.cors();
-		return http.build();
-	}
+    public WebSecurityConfig(UserDetailsService userDetailsService, AuthEntryPointJwt unauthorizedHandler, JwtUtils jwtUtils) {
+        this.userDetailsService = userDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
+        this.jwtUtils = jwtUtils;
+    }
+
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter(jwtUtils, userDetailsService);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setUserDetailsService(userDetailsService);
+        return authProvider;
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests()
+                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/v3/**").permitAll()
+                .antMatchers("/api/docs/**").permitAll()
+                .antMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/api/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated();
+
+
+        http.authenticationProvider(authenticationProvider());
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.cors();
+        return http.build();
+    }
 }

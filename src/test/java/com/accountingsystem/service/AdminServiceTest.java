@@ -20,7 +20,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AdminServiceTest {
+class AdminServiceTest {
     @Mock
     private CounterpartyContractMapper counterpartyContractMapper;
 
@@ -82,7 +82,7 @@ public class AdminServiceTest {
         int id = 5;
 
         when(counterpartyOrganizationRepo.existsById(5)).thenReturn(false);
-        assertThatThrownBy( () ->
+        assertThatThrownBy(() ->
                 adminService.updateCounterpartyOrganization(id, counterpartyOrganizationDto)
         ).isInstanceOf(NoSuchRowException.class);
 
@@ -110,7 +110,7 @@ public class AdminServiceTest {
     void shouldThrowNoSuchRowException_whenDeleteCounterpartyOrganizationWithWrongId() {
         int id = 5;
         when(counterpartyOrganizationRepo.existsById(5)).thenReturn(false);
-        assertThatThrownBy( () ->
+        assertThatThrownBy(() ->
                 adminService.deleteCounterpartyOrganization(id)
         ).isInstanceOf(NoSuchRowException.class);
 
@@ -171,7 +171,7 @@ public class AdminServiceTest {
 
         when(contractRepo.existsById(id)).thenReturn(false);
 
-        assertThatThrownBy( () ->
+        assertThatThrownBy(() ->
                 adminService.createContractStage(id, contractStageDto)
         ).isInstanceOf(NoSuchRowException.class);
 
@@ -196,7 +196,7 @@ public class AdminServiceTest {
 
         when(contractStageRepo.existsById(id)).thenReturn(false);
 
-        assertThatThrownBy( () ->
+        assertThatThrownBy(() ->
                 adminService.updateContractStage(id, contractStageDto)
         ).isInstanceOf(NoSuchRowException.class);
 
@@ -245,7 +245,7 @@ public class AdminServiceTest {
 
         when(contractStageRepo.existsById(id)).thenReturn(false);
 
-        assertThatThrownBy( () ->
+        assertThatThrownBy(() ->
                 adminService.deleteContractStage(id)
         ).isInstanceOf(NoSuchRowException.class);
 
@@ -292,7 +292,7 @@ public class AdminServiceTest {
 
         when(contractRepo.existsById(contractId)).thenReturn(false);
 
-        assertThatThrownBy( () ->
+        assertThatThrownBy(() ->
                 adminService.createCounterpartyContract(contractId, counterpartyContractDto)
         ).isInstanceOf(NoSuchRowException.class);
 
@@ -317,7 +317,7 @@ public class AdminServiceTest {
         when(contractRepo.existsById(contractId)).thenReturn(true);
         when(counterpartyOrganizationRepo.existsById(orgId)).thenReturn(false);
 
-        assertThatThrownBy( () ->
+        assertThatThrownBy(() ->
                 adminService.createCounterpartyContract(contractId, counterpartyContractDto)
         ).isInstanceOf(NoSuchRowException.class);
 
@@ -365,7 +365,7 @@ public class AdminServiceTest {
 
         when(counterpartyContractRepo.existsById(contractId)).thenReturn(false);
 
-        assertThatThrownBy( () ->
+        assertThatThrownBy(() ->
                 adminService.updateCounterpartyContract(contractId, counterpartyContractDto)
         ).isInstanceOf(NoSuchRowException.class);
 
@@ -390,11 +390,11 @@ public class AdminServiceTest {
         when(counterpartyContractRepo.existsById(contractId)).thenReturn(true);
         when(counterpartyOrganizationRepo.existsById(orgId)).thenReturn(false);
 
-        assertThatThrownBy( () ->
+        assertThatThrownBy(() ->
                 adminService.updateCounterpartyContract(contractId, counterpartyContractDto)
         ).isInstanceOf(NoSuchRowException.class);
 
         verify(counterpartyContractRepo, times(1)).existsById(contractId);
         verify(counterpartyOrganizationRepo, times(1)).existsById(orgId);
     }
- }
+}
