@@ -11,7 +11,6 @@ import com.accountingsystem.entitys.enums.ERole;
 import com.accountingsystem.filters.SearchRequest;
 import com.accountingsystem.filters.SearchSpecification;
 import com.accountingsystem.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -33,9 +32,8 @@ public class AdminService {
 
     private final ContractMapper contractMapper;
 
-    @Autowired
     public AdminService(ContractRepo contractRepo, CounterpartyContractRepo counterpartyContractRepo,
-                       CounterpartyOrganizationRepo counterpartyOrganizationRepo, ContractStageRepo contractStageRepo,
+                        CounterpartyOrganizationRepo counterpartyOrganizationRepo, ContractStageRepo contractStageRepo,
                         UserRepo userRepo, UserMapper userMapper, ContractMapper contractMapper) {
         this.contractRepo = contractRepo;
         this.counterpartyOrganizationRepo = counterpartyOrganizationRepo;
@@ -43,7 +41,7 @@ public class AdminService {
         this.contractStageRepo = contractStageRepo;
         this.userRepo = userRepo;
         this.userMapper = userMapper;
-        this.contractMapper= contractMapper;
+        this.contractMapper = contractMapper;
     }
 
     // Удаление/добавление/изменение организаций контр-агентов
@@ -55,15 +53,17 @@ public class AdminService {
     public void updateCounterpartyOrganization(
             int id, CounterpartyOrganizationDto counterpartyOrganizationDto
     ) {
-        if(!counterpartyOrganizationRepo.existsById(id))
+        if (!counterpartyOrganizationRepo.existsById(id)) {
             throw new NoSuchRowException("id", id, "CounterpartyOrganization");
+        }
 
         counterpartyOrganizationRepo.updateCounterpartyOrganization(id, counterpartyOrganizationDto);
     }
 
     public void deleteCounterpartyOrganization(int id) {
-        if(!counterpartyOrganizationRepo.existsById(id))
+        if (!counterpartyOrganizationRepo.existsById(id)) {
             throw new NoSuchRowException("id", id, "Counterparty organization");
+        }
 
         counterpartyOrganizationRepo.deleteById(id);
     }
@@ -71,22 +71,25 @@ public class AdminService {
     // Удаление-добавление-изменение стадий контрактов
 
     public void createContractStage(int contractId, ContractStageDto contractStageDto) {
-        if (!contractRepo.existsById(contractId))
+        if (!contractRepo.existsById(contractId)) {
             throw new NoSuchRowException("id", contractId, "Contract");
+        }
 
         contractStageRepo.insertContractStage(contractId, contractStageDto);
     }
 
     public void updateContractStage(int id, ContractStageDto contractStageDto) {
-        if (!contractStageRepo.existsById(id))
+        if (!contractStageRepo.existsById(id)) {
             throw new NoSuchRowException("id", id, "Contract stage");
+        }
 
         contractStageRepo.updateContractStage(id, contractStageDto);
     }
 
     public void deleteContractStage(int id) {
-        if (!contractStageRepo.existsById(id))
+        if (!contractStageRepo.existsById(id)) {
             throw new NoSuchRowException("id", id, "Contract stage");
+        }
 
         contractStageRepo.deleteById(id);
     }
@@ -95,28 +98,33 @@ public class AdminService {
 
     public void createCounterpartyContract(
             int contractId, CounterpartyContractDto counterpartyContractDto) {
-        if (!contractRepo.existsById(contractId))
+        if (!contractRepo.existsById(contractId)) {
             throw new NoSuchRowException("id", contractId, "Contract");
+        }
         Integer counterpartyOrganizationId = counterpartyContractDto.getCounterpartyOrganizationId();
-        if (counterpartyOrganizationId != null && !counterpartyOrganizationRepo.existsById(counterpartyOrganizationId))
+        if (counterpartyOrganizationId != null && !counterpartyOrganizationRepo.existsById(counterpartyOrganizationId)) {
             throw new NoSuchRowException("id", counterpartyOrganizationId, "Counterparty organization");
+        }
 
         counterpartyContractRepo.insertCounterpartyContract(contractId, counterpartyContractDto);
     }
 
     public void updateCounterpartyContract(int id, CounterpartyContractDto counterpartyContractDto) {
-        if (!counterpartyContractRepo.existsById(id))
+        if (!counterpartyContractRepo.existsById(id)) {
             throw new NoSuchRowException("id", id, "Counterparty contract");
+        }
         Integer counterpartyOrganizationId = counterpartyContractDto.getCounterpartyOrganizationId();
-        if (counterpartyOrganizationId != null && !counterpartyOrganizationRepo.existsById(counterpartyOrganizationId))
+        if (counterpartyOrganizationId != null && !counterpartyOrganizationRepo.existsById(counterpartyOrganizationId)) {
             throw new NoSuchRowException("id", counterpartyOrganizationId, "Counterparty organization");
+        }
 
         counterpartyContractRepo.updateCounterpartyContract(id, counterpartyContractDto);
     }
 
     public void deleteCounterpartyContract(Integer id) {
-        if (!counterpartyContractRepo.existsById(id))
+        if (!counterpartyContractRepo.existsById(id)) {
             throw new NoSuchRowException("id", id, "Counterparty contract");
+        }
 
         counterpartyContractRepo.deleteById(id);
     }
@@ -128,19 +136,22 @@ public class AdminService {
     }
 
     public void updateContract(Integer contractId, ContractDto contractDto) {
-        if (!contractRepo.existsById(contractId))
-            throw new  NoSuchRowException("id", contractId, "Contract");
+        if (!contractRepo.existsById(contractId)) {
+            throw new NoSuchRowException("id", contractId, "Contract");
+        }
         Integer userId = contractDto.getUserId();
-        if (userId != null && !userRepo.existsById(userId))
+        if (userId != null && !userRepo.existsById(userId)) {
             throw new NoSuchRowException("id", userId, "User");
+        }
         contractDto.setUserId(userId);
 
         contractRepo.updateContract(contractId, contractDto);
     }
 
     public void deleteContract(Integer contractId) {
-        if (!contractRepo.existsById(contractId))
-            throw new  NoSuchRowException("id", contractId, "Contract");
+        if (!contractRepo.existsById(contractId)) {
+            throw new NoSuchRowException("id", contractId, "Contract");
+        }
 
         contractRepo.deleteById(contractId);
     }
@@ -168,10 +179,11 @@ public class AdminService {
     }
 
     public void deleteUser(Integer userId) {
-        User userToDelete = userRepo.findById(userId).orElseThrow(()-> new NoSuchRowException("id", userId, "user"));
+        User userToDelete = userRepo.findById(userId).orElseThrow(() -> new NoSuchRowException("id", userId, "user"));
 
-        if (userToDelete.getRoles().stream().anyMatch(role -> role.getName().equals(ERole.ROLE_ADMIN)))
+        if (userToDelete.getRoles().stream().anyMatch(role -> role.getName().equals(ERole.ROLE_ADMIN))) {
             throw new IllegalFieldValueException("Can't delete user with \'ADMIN\' role");
+        }
 
         userRepo.deleteById(userId);
     }

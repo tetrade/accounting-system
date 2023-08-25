@@ -9,5 +9,7 @@ public enum EDataFormat {
         this.format = format;
     }
 
-    public String getFormat() { return this.format; }
+    public String getFormat() {
+        return this.format;
+    }
 }

@@ -15,26 +15,26 @@ import java.util.Set;
         "counterpartyContracts"
 })
 @ToString
-public class CounterpartyOrganization{
+public class CounterpartyOrganization {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id"  )
+    @Column(name = "id")
     private int id;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="address")
+    @Column(name = "address")
     private String address;
 
-    @Column(name="inn", unique = true, nullable = false, columnDefinition = "char")
+    @Column(name = "inn", unique = true, nullable = false, columnDefinition = "char")
     private String inn;
 
     @OneToMany(
             cascade = {
                     CascadeType.DETACH, CascadeType.REFRESH
-            }, mappedBy = "counterpartyOrganization", fetch = FetchType.LAZY
+            }, mappedBy = "counterpartyOrganization"
     )
     @ToString.Exclude
     private Set<CounterpartyContract> counterpartyContracts;

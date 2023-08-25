@@ -6,17 +6,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 
-
 // для избежания нарушения принципа LSP создадим новый класс
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class CounterpartyContractDtoExcel extends ExcelContractTemplate {
     private ContractDtoExcel contractDtoExcel;
 
-
     @Override
     public String getInnerContractName() {
-        if (contractDtoExcel != null) return contractDtoExcel.getName();
+        if (contractDtoExcel != null) {
+            return contractDtoExcel.getName();
+        }
         return "";
     }
 

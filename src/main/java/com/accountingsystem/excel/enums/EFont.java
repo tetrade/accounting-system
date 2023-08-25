@@ -9,9 +9,10 @@ public enum EFont {
         public XSSFFont getFont(XSSFWorkbook workbook, int fontSize) {
             XSSFFont font = workbook.createFont();
             font.setFontName("Times New Roman");
-            font.setFontHeightInPoints((short)fontSize);
+            font.setFontHeightInPoints((short) fontSize);
             return font;
         }
     };
+
     public abstract XSSFFont getFont(XSSFWorkbook workbook, int fontSize);
 }

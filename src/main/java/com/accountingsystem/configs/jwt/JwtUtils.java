@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -17,27 +16,27 @@ import java.util.Date;
 @Slf4j
 public class JwtUtils {
 
-	@Value("${app.jwtSecret}")
-	private String jwtSecret;
+	private final JwtProperties jwtProperties;
 
-	@Value("${app.jwtExpirationMs}")
-	private int jwtExpirationMs;
+	public JwtUtils(JwtProperties jwtProperties) {
+		this.jwtProperties = jwtProperties;
+	}
 
 	public String generateJwtToken(Authentication authentication) {
 
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
-		SecretKey jwtAccessSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+		SecretKey jwtAccessSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.getSecret()));
 
 		return Jwts.builder().setSubject((userPrincipal.getUsername())).setIssuedAt(new Date())
-				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+				.setExpiration(new Date((new Date()).getTime() + jwtProperties.getExpirationMs()))
 				.signWith(jwtAccessSecret)
 				.compact();
 	}
 
 	public boolean validateJwtToken(String jwt) throws InvalidKeyException {
 		try {
-			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt);
+			Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(jwt);
 			return true;
 		} catch (RuntimeException e) {
 			log.error(e.getMessage());
@@ -46,7 +45,7 @@ public class JwtUtils {
 	}
 
 	public String getUserNameFromJwtToken(String jwt) {
-		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt).getBody().getSubject();
+		return Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(jwt).getBody().getSubject();
 	}
 
 }

@@ -12,7 +12,6 @@ import com.accountingsystem.filters.SearchRequest;
 import com.accountingsystem.service.UserDetailsImpl;
 import com.accountingsystem.service.UserService;
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,21 +31,25 @@ import java.util.Set;
 @CrossOrigin(allowCredentials = "true", originPatterns = "*")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserService userService;
+    private final UserMapper userMapper;
+    private final ExcelReportWriter excelReportWriter;
 
-    @Autowired
-    private ExcelReportWriter excelReportWriter;
 
-    // Методы для получения информации пользователя
+    public UserController(UserService userService, UserMapper userMapper, ExcelReportWriter excelReportWriter) {
+        this.userService = userService;
+        this.userMapper = userMapper;
+        this.excelReportWriter = excelReportWriter;
+    }
+
+    //<editor-fold desc="Методы для получения информации пользователя">
     @PostMapping("counterparty-organizations/search")
     public ResponseEntity<Page<CounterpartyOrganizationDto>> getCounterpartyOrganizations(@RequestBody SearchRequest searchRequest) {
         Page<CounterpartyOrganizationDto> counterpartyOrganizationDtos = userService.getCounterpartyOrganizations(searchRequest);
         return ResponseEntity.ok().body(counterpartyOrganizationDtos);
     }
+
 
     @PostMapping("contracts/search")
     public ResponseEntity<Page<ContractDto>> getContracts(
@@ -90,6 +93,8 @@ public class UserController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return ResponseEntity.ok(userMapper.mapToUserDto(userDetails));
     }
+    //</editor-fold>
+
 
     @GetMapping("downland-contract-report/dates")
     public ResponseEntity<ByteArrayResource> downlandContractReport(

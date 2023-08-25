@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Setter
 @Getter
 public class UserDetailsImpl implements UserDetails {
@@ -56,7 +57,9 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     @Override
-    public String getPassword() { return this.password; }
+    public String getPassword() {
+        return this.password;
+    }
 
     @Override
     public String getUsername() {
@@ -65,10 +68,15 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        if (terminationDate == null) return true;
+        if (terminationDate == null) {
+            return true;
+        }
 
-        for (Role r: user.getRoles())
-            if (r.getName().equals(ERole.ROLE_ADMIN)) return true;
+        for (Role r : user.getRoles()) {
+            if (r.getName().equals(ERole.ROLE_ADMIN)) {
+                return true;
+            }
+        }
 
         return terminationDate.isAfter(LocalDate.now());
     }

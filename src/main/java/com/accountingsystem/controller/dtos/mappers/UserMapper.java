@@ -41,13 +41,15 @@ public abstract class UserMapper {
     @AfterMapping
     void map(@MappingTarget User user, UserDto userDto) {
 
-        if (userDto.getNewPassword() != null)
+        if (userDto.getNewPassword() != null) {
             user.setPassword(passwordEncoder.encode(userDto.getNewPassword()));
+        }
 
-        if (userDto.getIsAdmin())
+        if (userDto.getIsAdmin()) {
             user.getRoles().add(roleRepo.findByName(ERole.ROLE_ADMIN).orElse(null));
-        else
+        } else {
             user.getRoles().remove(roleRepo.findByName(ERole.ROLE_ADMIN).orElse(null));
+        }
     }
 
     boolean map(Set<Role> role) {
@@ -55,7 +57,9 @@ public abstract class UserMapper {
     }
 
     public User mapIdToUser(Integer id) {
-        if (id == null) return null;
+        if (id == null) {
+            return null;
+        }
         return userRepo.findById(id).orElseThrow(() -> new NoSuchRowException("id", id, "user"));
     }
 

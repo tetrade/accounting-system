@@ -19,14 +19,16 @@ import javax.validation.constraints.Positive;
 @CrossOrigin(allowCredentials = "true", originPatterns = "*")
 public class AdminController {
 
-    @Autowired
-    private AdminService adminService;
+    private final AdminService adminService;
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+    public AdminController(AdminService adminService, UserService userService) {
+        this.adminService = adminService;
+        this.userService = userService;
+    }
 
-    // ------------------------------------------- Организации контр-агенты -------------------------------------------
-
+    //<editor-fold desc="Организации контр-агнеты">
     @PostMapping("counterparty-organizations")
     public ResponseEntity<Void> createCounterpartyOrganization(
             @RequestBody @Valid CounterpartyOrganizationDto counterpartyOrganizationDto) {
@@ -48,13 +50,13 @@ public class AdminController {
         adminService.deleteCounterpartyOrganization(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    //</editor-fold>
 
-    // --------------------------------------- Контракты с контр-агентами ---------------------------------------
-
+    //<editor-fold desc="Контракты с контр-агентами">
     @PostMapping("contracts/{contractId}/counterparty-contracts/search")
     public ResponseEntity<Page<CounterpartyContractDto>> getCounterpartyContractsByContractId(
-           @PathVariable @Positive Integer contractId,
-           @RequestBody @Valid SearchRequest searchRequest
+            @PathVariable @Positive Integer contractId,
+            @RequestBody @Valid SearchRequest searchRequest
     ) {
         searchRequest.addEntityIdFilter(ETargetEntity.CONTRACT, contractId);
 
@@ -85,9 +87,9 @@ public class AdminController {
         adminService.deleteCounterpartyContract(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    //</editor-fold>
 
-    // ------------------------------------- Стадии контракта -------------------------------------
-
+    //<editor-fold desc="Стадии контракта">
     @PostMapping("contracts/{contractId}/contract-stages/search")
     public ResponseEntity<Page<ContractStageDto>> getContractStagesByContractId(
             @PathVariable @Positive Integer contractId,
@@ -122,9 +124,9 @@ public class AdminController {
         adminService.deleteContractStage(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    //</editor-fold>
 
-//    ----------------------------------------------- Контракты -----------------------------------------------
-
+    //<editor-fold desc="Контракт">
     // Так поскольку мы имеем не жесткую связь между контрактом и пользователем.
     // Контракт может быть изначально никому не назначен.
 
@@ -158,13 +160,13 @@ public class AdminController {
         adminService.deleteContract(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    //</editor-fold>
 
-    // ------------------------------------ Список пользователей ------------------------------------
-
+    //<editor-fold desc="Пользователь">
     @PostMapping("users")
     public ResponseEntity<Page<UserDto>> getUsers(
             @RequestBody @Valid SearchRequest searchRequest
-    ){
+    ) {
         Page<UserDto> users = adminService.getAllUsers(searchRequest);
         return ResponseEntity.ok().body(users);
     }
@@ -180,4 +182,5 @@ public class AdminController {
         adminService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    //</editor-fold>
 }

@@ -27,8 +27,9 @@ public interface ContractMapper {
 
     @AfterMapping
     default void mapToContract(@MappingTarget Contract contract, ContractDto contractDto){
-        if (contract.getCounterpartyContracts() != null)
+        if (contract.getCounterpartyContracts() != null) {
             contract.getCounterpartyContracts().forEach(cc -> cc.setContract(contract));
+        }
         if (contract.getContractStages() != null) {
             contract.getContractStages().forEach( cs -> cs.setContract(contract));
         }

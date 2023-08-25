@@ -9,10 +9,8 @@ import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
 import com.accountingsystem.filters.SearchRequest;
 import com.accountingsystem.filters.SearchSpecification;
 import com.accountingsystem.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -44,7 +42,6 @@ public class UserService {
 
     private final UserLogRepository userLogRepository;
 
-    @Autowired
     public UserService(ContractRepo contractRepo, CounterpartyContractRepo counterpartyContractRepo,
                        ContractStageMapper contractStageMapper, CounterpartyOrganizationRepo counterpartyOrganizationRepo,
                        ContractStageRepo contractStageRepo, CounterpartyContractMapper counterpartyContractMapper, ContractMapper contractMapper,
@@ -91,7 +88,7 @@ public class UserService {
 
     // Методы для извлечения информации для пользователя с использованием фильтров и пагинации
 
-    public Page<CounterpartyOrganizationDto> getCounterpartyOrganizations(SearchRequest searchRequest){
+    public Page<CounterpartyOrganizationDto> getCounterpartyOrganizations(SearchRequest searchRequest) {
         SearchSpecification<CounterpartyOrganization> specification = new SearchSpecification<>(searchRequest);
         return counterpartyOrganizationRepo
                 .findAll(specification, PageRequest.of(searchRequest.getPage(), searchRequest.getSize()))

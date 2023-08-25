@@ -20,68 +20,72 @@ import java.time.LocalDate;
         name = "CounterpartyContract.counterpartyOrganization",
         attributeNodes = @NamedAttributeNode("counterpartyOrganization")
 )
-public class CounterpartyContract{
+public class CounterpartyContract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private int id;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="type")
+    @Column(name = "type")
     @Convert(converter = TypeConverter.class)
     private EType type;
 
     @ManyToOne(cascade = {
             CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST
-    }, fetch = FetchType.LAZY)
+    })
     @JoinColumn(name = "counterparty_organization_id")
     @ToString.Exclude
     private CounterpartyOrganization counterpartyOrganization;
 
     @ManyToOne(cascade = {
             CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
-    @JoinColumn(name="contract_id")
+    })
+    @JoinColumn(name = "contract_id")
     @ToString.Exclude
     private Contract contract;
 
-    @Column(name="amount")
+    @Column(name = "amount")
     private BigDecimal amount;
 
-    @Column(name= "actual_start_date")
+    @Column(name = "actual_start_date")
     private LocalDate actualStartDate;
 
-    @Column(name= "actual_end_date")
+    @Column(name = "actual_end_date")
     private LocalDate actualEndDate;
 
-    @Column(name= "planned_start_date")
+    @Column(name = "planned_start_date")
     private LocalDate plannedStartDate;
 
-    @Column(name= "planned_end_date")
+    @Column(name = "planned_end_date")
     private LocalDate plannedEndDate;
 
     public void setCounterpartyOrganization(CounterpartyOrganization counterpartyOrganization) {
-       if (this.counterpartyOrganization == counterpartyOrganization) return;
+        if (this.counterpartyOrganization == counterpartyOrganization) return;
 
-       if (this.counterpartyOrganization != null) {
-           this.counterpartyOrganization.getCounterpartyContracts().remove(this);
-       }
+        if (this.counterpartyOrganization != null) {
+            this.counterpartyOrganization.getCounterpartyContracts().remove(this);
+        }
 
-       this.counterpartyOrganization = counterpartyOrganization;
+        this.counterpartyOrganization = counterpartyOrganization;
 
-       if (this.counterpartyOrganization != null) {
-           this.counterpartyOrganization.addCounterpartyContract(this);
-       }
+        if (this.counterpartyOrganization != null) {
+            this.counterpartyOrganization.addCounterpartyContract(this);
+        }
     }
 
 
     @PreRemove
     public void preRemove() {
-        if (this.counterpartyOrganization != null) this.counterpartyOrganization.getCounterpartyContracts().remove(this);
-        if (this.contract != null) this.contract.getCounterpartyContracts().remove(this);
+        if (this.counterpartyOrganization != null) {
+            this.counterpartyOrganization.getCounterpartyContracts().remove(this);
+        }
+        if (this.contract != null) {
+            this.contract.getCounterpartyContracts().remove(this);
+        }
     }
 }

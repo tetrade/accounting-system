@@ -22,42 +22,44 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name="full_name")
+    @Column(name = "full_name")
     private String fullName;
 
-    @Column(name="login", unique = true)
+    @Column(name = "login", unique = true)
     private String login;
 
-    @Column(name="password")
+    @Column(name = "password")
     private String password;
 
-    @Column(name="terminate_date")
+    @Column(name = "terminate_date")
     private LocalDate terminationDate;
 
     @OneToMany(cascade = {
             CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.REFRESH
     },
-            mappedBy = "user", fetch = FetchType.LAZY)
+            mappedBy = "user")
     private Set<Contract> contracts;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "user_role",
-            joinColumns = @JoinColumn(name="user_id"),
-            inverseJoinColumns = @JoinColumn(name="role_id")
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
 
-    public void addContract(Contract contract){
-        if (this.contracts == null) this.contracts = new HashSet<>();
+    public void addContract(Contract contract) {
+        if (this.contracts == null) {
+            this.contracts = new HashSet<>();
+        }
         this.contracts.add(contract);
         contract.setUser(this);
     }
 
     @PreRemove
     public void preRemove() {
-        for (Contract c: contracts) {
+        for (Contract c : contracts) {
             c.setUser(null);
         }
     }

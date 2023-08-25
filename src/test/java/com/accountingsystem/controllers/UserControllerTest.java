@@ -194,7 +194,7 @@ class UserControllerTest {
     @WithMockUser("test-login")
     void shouldCreateContractStageReport_whenCalled() throws Exception {
 
-        when(userService.getContractStagesContractForContractId(any(  ), any())).thenReturn(new HashSet<>());
+        when(userService.getContractStagesContractForContractId(any(), any())).thenReturn(new HashSet<>());
         when(excelReportWriter.createContractStagesReport(anySet())).thenReturn(new ByteArrayOutputStream(3));
 
         mvc.perform(

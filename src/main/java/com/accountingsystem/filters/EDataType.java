@@ -15,7 +15,7 @@ public enum EDataType {
 
     STRING {
         @Override
-        public Object getValue(String value){
+        public Object getValue(String value) {
             return value;
         }
     },
@@ -23,22 +23,31 @@ public enum EDataType {
         @Override
         public Object getValue(String value) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            try { return LocalDate.parse(value, formatter); }
-            catch (Exception ex) {throw new IllegalFieldValueException("Illegal `value` field. Wrong date format. Should be: dd.MM.yyyy"); }
+            try {
+                return LocalDate.parse(value, formatter);
+            } catch (Exception ex) {
+                throw new IllegalFieldValueException("Illegal `value` field. Wrong date format. Should be: dd.MM.yyyy");
+            }
         }
     },
     DECIMAL {
         @Override
         public Object getValue(String value) {
-            try { return new BigDecimal(value); }
-            catch (NumberFormatException ex) { throw new IllegalFieldValueException("Illegal `value` field. Wrong number format"); }
+            try {
+                return new BigDecimal(value);
+            } catch (NumberFormatException ex) {
+                throw new IllegalFieldValueException("Illegal `value` field. Wrong number format");
+            }
         }
     }, INTEGER {
         @Override
         public Object getValue(String value) {
             if (Objects.equals(value, "null")) return null;
-            try { return Integer.valueOf(value); }
-            catch (NumberFormatException ex) { throw new IllegalFieldValueException("Illegal `value` field. Wrong number Format"); }
+            try {
+                return Integer.valueOf(value);
+            } catch (NumberFormatException ex) {
+                throw new IllegalFieldValueException("Illegal `value` field. Wrong number Format");
+            }
         }
     }, TYPE {
         @Override

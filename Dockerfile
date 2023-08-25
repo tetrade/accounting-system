@@ -1,5 +1,9 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8-jdk-alpine AS build
+WORKDIR /app
+COPY . .
+RUN ["./mvnw", "package", "-Dmaven.test.skip=true"]
+
+FROM openjdk:8-jre-alpine
 EXPOSE 8080
-ARG JAR_FILE=target/accounting-system-0.0.1-SNAPSHOT.jar
-ADD ${JAR_FILE} app.jar
+COPY --from=build /app/target/accounting-system-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]

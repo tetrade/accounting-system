@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories("com.accountingsystem")
 public class AccountingSystemApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AccountingSystemApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(AccountingSystemApplication.class, args);
+    }
 }

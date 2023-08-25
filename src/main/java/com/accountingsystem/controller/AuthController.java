@@ -1,6 +1,7 @@
 package com.accountingsystem.controller;
 
 
+import com.accountingsystem.configs.jwt.JwtProperties;
 import com.accountingsystem.configs.jwt.JwtUtils;
 import com.accountingsystem.controller.dtos.LoginRequest;
 import com.accountingsystem.controller.dtos.SignUpRequest;
@@ -8,8 +9,8 @@ import com.accountingsystem.controller.dtos.UserDto;
 import com.accountingsystem.controller.dtos.mappers.UserMapper;
 import com.accountingsystem.service.UserDetailsImpl;
 import com.accountingsystem.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,50 +27,52 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("api/auth/")
 @CrossOrigin(allowCredentials = "true", originPatterns = "*")
+@Setter
+@Getter
 public class AuthController {
 
-	@Autowired
-	AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
+    private final UserMapper userMapper;
+    private final UserService userService;
+    private final JwtProperties jwtProperties;
 
-	@Autowired
-	JwtUtils jwtUtils;
+    public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserMapper userMapper,
+                          UserService userService, JwtProperties jwtProperties) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
+        this.userMapper = userMapper;
+        this.userService = userService;
+        this.jwtProperties = jwtProperties;
 
-	@Autowired
-	UserMapper userMapper;
+    }
 
-	@Autowired
-	UserService userService;
+    @PostMapping("/sign-in")
+    public ResponseEntity<UserDto> authUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse httpServletResponse,
+                                            HttpServletRequest httpServletRequest) {
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(
+                        loginRequest.getLogin(), loginRequest.getPassword()
+                ));
 
-	@Value("${app.jwtExpirationMs}")
-	private int jwtExpirationMs;
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
 
-	@PostMapping("/sign-in")
-	public ResponseEntity<UserDto> authUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse httpServletResponse,
-											HttpServletRequest httpServletRequest) {
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(
-						loginRequest.getLogin(), loginRequest.getPassword()
-				));
+        Cookie cookie = new Cookie("jwt", jwt);
+        cookie.setPath("/");
+        cookie.setMaxAge(jwtProperties.getExpirationMs());
+        httpServletResponse.addCookie(cookie);
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-		// В случае если работа будет происходить с куки
-		Cookie cookie = new Cookie("jwt", jwt);
-		cookie.setPath("/");
-		cookie.setMaxAge(jwtExpirationMs);
-		httpServletResponse.addCookie(cookie);
+        userService.logUserLogin(userDetails.getLogin(), httpServletRequest.getRemoteAddr());
 
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        return ResponseEntity.ok(userMapper.mapToUserDto(userDetails));
+    }
 
-		userService.logUserLogin(userDetails.getLogin(), httpServletRequest.getRemoteAddr());
-
-		return ResponseEntity.ok(userMapper.mapToUserDto(userDetails));
-	}
-
-	@PostMapping("/sign-up")
-	public ResponseEntity<Void> registerUser(@Valid @RequestBody SignUpRequest signupRequest) {
-		userService.createNewUser(signupRequest);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
+    @PostMapping("/sign-up")
+    public ResponseEntity<Void> registerUser(@Valid @RequestBody SignUpRequest signupRequest) {
+        userService.createNewUser(signupRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

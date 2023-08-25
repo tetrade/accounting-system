@@ -53,7 +53,7 @@ class CustomAdminRepoTest extends AbstractTestContainerStartUp {
 
     @Test
     @Order(1)
-    void shouldInsertCounterpartyOrganization_whenMethodCalled(){
+    void shouldInsertCounterpartyOrganization_whenMethodCalled() {
         CounterpartyOrganizationDto newRow = new CounterpartyOrganizationDto();
         newRow.setName("name");
         newRow.setAddress("address");
@@ -74,7 +74,7 @@ class CustomAdminRepoTest extends AbstractTestContainerStartUp {
 
     @Test
     @Order(2)
-    void shouldUpdateCounterpartyOrganization_whenMethodCalled(){
+    void shouldUpdateCounterpartyOrganization_whenMethodCalled() {
         CounterpartyOrganizationDto newRow = new CounterpartyOrganizationDto();
         newRow.setName("name123");
         newRow.setAddress("addres");
@@ -129,7 +129,7 @@ class CustomAdminRepoTest extends AbstractTestContainerStartUp {
 
     @Test
     @Order(4)
-    void shouldUpdateContract_whenCalled(){
+    void shouldUpdateContract_whenCalled() {
         Contract shouldBeUpdated = new Contract();
         shouldBeUpdated.setName("fde9");
         shouldBeUpdated.setAmount(BigDecimal.valueOf(123.13));
@@ -166,7 +166,7 @@ class CustomAdminRepoTest extends AbstractTestContainerStartUp {
 
     @Test
     @Order(5)
-    void shouldInsertContractStage_whenMethodCalled(){
+    void shouldInsertContractStage_whenMethodCalled() {
         Contract c = new Contract();
         c.setName("fde9");
         c.setAmount(BigDecimal.valueOf(123.13));
@@ -265,7 +265,7 @@ class CustomAdminRepoTest extends AbstractTestContainerStartUp {
 
     @Test
     @Order(7)
-    void shouldInsertCounterpartyContract_whenMethodCalled(){
+    void shouldInsertCounterpartyContract_whenMethodCalled() {
         Contract c = new Contract();
         c.setName("fde9");
         c.setAmount(BigDecimal.valueOf(123.13));
@@ -559,7 +559,7 @@ class CustomAdminRepoTest extends AbstractTestContainerStartUp {
         assertThat(contractStageList).hasSize(2)
                 .usingRecursiveFieldByFieldElementComparator().contains(cs, cs1);
 
-       contractStageRepo.deleteById(contractStageList.get(0).getId());
+        contractStageRepo.deleteById(contractStageList.get(0).getId());
 
         assertThat(contractStageRepo.findAll()).hasSize(1)
                 .usingRecursiveFieldByFieldElementComparator().containsAnyOf(cs, cs1);

@@ -139,37 +139,37 @@ class MappersTest {
 
         CounterpartyOrganizationDto counterpartyOrganizationDto = counterpartyOrganizationMapper.map(counterpartyOrganization);
 
-       assertThat(counterpartyOrganizationDto).usingRecursiveComparison().isEqualTo(should);
+        assertThat(counterpartyOrganizationDto).usingRecursiveComparison().isEqualTo(should);
     }
 
     @Test
     void shouldReturnSameCounterpartyContractDto_whenMapFromCounterpartyContract() {
-       CounterpartyContractDto should = new CounterpartyContractDto();
-       should.setName(counterpartyContract.getName());
-       should.setId(counterpartyContract.getId());
-       should.setType(counterpartyContract.getType());
-       should.setAmount(counterpartyContract.getAmount());
-       should.setActualStartDate(counterpartyContract.getActualStartDate());
-       should.setActualEndDate(counterpartyContract.getActualEndDate());
-       should.setPlannedEndDate(counterpartyContract.getPlannedEndDate());
-       should.setPlannedStartDate(counterpartyContract.getPlannedStartDate());
+        CounterpartyContractDto should = new CounterpartyContractDto();
+        should.setName(counterpartyContract.getName());
+        should.setId(counterpartyContract.getId());
+        should.setType(counterpartyContract.getType());
+        should.setAmount(counterpartyContract.getAmount());
+        should.setActualStartDate(counterpartyContract.getActualStartDate());
+        should.setActualEndDate(counterpartyContract.getActualEndDate());
+        should.setPlannedEndDate(counterpartyContract.getPlannedEndDate());
+        should.setPlannedStartDate(counterpartyContract.getPlannedStartDate());
 
-       CounterpartyOrganizationDto innerShould = new CounterpartyOrganizationDto();
-       innerShould.setId(counterpartyOrganization.getId());
-       innerShould.setAddress(counterpartyOrganization.getAddress());
-       innerShould.setName(counterpartyOrganization.getName());
-       innerShould.setInn(counterpartyOrganization.getInn());
+        CounterpartyOrganizationDto innerShould = new CounterpartyOrganizationDto();
+        innerShould.setId(counterpartyOrganization.getId());
+        innerShould.setAddress(counterpartyOrganization.getAddress());
+        innerShould.setName(counterpartyOrganization.getName());
+        innerShould.setInn(counterpartyOrganization.getInn());
 
-       should.setCounterpartyOrganization(innerShould);
+        should.setCounterpartyOrganization(innerShould);
 
-       CounterpartyContractDto counterpartyContractDto =
-               counterpartyContractMapper.mapToCounterpartyContractDto(counterpartyContract);
+        CounterpartyContractDto counterpartyContractDto =
+                counterpartyContractMapper.mapToCounterpartyContractDto(counterpartyContract);
 
         assertThat(counterpartyContractDto).usingRecursiveComparison().isEqualTo(should);
     }
 
     @Test
-    void shouldReturnSameContractStageDto_whenMapFromContractStage(){
+    void shouldReturnSameContractStageDto_whenMapFromContractStage() {
         ContractStageDto should = new ContractStageDto();
         should.setId(contractStage.getId());
         should.setName(contractStage.getName());

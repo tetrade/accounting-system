@@ -62,10 +62,10 @@ class AdminControllerTest {
         counterpartyOrganizationDto.setInn("012345678912");
 
         mvc.perform(
-                MockMvcRequestBuilders.post("/api/admin/counterparty-organizations")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(counterpartyOrganizationDto))
-                        .with(csrf()))
+                        MockMvcRequestBuilders.post("/api/admin/counterparty-organizations")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(counterpartyOrganizationDto))
+                                .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
 
         verify(adminService, times(1)).createCounterpartyOrganization(counterpartyOrganizationDto);
@@ -110,10 +110,10 @@ class AdminControllerTest {
         searchRequest.addFilter(new FilterRequest(EPublicKey.NAME, ETargetEntity.COUNTERPARTY_ORGANIZATION, EOperator.EQUAL, "something"));
 
         mvc.perform(
-                MockMvcRequestBuilders.post("/api/admin/contracts/2/counterparty-contracts/search")
-                           .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(searchRequest))
-                        .with(csrf()))
+                        MockMvcRequestBuilders.post("/api/admin/contracts/2/counterparty-contracts/search")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(searchRequest))
+                                .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content", Matchers.is(new ArrayList<>())));
 
@@ -296,7 +296,8 @@ class AdminControllerTest {
                                 .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content")
-                        .value(jsonParser.parse(objectMapper.writeValueAsString(Stream.of(cuD).collect(Collectors.toList())))));;
+                        .value(jsonParser.parse(objectMapper.writeValueAsString(Stream.of(cuD).collect(Collectors.toList())))));
+        ;
 
         verify(adminService).getContractWithUsers(searchRequest);
     }

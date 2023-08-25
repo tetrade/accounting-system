@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@Table(name= "contract")
+@Table(name = "contract")
 @Entity
 @Data
 @ToString
@@ -26,43 +26,41 @@ import java.util.Set;
 public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private int id;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="type")
+    @Column(name = "type")
     @Convert(converter = TypeConverter.class)
     private EType type;
 
-    @Column(name="planned_start_date")
+    @Column(name = "planned_start_date")
     private LocalDate plannedStartDate;
 
-    @Column(name="planned_end_date")
+    @Column(name = "planned_end_date")
     private LocalDate plannedEndDate;
 
-    @Column(name="actual_start_date")
+    @Column(name = "actual_start_date")
     private LocalDate actualStartDate;
 
-    @Column(name="actual_end_date")
+    @Column(name = "actual_end_date")
     private LocalDate actualEndDate;
 
-    @JoinColumn(name="user_id")
-    @ManyToOne(cascade = {
-            CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE
-    }, fetch  = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
     @ToString.Exclude
     private User user;
 
-    @Column(name="amount")
+    @Column(name = "amount")
     private BigDecimal amount;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract", targetEntity = CounterpartyContract.class, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract", targetEntity = CounterpartyContract.class)
     @ToString.Exclude
     private Set<CounterpartyContract> counterpartyContracts;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract", targetEntity = ContractStage.class, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract", targetEntity = ContractStage.class)
     @ToString.Exclude
     private Set<ContractStage> contractStages;
 
