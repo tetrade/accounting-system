@@ -1,6 +1,7 @@
 FROM openjdk:8-jdk-alpine AS build
 WORKDIR /app
 COPY . .
+RUN chmod +x ./mvnw
 RUN ["./mvnw", "package", "-Dmaven.test.skip=true"]
 
 FROM openjdk:8-jre-alpine
