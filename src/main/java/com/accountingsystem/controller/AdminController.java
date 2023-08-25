@@ -1,6 +1,12 @@
 package com.accountingsystem.controller;
 
-import com.accountingsystem.controller.dtos.*;
+import com.accountingsystem.controller.dtos.ContractDto;
+import com.accountingsystem.controller.dtos.ContractStageDto;
+import com.accountingsystem.controller.dtos.ContractUserDto;
+import com.accountingsystem.controller.dtos.CounterpartyContractDto;
+import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
+import com.accountingsystem.controller.dtos.UserDto;
+
 import com.accountingsystem.filters.ETargetEntity;
 import com.accountingsystem.filters.SearchRequest;
 import com.accountingsystem.service.AdminService;
@@ -9,7 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;

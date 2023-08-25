@@ -5,9 +5,23 @@ import com.accountingsystem.controller.dtos.ContractDto;
 import com.accountingsystem.controller.dtos.ContractStageDto;
 import com.accountingsystem.controller.dtos.CounterpartyContractDto;
 import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
-import com.accountingsystem.entitys.*;
+
+
+import com.accountingsystem.entitys.Contract;
+import com.accountingsystem.entitys.ContractStage;
+import com.accountingsystem.entitys.CounterpartyContract;
+import com.accountingsystem.entitys.CounterpartyOrganization;
+import com.accountingsystem.entitys.User;
 import com.accountingsystem.entitys.enums.EType;
-import com.accountingsystem.repository.*;
+
+
+import com.accountingsystem.repository.ContractRepo;
+import com.accountingsystem.repository.ContractStageRepo;
+import com.accountingsystem.repository.CounterpartyContractRepo;
+import com.accountingsystem.repository.CounterpartyOrganizationRepo;
+import com.accountingsystem.repository.UserLogRepository;
+import com.accountingsystem.repository.UserRepo;
+
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

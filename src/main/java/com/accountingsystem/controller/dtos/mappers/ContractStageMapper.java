@@ -4,7 +4,12 @@ import com.accountingsystem.controller.dtos.ContractStageDto;
 import com.accountingsystem.entitys.ContractStage;
 import com.accountingsystem.excel.dto.ContractStageDtoExcel;
 import org.apache.poi.ss.usermodel.DateUtil;
-import org.mapstruct.*;
+
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.IterableMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 import java.time.LocalDate;
 import java.util.Collection;

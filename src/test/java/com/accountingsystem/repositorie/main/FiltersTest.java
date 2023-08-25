@@ -1,11 +1,34 @@
 package com.accountingsystem.repositorie.main;
 
 import com.accountingsystem.AbstractTestContainerStartUp;
-import com.accountingsystem.entitys.*;
+
+
+import com.accountingsystem.entitys.Role;
 import com.accountingsystem.entitys.enums.ERole;
 import com.accountingsystem.entitys.enums.EType;
-import com.accountingsystem.filters.*;
-import com.accountingsystem.repository.*;
+
+import com.accountingsystem.entitys.Contract;
+import com.accountingsystem.entitys.ContractStage;
+import com.accountingsystem.entitys.CounterpartyContract;
+import com.accountingsystem.entitys.CounterpartyOrganization;
+import com.accountingsystem.entitys.User;
+import com.accountingsystem.entitys.enums.EType;
+
+
+import com.accountingsystem.filters.EOperator;
+import com.accountingsystem.filters.EPublicKey;
+import com.accountingsystem.filters.ETargetEntity;
+import com.accountingsystem.filters.FilterRequest;
+import com.accountingsystem.filters.SearchRequest;
+import com.accountingsystem.filters.SearchSpecification;
+import com.accountingsystem.repository.ContractRepo;
+import com.accountingsystem.repository.ContractStageRepo;
+import com.accountingsystem.repository.CounterpartyContractRepo;
+import com.accountingsystem.repository.CounterpartyOrganizationRepo;
+import com.accountingsystem.repository.RoleRepo;
+import com.accountingsystem.repository.UserLogRepository;
+import com.accountingsystem.repository.UserRepo;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

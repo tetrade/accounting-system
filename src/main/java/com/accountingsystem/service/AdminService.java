@@ -2,7 +2,14 @@ package com.accountingsystem.service;
 
 import com.accountingsystem.advice.exceptions.IllegalFieldValueException;
 import com.accountingsystem.advice.exceptions.NoSuchRowException;
-import com.accountingsystem.controller.dtos.*;
+
+
+import com.accountingsystem.controller.dtos.ContractDto;
+import com.accountingsystem.controller.dtos.ContractStageDto;
+import com.accountingsystem.controller.dtos.ContractUserDto;
+import com.accountingsystem.controller.dtos.CounterpartyContractDto;
+import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
+import com.accountingsystem.controller.dtos.UserDto;
 import com.accountingsystem.controller.dtos.mappers.ContractMapper;
 import com.accountingsystem.controller.dtos.mappers.UserMapper;
 import com.accountingsystem.entitys.Contract;
@@ -10,7 +17,13 @@ import com.accountingsystem.entitys.User;
 import com.accountingsystem.entitys.enums.ERole;
 import com.accountingsystem.filters.SearchRequest;
 import com.accountingsystem.filters.SearchSpecification;
-import com.accountingsystem.repository.*;
+
+
+import com.accountingsystem.repository.ContractRepo;
+import com.accountingsystem.repository.ContractStageRepo;
+import com.accountingsystem.repository.CounterpartyContractRepo;
+import com.accountingsystem.repository.CounterpartyOrganizationRepo;
+import com.accountingsystem.repository.UserRepo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;

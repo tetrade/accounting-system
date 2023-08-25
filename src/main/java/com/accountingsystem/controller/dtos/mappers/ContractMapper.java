@@ -7,7 +7,14 @@ import com.accountingsystem.entitys.CounterpartyContract;
 import com.accountingsystem.excel.dto.ContractDtoExcel;
 import com.accountingsystem.excel.dto.CounterpartyContractDtoExcel;
 import org.apache.poi.ss.usermodel.DateUtil;
-import org.mapstruct.*;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.IterableMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+
 
 import java.util.Collection;
 import java.util.Set;

@@ -4,9 +4,21 @@ import com.accountingsystem.advice.exceptions.NoSuchRowException;
 import com.accountingsystem.controller.dtos.ContractStageDto;
 import com.accountingsystem.controller.dtos.CounterpartyContractDto;
 import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
-import com.accountingsystem.controller.dtos.mappers.*;
+
+import com.accountingsystem.controller.dtos.mappers.ContractMapper;
+import com.accountingsystem.controller.dtos.mappers.ContractStageMapper;
+import com.accountingsystem.controller.dtos.mappers.CounterpartyContractMapper;
+import com.accountingsystem.controller.dtos.mappers.CounterpartyOrganizationMapper;
+import com.accountingsystem.controller.dtos.mappers.UserMapper;
 import com.accountingsystem.entitys.enums.EType;
-import com.accountingsystem.repository.*;
+
+import com.accountingsystem.repository.ContractRepo;
+import com.accountingsystem.repository.ContractStageRepo;
+import com.accountingsystem.repository.CounterpartyContractRepo;
+import com.accountingsystem.repository.CounterpartyOrganizationRepo;
+import com.accountingsystem.repository.UserLogRepository;
+import com.accountingsystem.repository.UserRepo;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

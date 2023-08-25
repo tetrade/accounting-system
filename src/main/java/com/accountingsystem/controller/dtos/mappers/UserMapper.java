@@ -10,7 +10,13 @@ import com.accountingsystem.entitys.enums.ERole;
 import com.accountingsystem.repository.RoleRepo;
 import com.accountingsystem.repository.UserRepo;
 import com.accountingsystem.service.UserDetailsImpl;
-import org.mapstruct.*;
+
+import org.mapstruct.AfterMapping;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

@@ -5,7 +5,6 @@ import com.accountingsystem.entitys.enums.EType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.ToString;
-import org.aspectj.lang.annotation.Before;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;

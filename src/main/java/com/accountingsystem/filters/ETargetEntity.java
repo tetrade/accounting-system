@@ -1,9 +1,19 @@
 package com.accountingsystem.filters;
 
 import com.accountingsystem.advice.exceptions.IllegalFieldValueException;
-import com.accountingsystem.entitys.*;
+import com.accountingsystem.entitys.Contract;
+import com.accountingsystem.entitys.ContractStage;
+import com.accountingsystem.entitys.CounterpartyContract;
+import com.accountingsystem.entitys.CounterpartyOrganization;
+import com.accountingsystem.entitys.User;
 
-import javax.persistence.criteria.*;
+
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.From;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 
 public enum ETargetEntity {
 

@@ -2,9 +2,22 @@ package com.accountingsystem.controllers;
 
 import com.accountingsystem.configs.jwt.JwtUtils;
 import com.accountingsystem.controller.AdminController;
-import com.accountingsystem.controller.dtos.*;
+
+
+import com.accountingsystem.controller.dtos.ContractDto;
+import com.accountingsystem.controller.dtos.ContractStageDto;
+import com.accountingsystem.controller.dtos.ContractUserDto;
+import com.accountingsystem.controller.dtos.CounterpartyContractDto;
+import com.accountingsystem.controller.dtos.CounterpartyOrganizationDto;
+import com.accountingsystem.controller.dtos.UserDto;
 import com.accountingsystem.entitys.enums.EType;
-import com.accountingsystem.filters.*;
+
+
+import com.accountingsystem.filters.EOperator;
+import com.accountingsystem.filters.EPublicKey;
+import com.accountingsystem.filters.ETargetEntity;
+import com.accountingsystem.filters.FilterRequest;
+import com.accountingsystem.filters.SearchRequest;
 import com.accountingsystem.repository.UserLogRepository;
 import com.accountingsystem.service.AdminService;
 import com.accountingsystem.service.UserService;
@@ -29,7 +42,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @WebMvcTest(AdminController.class)
